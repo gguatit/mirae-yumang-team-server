@@ -1,51 +1,4 @@
-      @font-face {
-        font-family: 'Cafe24ClassicType';
-        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-2@1.0/Cafe24ClassicType-Regular.woff2') format('woff2');
-        font-weight: regular;
-        font-display: swap;
-    }
 
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #82BEDC;
-        font-family: 'Cafe24ClassicType';
-        font-weight: 200;
-    }
-
-    .header-logo {
-        text-shadow: 10px 10px 3px gray;
-        text-align: center;
-        font-size: 40px;
-        font-weight: 400;
-    }
-
-    .header-menu {
-        display: flex;
-        gap: 20px;
-
-    }
-
-    .header .nav {
-        display: flex;
-        gap: 76px;
-    }
-
-    .header-menu a {
-        padding: 8px 16px;
-        border-radius: 5px;
-        transition: background 0.3s;
-    }
-
-    .nav a:hover {
-        color: white;
-    }
-    .header-menu a:hover {
-        color: white;
-        background: #6B89AB;
-    }
 
     .container {
         flex: 1;
@@ -56,24 +9,55 @@
     }
 
     .welcome-box {
-        background: white;
         padding: 60px;
         border-radius: 20px;
         box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         text-align: center;
-        max-width: 600px;
+        max-width: 1200px;
     }
 
     .welcome-box h1 {
+        color: var(--sliverpink);
         font-size: 36px;
-        color: #333;
-        margin-bottom: 20px;
+        margin-bottom: 100px;
     }
 
     .welcome-box p {
         font-size: 18px;
         color: #666;
         margin-bottom: 30px;
+    }
+
+    .contains {
+        display: flex;
+        gap: 230px;
+    }
+
+    .contains p {
+        color: #fff;
+        font-size: 13px;
+    }
+
+    .contain {
+        width: 285px;
+        height: 80px;
+        line-height: 80px;
+        margin: 0 auto;
+        margin-bottom: 35px;
+    }
+
+    .contain p {
+        font-size: 20px;
+    }
+
+    .contain::before {
+        content: '';
+        display: block;
+        width: 285px;
+        height: 80px;
+        background: rgba(255, 255, 255, .4);
+        filter: blur(5px);
+        position: absolute;
     }
 
     .user-badge {
