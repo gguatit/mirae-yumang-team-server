@@ -32,6 +32,15 @@
         display: flex;
         gap: 230px;
     }
+     .contain p:hover {
+        color: var(--policeblue);
+        transition: all 0.3s;
+     }
+
+     .contain:hover::before {
+        background: rgba(255, 255, 255, .7);
+        transition: all 0.3s;
+     }
 
     .contains p {
         color: #fff;
@@ -39,6 +48,7 @@
     }
 
     .contain {
+        display: block;
         width: 285px;
         height: 80px;
         line-height: 80px;
@@ -58,6 +68,7 @@
         background: rgba(255, 255, 255, .4);
         filter: blur(5px);
         position: absolute;
+        z-index: -1;
     }
 
     .user-badge {

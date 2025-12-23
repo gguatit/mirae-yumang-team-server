@@ -8,18 +8,15 @@
 </head>
 <body>
 <div class="header">
-  <div class="header-logo"><a href="#"><img src="/static/images/STARLOG.png" alt="로고"></a></div>
+  <div class="header-logo"><a href="/home"><img src="/static/images/STARLOG.png" alt="로고"></a></div>
   <div class="nav">
-      <div><a href="">오늘의 별자리운세</a></div>
-      <div><a href="">오늘의 학교밈</a></div>
+      <div><a href="/mypage">오늘의 별자리운세</a></div>
+      <div><a href="/posts">오늘의 학교밈</a></div>
   </div>
   <div class="header-menu">
     <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
     <div th:if="${username}">
-                <span style=" margin-right: 10px;"
-                      th:text="${username} + '님'"></span>
-      <a href="/posts">게시판</a>
-      <a href="/mypage">마이페이지</a>
+      <a href="/mypage" th:text="${username} + '님'"></a>
       <a href="/auth/logout">로그아웃</a>
     </div>
     <div th:unless="${username}">
@@ -31,18 +28,18 @@
 
 <div class="container">
   <div class="welcome-box">
-    <h1 class="">별이 말해주는 오늘,<br>
+    <h1>별이 말해주는 오늘,<br>
        우리가 만드는 학교 이야기.!
     </h1>
 
     <div class="contains">
       <div>
-        <div class="contain"><p>오늘의 운세 보기</p></div>
+        <a href="/mypage" class="contain"><p>오늘의 운세 보기</p></a>
         <p>12별자리별 오늘의 운세를 간단하게 보여드립니다.</p>
       </div>
       
       <div>
-        <div class="contain"><p>학교 밈 보러가기</p></div>
+          <a href="/posts" class="contain"><p>학교 밈 보러가기</p></a>
         <p>우리 학교에서만 공감 가능한 밈을 공유해보세요.</p>
       </div>
     </div>

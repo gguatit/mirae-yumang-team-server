@@ -39,6 +39,7 @@
         align-items: center;
         color: var(--sky);
         font-weight: 200;
+        padding-righit: 30px;
     }
 
     .header-logo {
@@ -66,7 +67,10 @@
     .header-menu a {
         padding: 8px 16px;
         border-radius: 5px;
-        transition: background 0.3s;
+
+    }
+    .header a {
+        transition: all 0.3s;
     }
 
     .nav a:hover {
