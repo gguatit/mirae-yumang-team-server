@@ -1,0 +1,81 @@
+    .register-container{
+        width: 600px;
+        height: 700px;
+        background: #B1CCE199;
+        border-radius: 30px;
+        margin: 30px auto 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 28px;
+    }
+
+    .form-group input{
+        width: 400px;
+        height: 50px;
+        display: flex;
+        font-size: 16px;
+        line-height: 60px;
+        color: #6B89AB;
+        background: #EDFEFB;
+        border: none;
+        font-family: Cafe24 Simplehae;
+        border-radius: 5px;
+        padding-left: 20px;
+        margin: 0 auto 20px auto;
+    }
+
+
+
+    /* input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    input:focus {
+        /* outline: none; */
+        /* border-color: #667eea; */
+     /* }  */ 
+
+    button {
+        width: 400px;
+        height: 70px;
+        font-size: 20px;
+        line-height: 60px;
+        color: #EDFEFB;
+        background: #82BEDC;
+        border-radius: 5px;
+        border: none;
+        margin: 0 auto;
+    }
+
+
+    .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #c33;
+    }
+
+    .link-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .link-group a {
+        color: #667eea;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
