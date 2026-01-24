@@ -8,15 +8,15 @@
 </head>
 <body>
 
-<div class="header">
-  <div class="header-logo"><a href="#"><img src="/static/images/STARLOG.png" alt="로고"></a></div>
-  <div class="nav">
+<!-- <div class="header">-->
+   <!-- <div class="header-logo"><a href="#"><img src="/static/images/STARLOG.png" alt="로고"></a></div> -->
+  <!-- <div class="nav">
       <div><a href="">오늘의 별자리운세</a></div>
       <div><a href="">오늘의 학교밈</a></div>
   </div>
   <div class="header-menu">
-    <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
-    <div th:if="${username}">
+    < 로그인 여부에 따라 다른 메뉴 표시 -->
+    <!-- <div th:if="${username}">
                 <span style=" margin-right: 10px;"
                       th:text="${username} + '님'"></span>
       <a href="/posts">게시판</a>
@@ -28,20 +28,28 @@
       <a href="/auth/register">회원가입</a>
     </div>
   </div>
-</div>
+</div> -->
 
 
-<div class="login-container">
+<!-- <div class="login-container">
     <div class="login-logo">
         <h2 class="back">Fortune <br> 
         Board</h2>
          <h2 class="front">Fortune <br> 
         Board</h2>
-    </div>
+    </div> -->
     
+    <header><a href="/home">홈으로</a></header>
 
-    <!--에러 메세지 표시-->
-    <div th:if="${error}" class="error-message">
+     <div class="wrap">
+        <div class="centerbox">
+            <div class="leftbox">
+                <img src="/static/images/로그인 페이지 이미지.png" alt="">
+            </div>
+            <div class="rightbox">
+                <!-- LOGO 메인화면 이동 -->
+                <a href="#" class="starlog">SATRLOG</a>
+                <div th:if="${error}" class="error-message">
         <span th:text="${error}"></span>
     </div>
 
@@ -62,18 +70,19 @@
         <input type="text" id="password" name="password"
                placeholder="비밀번호를 입력하세요" required>
       </div>
-    <div class="savename">
+    <!-- <div class="savename">
         <input type="checkbox" id="savename" name="savename">
         아이디 저장
-    </div>
+    </div> -->
       
       
       <button type="submit">로그인</button>
     </form>
     <div class="link-group">
-      <a href="/auth/register">회원가입하기</a>
+      <a href="/auth/register">아직 계정이 없나요? 회원가입</a>
     </div>
-    </div>
-</div>
+            </div>
+        </div>
+    </div> 
 </body>
 </html>

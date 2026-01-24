@@ -1,0 +1,121 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', sans-serif;
+}
+
+body {
+    background: #0e0f1a;
+    color: #fff;
+}
+
+/* 전체 중앙 정렬 */
+.profile-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 카드 */
+.profile-card {
+    width: 420px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 28px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* 상단 */
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.profile-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin-right: 16px;
+}
+
+.profile-name {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.profile-zodiac {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+/* 섹션 */
+.profile-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    opacity: 0.8;
+}
+
+/* 자기소개 */
+.profile-bio {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+/* 활동 */
+.profile-stats {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+}
+
+.profile-stats li {
+    text-align: center;
+}
+
+.profile-stats strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-stats span {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+/* 버튼 */
+.profile-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-primary {
+    flex: 1;
+    background: linear-gradient(135deg, #7f7cff, #b983ff);
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-outline {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    padding: 12px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+}

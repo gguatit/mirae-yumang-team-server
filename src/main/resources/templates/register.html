@@ -8,37 +8,21 @@
 </head>
 <body>
 
-
-<div class="header">
-    <div class="header-logo"><a href="#"><img src="/static/images/STARLOG.png" alt="로고"></a></div>
-    <div class="nav">
-        <div><a href="">오늘의 별자리운세</a></div>
-        <div><a href="">오늘의 학교밈</a></div>
-    </div>
-    <div class="header-menu">
-        <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
-        <div th:if="${username}">
-                <span style=" margin-right: 10px;"
-                      th:text="${username} + '님'"></span>
-            <a href="/posts">게시판</a>
-            <a href="/mypage">마이페이지</a>
-            <a href="/auth/logout">로그아웃</a>
-        </div>
-        <div th:unless="${username}">
-            <a href="/auth/login">로그인</a>
-            <a href="/auth/register">회원가입</a>
-        </div>
-    </div>
-</div>
+  <header><a href="/home">홈으로</a></header>
 
 
+  <div class="wrap">
+    <div class="centerbox">
+      <div class="leftbox">
+        <img src="/static/images/로그인 페이지 이미지.png" alt="">
+      </div>
 
+      <div class="rightbox">
+        <!-- LOGO -->
+         
+        <a href="login.html" class="starlog">STARLOG</a>
 
-
-
-
-<div class="register-container">
-  <div class="header-logo"><a href="#"><img src="/static/images/STARLOG.png" alt="로고"></a></div>
+       <div class="register-container">
 
   <div th:if="${error}" class="error-message">
     <span th:text="${error}"></span>
@@ -67,9 +51,11 @@
     <button type="submit">회원가입</button>
   </form>
 
-  <!-- <div class="link-group">
+  <div class="link-group">
     <a href="/auth/login">이미 계정이 있으신가요? 로그인</a>
-  </div> -->
-</div>
+  </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

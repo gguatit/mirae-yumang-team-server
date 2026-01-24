@@ -1,82 +1,313 @@
+*{
+	margin:0 auto;
+	padding:0;
+	list-style:none;
+	font-family:"맑은 고딕";
+	color:#C7D7F9
+}
+body{
+	height:100vh; 
+    background: #161838;
+	font-size:20px;
+}
+a{ 
+	text-decoration:none;
+	/* display:block; */
+}
+section {
+  align-items: center; /* 세로 중앙 정렬 */
+  max-width: 100%;
+  height: 100%;
+}
+.wrap {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    /* border: 1px solid #ffcd04; */
+}
+.hero {
+    /* border: 1px solid #9d00ff; */
+    height: 1000px;
+    position: relative;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+.MainTitle {
+    width: 90%;
+    height: 90%;
+    margin-top: 50px;
+}
+/* 로그인 회원가입 버튼 */
+.header-menu {
+    top: 30px;
+    right: 10px;
+    position: fixed;
+}
+.header-menu>div>a {
+    font-size: 16px;
+    color:#FAE8D3;
+    border: 1px solid #FAE8D3;
+    padding: 8px;
+    border-radius: 50px;
+    margin:4px;
+}
+.intro0{
+    width: 100%;
+    height: 450px;
+    display: flex;
+    align-items: center;
+    background-color: #5C68B2;
+}
+.intro0>div {
+    width: 850px; 
+    margin: 0 auto;
+    text-align: center;
+    line-height: 40px;
+}
+.intro0>div>p {
+    font-size: 36px;
+    margin-bottom: 16px;
+}
+.intro0>div>span {
+    font-size: 20px;
+}
+.intro1 {
+    height: 1059px;
+    background: #202353;
+}
+.intro1>.wrap>p {
+    text-align: center;
+    line-height: 40px;
+}
+.intro1ImgBox {
+    margin: auto;
+    padding: 117px 0;
+    width: 1200px;
+    height: 850px;
+}
+.intro1ImgBox>img {
+    width: 100%;
+    height: 100%;
+}
+.today {
+    height: 1027px;
+}
+.today>.wrap>div {
+    width: 720px;
+    height: 100%;
+}
+.today>.wrap {
+    display: flex;
+}
+/* today 왼쪽 박스 버튼x */
+.today-box1{
+    background: #5C68B2;
+}
+.today-box1>.titlebox{
+    height: 380px;
+}
+.titlebox>div {
+    width: 500px;
+    margin: 100px auto;
+    padding: 80px;
+}
+.titlebox>div>p{
+    font-size: 44px;
+    margin-bottom: 30px;
+}
+.titlebox>div>span {
+    line-height: 40px;
+    font-size: 20px;
+}
+.today-box1>.imgbox{
+    height: 547px;
+}
+.today-box1>.imgbox>img{
+    width: 100%;
+    height: 100%;
+}
+/* today 오른쪽 박스 버튼o */
+.today-box2 {
+    display: flex;
+    align-items: center;
+    background: #9DB2F5;
+}
+.today-box2>.card {
+    width: 450px;
+    height: 700px;
+}
+.card-top{
+    font-size: 24px;
+    width: 100%;
+    height: 450px;
+    background: #5C68B2;
+    border-radius:16px 16px 0 0 ;
+}
+.card-top>.fortune-title{
+    font-size: 28px;
+    line-height: 40px;
+    padding: 40px 0 10px;
+    padding-left: 20px;
+}  
+.fortune-list{
+    margin-top: 30px;
+    padding-left: 20px;
+}
+.fortune-list>li {
+    padding: 16px 0;
+}
+/* 카드 하단 */
+.card-buttom {
+    border-radius: 0 0 16px 16px;
+    width: 100%;
+    height: 250px;
+    background: #202353;
+    position: relative;
+}
+.card-buttom>p {
+    font-weight: 100;
+    color:#FAE8D3; 
+    font-size: 12px;
+    text-align: center;
+    padding-top: 80px;
+}
+/* 오늘의 운세 버튼 */
+.today-buttom{
+    font-size: 20px; 
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color:#FAE8D3;
+    border: 1px solid #FAE8D3;
+    padding: 8px;
+    border-radius: 50px;
+}
 
+/* 서비스 설명 */
+.intro2 {
+    height: 1059px;
+    background: #202353;
+}
+.intro2>.wrap>p {
+    text-align: center;
+    line-height: 40px;
+}
+.intro2ImgBox {
+    margin: auto;
+    padding: 117px 0;
+    width: 1200px;
+    height: 600px;
+}
+.intro2ImgBox>img {
+    width: 100%;
+    height: 100%;
+}
 
-    .container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-    }
-
-    .welcome-box {
-        padding: 60px;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        text-align: center;
-        max-width: 1200px;
-    }
-
-    .welcome-box h1 {
-        color: var(--sliverpink);
-        font-size: 36px;
-        margin-bottom: 100px;
-    }
-
-    .welcome-box p {
-        font-size: 18px;
-        color: #666;
-        margin-bottom: 30px;
-    }
-
-    .contains {
-        display: flex;
-        gap: 230px;
-    }
-     .contain p:hover {
-        color: var(--policeblue);
-        transition: all 0.3s;
-     }
-
-     .contain:hover::before {
-        background: rgba(255, 255, 255, .7);
-        transition: all 0.3s;
-     }
-
-    .contains p {
-        color: #fff;
-        font-size: 13px;
-    }
-
-    .contain {
-        display: block;
-        width: 285px;
-        height: 80px;
-        line-height: 80px;
-        margin: 0 auto;
-        margin-bottom: 35px;
-    }
-
-    .contain p {
-        font-size: 20px;
-    }
-
-    .contain::before {
-        content: '';
-        display: block;
-        width: 285px;
-        height: 80px;
-        background: rgba(255, 255, 255, .4);
-        filter: blur(5px);
-        position: absolute;
-        z-index: -1;
-    }
-
-    .user-badge {
-        display: inline-block;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: 600;
-        margin-bottom: 30px;
-    }
+.community {
+    /* border: 1px solid #9d00ff; */
+    height: 1027px;
+}
+.community>.wrap {
+    display: flex;
+}
+.community>.wrap>div {
+    width: 720px;
+    height: 100%;
+}
+/* 커무니티 카드 */
+.community-box2{
+    display: flex;
+    align-items: center;
+    background: #9DB2F5;
+}
+/* 카드 */
+.community-box2>.card {
+    width: 450px;
+    height: 700px;
+}
+.community-box2>.card-top{
+    font-size: 24px;
+    width: 100%;
+    height: 450px;
+    background: #5C68B2;
+    border-radius:16px 16px 0 0 ;
+}
+.community-box2 .fortune-title{
+    font-size: 28px;
+    line-height: 40px;
+    padding: 40px 0 10px;
+    padding-left: 20px;
+}  
+.community-box2>.fortune-list{
+    margin-top: 30px;
+    padding-left: 20px;
+}
+.fortune-list>li {
+    padding: 16px 0;
+}
+/* 카드 하단 */
+.community-box2>.card-buttom {
+    border-radius: 0 0 16px 16px;
+    width: 100%;
+    height: 250px;
+    background: #202353;
+    position: relative;
+}
+.community-box2>.card-buttom>p {
+    font-weight: 100;
+    color:#FAE8D3; 
+    font-size: 12px;
+    text-align: center;
+    padding-top: 80px;
+}
+/* 커뮤니티 버튼 */
+.community-buttom{
+    font-size: 20px; 
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color:#FAE8D3;
+    border: 1px solid #FAE8D3;
+    padding: 8px;
+    border-radius: 50px;
+}
+.community-box1{
+    background: #5C68B2;
+}
+.community-box1>.titlebox{
+    height: 380px;
+}
+.titlebox>div {
+    width: 500px;
+    margin: 100px auto;
+    padding: 80px;
+}
+.titlebox>div>p{
+    font-size: 44px;
+    margin-bottom: 30px;
+}
+.titlebox>div>span {
+    font-size: 20px;
+}
+.community-box1>.imgbox{
+    height: 547px;
+}
+.community-box1>.imgbox>img{
+    width: 100%;
+    height: 100%;
+}
+footer{
+     width: 1440px;
+     height: 120px;
+     background: #484848;
+}
