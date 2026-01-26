@@ -58,7 +58,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.15.3</version>
+		</dependency>
+		<!-- Source: https://mvnrepository.com/artifact/com.googlecode/google-api-translate-java -->
+		<dependency>
+			<groupId>com.googlecode</groupId>
+			<artifactId>google-api-translate-java</artifactId>
+			<version>0.92</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

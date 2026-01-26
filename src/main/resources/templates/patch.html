@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul >
+        <li th:each=" u : ${unsaeList}">
+            <p th:text="${u.con}"></p>
+            <p th:text="${u.date}"></p>
+            <p th:text="${u.content}"></p>
+            <p th:text="${u.lCor}"></p>
+            <p th:text="${u.lKey}"></p>
+            <p th:text="${u.money}"></p>
+            <p th:text="${u.love}"></p>
+            <p th:text="${u.study}"></p>
+            <p th:text="${u.health}"></p>
+        </li>          
+    </ul>
+</body>
+</html>

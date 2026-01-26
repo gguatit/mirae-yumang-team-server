@@ -1,8 +1,15 @@
 package com.example.demo.controller;
 
+import com.example.demo.crawler.CrawlingUtils;
+import com.example.demo.entity.Unsae;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,9 +55,10 @@ public class HomeController {
      * 
      * @param session 현재 사용자의 세션 (Spring이 자동 주입)
      * @param model 뷰에 데이터를 전달하기 위한 객체
+     * @throws Exception 
      */
     @GetMapping("/")
-    public String index(HttpSession session, Model model) {
+    public String index(HttpSession session, Model model) throws Exception {
         return home(session, model);  // home() 메서드 재활용
     }
 
@@ -60,13 +68,14 @@ public class HomeController {
      * 학습 포인트:
      * - 로그인 여부에 따라 다른 화면 표시 (동일 템플릿, 다른 데이터)
      * - Thymeleaf의 th:if를 활용한 조건부 렌더링
+     * @throws Exception 
      */
     @GetMapping("/home")
-    public String home(HttpSession session, Model model) {
+    public String home(HttpSession session, Model model) throws Exception {
         // 세션에서 로그인 정보 확인
         // getAttribute()는 Object를 반환하므로 String으로 캐스팅 필요
         String username = (String) session.getAttribute("loginUser");
-
+        
         if (username != null) {
             // 로그인 상태: username을 뷰에 전달
             model.addAttribute("username", username);
