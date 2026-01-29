@@ -4,160 +4,22 @@
   <meta charset="UTF-8">
   <title>글 수정</title>
   <link rel="stylesheet" href="/static/css/reset.css">
-  <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f5f5;
-    }
-
-    .navbar {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .navbar-brand {
-        font-size: 24px;
-        font-weight: 700;
-        text-decoration: none;
-        color: white;
-    }
-
-    .navbar-menu a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 16px;
-    }
-
-    .container {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .write-box {
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-        font-size: 28px;
-        color: #333;
-        margin-bottom: 30px;
-    }
-
-    .form-group {
-        margin-bottom: 25px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 8px;
-        color: #555;
-        font-weight: 600;
-    }
-
-    input[type="text"],
-    textarea {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        font-size: 14px;
-        font-family: inherit;
-        transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus,
-    textarea:focus {
-        outline: none;
-        border-color: #667eea;
-    }
-
-    textarea {
-        min-height: 300px;
-        resize: vertical;
-    }
-
-    .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 30px;
-    }
-
-    button, .btn-cancel {
-        flex: 1;
-        padding: 14px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: transform 0.2s;
-    }
-
-    button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-
-    .btn-cancel {
-        background: #6c757d;
-        color: white;
-        display: inline-block;
-    }
-
-    button:hover, .btn-cancel:hover {
-        transform: translateY(-2px);
-    }
-
-    .error-message {
-        background: #fee;
-        color: #c33;
-        padding: 12px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        border-left: 4px solid #c33;
-    }
-
-    .info-box {
-        background: #f0f7ff;
-        border-left: 4px solid #667eea;
-        padding: 12px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-    }
-
-    .info-box span {
-        color: #555;
-        font-size: 14px;
-    }
-  </style>
+  <link rel="stylesheet" href="/static/css/post-edit.css">
 </head>
 <body>
 <div class="navbar">
   <a href="/home" class="navbar-brand">스프링 게시판</a>
-  <div class="navbar-menu">
-    <a href="/posts">게시판</a>
+    <div class="navbar-menu">
+        <span th:if="${username}" style="color: white;" ></span>
+        <a href="/posts">게시판</a>
+        <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
+        <a th:if="${username}" href="/auth/logout">로그아웃</a>
   </div>
 </div>
 
 <div class="container">
   <div class="write-box">
-    <h1>글 수정</h1>
+
 
     <!-- 학습용: 수정과 작성의 차이를 보여주는 정보 박스 -->
     <div class="info-box">
@@ -177,14 +39,12 @@
     -->
     <form th:action="@{/posts/{id}/edit(id=${post.id})}" method="post">
       <div class="form-group">
-        <label for="title">제목</label>
         <input type="text" id="title" name="title"
                th:value="${post.title}"
                placeholder="제목을 입력하세요" required>
       </div>
 
       <div class="form-group">
-        <label for="content">내용</label>
         <textarea id="content" name="content"
                   placeholder="내용을 입력하세요" 
                   required

@@ -10,9 +10,8 @@
 <div class="navbar">
     <a href="/home" class="navbar-brand">스프링 게시판</a>
     <div class="navbar-menu">
-        <span th:if="${username}" style="color: white;" th:text="${username} + '님'"></span>
         <a href="/posts">게시판</a>
-        <a th:if="${username}" href="/mypage">마이페이지</a>
+        <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
         <a th:if="${username}" href="/auth/logout">로그아웃</a>
         <a th:unless="${username}" href="/auth/login">로그인</a>
     </div>

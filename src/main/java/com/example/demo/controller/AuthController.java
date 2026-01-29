@@ -38,6 +38,7 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+    
 
     // ============================================
     // 로그인 처리
@@ -200,4 +201,7 @@ public class AuthController {
         // GET 요청도 로그아웃 처리 (브라우저 주소창 입력 대응)
         return logout(session);
     }
+
+    
+    
 }

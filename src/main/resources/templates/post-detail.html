@@ -4,135 +4,17 @@
   <meta charset="UTF-8">
   <title th:text="${post.title}">게시글 상세</title>
   <link rel="stylesheet" href="/static/css/reset.css">
-  <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: #f5f5f5;
-    }
-
-    .navbar {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .navbar-brand {
-        font-size: 24px;
-        font-weight: 700;
-        text-decoration: none;
-        color: white;
-    }
-
-    .navbar-menu a {
-        color: white;
-        text-decoration: none;
-        padding: 8px 16px;
-    }
-
-    .container {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 0 20px;
-    }
-
-    .post-detail {
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-
-    .post-header {
-        padding: 30px 40px;
-        border-bottom: 2px solid #f0f0f0;
-    }
-
-    .post-title {
-        font-size: 28px;
-        color: #333;
-        margin-bottom: 15px;
-    }
-
-    .post-meta {
-        display: flex;
-        gap: 20px;
-        color: #666;
-        font-size: 14px;
-    }
-
-    .post-meta span {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .post-content {
-        padding: 40px;
-        min-height: 300px;
-        line-height: 1.8;
-        color: #333;
-        font-size: 16px;
-        white-space: pre-wrap;
-    }
-
-    .post-footer {
-        padding: 20px 40px;
-        background: #f8f9fa;
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        transition: transform 0.2s;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-
-    .btn-secondary {
-        background: #6c757d;
-        color: white;
-    }
-
-    .btn-danger {
-        background: #e74c3c;
-        color: white;
-    }
-
-    .btn:hover {
-        transform: translateY(-2px);
-    }
-  </style>
+  <link rel="stylesheet" href="/static/css/post-detail.css">
 </head>
 <body>
 <div class="navbar">
-  <a href="/home" class="navbar-brand">🚀 Spring Board</a>
-  <div class="navbar-menu">
-    <a href="/posts">게시판</a>
+  <a href="/home" class="navbar-brand">스프링 게시판</a>
+    <div class="navbar-menu">
+        <span th:if="${username}" style="color: white;" ></span>
+        <a href="/posts">게시판</a>
+        <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
+        <a th:if="${username}" href="/auth/logout">로그아웃</a>
+        <a th:unless="${username}" href="/auth/login">로그인</a>
   </div>
 </div>
 
@@ -140,17 +22,19 @@
   <div class="post-detail">
     <div class="post-header">
       <h1 class="post-title" th:text="${post.title}"></h1>
-      <div class="post-meta">
+    <div class="post-meta">
         <span>👤 <span th:text="${post.author}"></span></span>
         <span>📅 <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
         <span>👁️ <span th:text="${post.viewCount}"></span></span>
       </div>
+      
     </div>
+
 
     <div class="post-content" th:text="${post.content}"></div>
 
     <div class="post-footer">
-      <a href="/posts" class="btn btn-secondary">목록</a>
+      <a href="/posts" class="btn btn-secondary">돌아가기</a>
 
       <!-- 작성자만 수정/삭제 버튼 표시 -->
       <div class="btn-group" th:if="${isAuthor}">

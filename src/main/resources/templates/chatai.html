@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/chatai.css">
+</head>
+<body>
+    <div class="wrap">
+        <div class="navbar">
+          <a href="/home" class="navbar-brand">스프링 게시판</a>
+            <div class="navbar-menu">
+                <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
+                <a th:if="${username}" href="/auth/logout">로그아웃</a>
+                <a th:unless="${username}" href="/auth/login">로그인</a>
+          </div>
+        </div>
+        <!-- 중앙 내용 -->
+        <div class="bodybox">
+            <div class="bodybox">
+                <!-- 왼쪽 사이드바 -->
+                <aside class="sidebar-left">
+                    <button class="zodiac-select-btn">
+                        <span class="selected-zodiac">물병자리</span>
+                        선택
+                    </button>
+                    <!-- 별자리 리스트 -->
+                    <ul class="zodiac-list">
+                        <li data-zodiac="aries">
+                            <strong>양자리</strong>
+                            <span>3.21 ~ 4.19</span>
+                        </li>
+                        <li data-zodiac="taurus">
+                            <strong>황소자리</strong>
+                            <span>4.20 ~ 5.20</span>
+                        </li>
+                        <li data-zodiac="gemini">
+                            <strong>쌍둥이자리</strong>
+                            <span>5.21 ~ 6.21</span>
+                        </li>
+                        <li data-zodiac="cancer">
+                            <strong>게자리</strong>
+                            <span>6.22 ~ 7.22</span>
+                        </li>
+                        <li data-zodiac="leo">
+                            <strong>사자자리</strong>
+                            <span>7.23 ~ 8.22</span>
+                        </li>
+                        <li data-zodiac="virgo">
+                            <strong>처녀자리</strong>
+                            <span>8.23 ~ 9.22</span>
+                        </li>
+                        <li data-zodiac="libra">
+                            <strong>천칭자리</strong>
+                            <span>9.23 ~ 10.22</span>
+                        </li>
+                        <li data-zodiac="scorpio">
+                            <strong>전갈자리</strong>
+                            <span>10.23 ~ 11.22</span>
+                        </li>
+                        <li data-zodiac="sagittarius">
+                            <strong>사수자리</strong>
+                            <span>11.23 ~ 12.21</span>
+                        </li>
+                        <li data-zodiac="capricorn">
+                            <strong>염소자리</strong>
+                            <span>12.22 ~ 1.19</span>
+                        </li>
+                        <li data-zodiac="aquarius">
+                            <strong>물병자리</strong>
+                            <span>1.20 ~ 2.18</span>
+                        </li>
+                        <li data-zodiac="pisces">
+                            <strong>물고기자리</strong>
+                            <span>2.19 ~ 3.20</span>
+                        </li>
+                    </ul>
+                    <!--선택된 별자리 설명 -->
+                    <div class="zodiac-desc">
+                        <p>
+                            자유로운 사고와 독창성을 가진 별자리로,<br>
+                            새로운 시도를 두려워하지 않는 성향을 가지고 있어요.
+                        </p>
+                    </div>
+                </aside>
+
+                <!-- 중앙 AI 채팅 -->
+                <main class="chat-main" data-mode="chat">
+                    <div class="chat-messages">
+                       <div class="message ai">
+                        <div class="bubble">
+                             ai대화 메세지
+                        </div>
+                        <button class="save-fortune-btn">⭐ 저장</button>
+                       </div>                  
+                        <div class="message user">
+                            <div class="bubble">오늘 연애운 어때?</div>
+                        </div>
+                    
+                        <div class="message ai">
+                            <div class="bubble">
+                                예상치 못한 연락이 올 수 있어요.<br>
+                                너무 서두르지 마세요.
+                            </div>
+                            <button class="save-fortune-btn">⭐ 저장</button>
+                        </div>
+                    </div>
+                
+                    <div class="chat-input">
+                        <input type="text" placeholder="메시지를 입력하세요">
+                        <button>전송</button>
+                    </div>
+                </main>
+            
+                <!-- 오른쪽 사이드바 -->
+                <aside class="sidebar-right">
+                    <div class="today-date">
+                        <p>2026.01.23</p>
+                        <span>Friday</span>
+                    </div>
+                
+                    <ul class="chat-history">
+                        <li>오늘의 운세</li>
+                        <li>연애운 질문</li>
+                        <li>금전운 상담</li>
+                        <li>이번 주 운세</li>
+                    </ul>
+                </aside>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+  const btn = document.querySelector('.zodiac-select-btn');
+  const sidebar = document.querySelector('.sidebar-left');
+  const zodiacItems = document.querySelectorAll('.zodiac-list li');
+  const selectedText = document.querySelector('.selected-zodiac');
+  const descBox = document.querySelector('.zodiac-desc p');
+
+  const zodiacDescriptions = {
+    aries: "도전과 열정이 강한 별자리로, 시작을 두려워하지 않는 성향이에요.",
+    taurus: "안정과 현실을 중시하며, 한 번 마음먹은 일은 끝까지 해내요.",
+    gemini: "호기심이 많고 소통을 즐기는 별자리로, 생각이 빠르게 변해요.",
+    cancer: "감정이 풍부하고 배려심이 깊은 별자리예요.",
+    leo: "자신감과 리더십이 강하며, 주목받는 것을 좋아해요.",
+    virgo: "섬세하고 분석적인 성향으로 완벽을 추구해요.",
+    libra: "균형과 조화를 중요하게 생각하는 사교적인 별자리예요.",
+    scorpio: "집중력과 직관이 뛰어나며 깊은 관계를 선호해요.",
+    sagittarius: "자유와 모험을 사랑하며 긍정적인 에너지가 강해요.",
+    capricorn: "책임감이 강하고 현실적인 목표를 중시해요.",
+    aquarius: "독창적이고 개방적인 사고를 가진 별자리예요.",
+    pisces: "상상력이 풍부하고 감수성이 뛰어난 별자리예요."
+  };
+
+  btn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+  });
+
+  zodiacItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const name = item.querySelector('strong').textContent;
+      const key = item.dataset.zodiac;
+
+      selectedText.textContent = name;
+      descBox.textContent = zodiacDescriptions[key];
+
+      sidebar.classList.remove('open');
+    });
+  });
+    const chatMessages = document.querySelector('.chat-messages');
+  const historyItems = document.querySelectorAll('.chat-history li');
+
+  historyItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const text = item.textContent;
+
+      // 유저 말풍선 생성
+      const message = document.createElement('div');
+      message.classList.add('message', 'user');
+
+      message.innerHTML = `
+        <div class="bubble">${text}</div>
+      `;
+
+      chatMessages.appendChild(message);
+
+      // 스크롤 맨 아래로
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  });
+  const zodiacChatItems = document.querySelectorAll('.zodiac-list li');
+
+  zodiacChatItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const zodiacName = item.querySelector('strong')
+        ? item.querySelector('strong').textContent
+        : item.textContent;
+
+      const message = document.createElement('div');
+      message.classList.add('message', 'user');
+      message.innerHTML = `<div class="bubble">${zodiacName}</div>`;
+
+      chatMessages.appendChild(message); // ← 기존 변수 재사용
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+  });
+  const saveButtons = document.querySelectorAll('.save-fortune-btn');
+
+saveButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const fortuneText = btn.previousElementSibling.innerText;
+
+    let savedFortunes = JSON.parse(localStorage.getItem('savedFortunes')) || [];
+
+    savedFortunes.push({
+      text: fortuneText,
+      date: new Date().toLocaleDateString(),
+      zodiac: document.querySelector('.zodiac-info h3')?.innerText || '별자리'
+    });
+
+    localStorage.setItem('savedFortunes', JSON.stringify(savedFortunes));
+
+    alert('운세가 저장됐어요 ✨');
+  });
+});
+const chatMain = document.querySelector('.chat-main');
+
+// 기록 모드일 때만 실행
+if (chatMain.dataset.mode === 'history') {
+  const saved = JSON.parse(localStorage.getItem('savedFortunes')) || [];
+
+  chatMessages.innerHTML = ''; // 기존 메시지 제거
+
+  if (saved.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'message ai';
+    empty.innerHTML = `<div class="bubble">저장된 운세 기록이 없어요 ✨</div>`;
+    chatMessages.appendChild(empty);
+  } else {
+    saved.forEach(item => {
+      const msg = document.createElement('div');
+      msg.classList.add('message', 'ai');
+      msg.innerHTML = `
+        <div class="bubble">
+          <strong>${item.zodiac}</strong><br>
+          ${item.text}
+          <div style="margin-top:8px; font-size:12px; opacity:.6;">
+            ${item.date}
+          </div>
+        </div>
+      `;
+      chatMessages.appendChild(msg);
+    });
+  }
+
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+const params = new URLSearchParams(window.location.search);
+const mode = params.get('mode');
+
+if (mode === 'history') {
+  document.querySelector('.chat-main').dataset.mode = 'history';
+}
+</script>
+</html>
