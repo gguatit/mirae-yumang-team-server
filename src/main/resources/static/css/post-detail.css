@@ -195,17 +195,17 @@
         justify-content: right;
         gap: 10px;
     }
-    .suggestion{
+    .recommend-section{
         position: absolute;
-        width: 200px;
+        width: 210px;
         display: flex;
         gap: 10px;
         justify-content: center;
         right: 45%;
     }
-    .suggestion button {
-        width: 80px;
-        height: 80px;
+    .recommend-section button {
+        width: 100px;
+        height: 100px;
         border-radius: 8px;
         background: none;
         border: 2px solid #C7D7F9;
@@ -216,7 +216,13 @@
         text-align: center;
         align-content: center;
     }
-    .suggestion button:hover {
+    /* 추천/비추천 버튼이 활성화되었을 때 (색상 통일) */
+    .recommend-section button.active { 
         background: #C7D7F9;
         color: #272A66;
     }
+
+    /* .recommend-section button:hover {
+        background: #C7D7F9;
+        color: #272A66;
+    } */

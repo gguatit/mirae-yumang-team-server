@@ -37,10 +37,19 @@
       <a href="/posts" class="btn btn-secondary">돌아가기</a>
 
 
-      <div class="suggestion">
-        <button>추천</button>
-        <button>비추천</button>
-      </div>
+      <div class="recommend-section">
+        <button type="button" class="btn-like" 
+                th:classappend="${userChoice == 'L'} ? 'active' : ''"
+                th:onclick="'handleLikeHate(' + ${post.id} + ', \'L\')'">
+            추천 <span id="like-count" th:text="${likeCount}">0</span>
+        </button>
+
+        <button type="button" class="btn-hate"
+                th:classappend="${userChoice == 'H'} ? 'active' : ''" 
+                th:onclick="'handleLikeHate(' + ${post.id} + ', \'H\')'">
+            비추천 <span id="hate-count" th:text="${hateCount}">0</span>
+        </button>
+    </div>
 
 
       <!-- 작성자만 수정/삭제 버튼 표시 -->
@@ -54,5 +63,37 @@
     </div>
   </div>
 </div>
+<script>
+  async function handleLikeHate(postId, type) {
+    // 1. 서버에 요청 보내기 (PostController에 만든 API 주소)
+    // URL 구조: /posts/api/{postId}/like-hate?type=L 또는 H
+    const url = `/posts/api/${postId}/like-hate?type=${type}`;
+    
+    console.log("요청 주소:", url); // 브라우저 콘솔(F12)에서 주소가 맞는지 확인용
+    
+    try {
+        const response = await fetch(url, {
+            method: 'POST'
+        });
+
+        // 2. 로그인 안 된 경우 처리 (401 에러)
+        if (response.status === 401) {
+            alert("로그인이 필요한 서비스입니다.");
+            window.location.href = "/auth/login";
+            return;
+        }
+
+        // 3. 성공 시 메시지 출력 후 페이지 새로고침
+        if (response.ok) {
+            location.reload(); // 숫자를 업데이트하기 위해 화면 새로고침
+        } else {
+            alert("처리 중 오류가 발생했습니다.");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("서버와 통신할 수 없습니다.");
+    }
+  }
+</script>
 </body>
 </html>

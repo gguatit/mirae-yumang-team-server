@@ -84,6 +84,9 @@ public class AuthController {
             return "login";  // login.html로 다시 이동
         }
 
+        // [중요!] 이 줄이 있어야 PostController에서 userId를 꺼낼 수 있습니다.
+        session.setAttribute("userId", user.getId());
+        
         // 2. 로그인 성공 → 세션에 사용자 정보 저장
         session.setAttribute("loginUser", username);  // 핵심!
         session.setAttribute("loginEmail", user.getEmail());

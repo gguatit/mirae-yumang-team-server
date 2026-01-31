@@ -1,14 +1,22 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Lh;
 import com.example.demo.entity.Post;
+import com.example.demo.entity.RecommendationType;
+import com.example.demo.repository.LhRepository;
+import com.example.demo.service.LhService;
 import com.example.demo.service.PostService;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 📌 게시글(Post) 관련 컨트롤러
@@ -35,9 +43,48 @@ import java.util.List;
  * → 각 계층의 역할을 명확히 분리 (관심사의 분리)
  */
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/posts")  // 이 컨트롤러의 모든 URL은 /posts로 시작
 public class PostController {
+    
+    private final LhRepository lhRepository;
+    private final LhService lhService;
 
+    
+    // 1. 상세 페이지 조회 (여기서 카운트를 수행해서 HTML에 넘김)
+    @GetMapping("/post/{postId}")
+    public String getPostDetail(@PathVariable Long postId, Model model) {
+        Post post = postService.getPostById(postId);
+        
+        // LH 테이블에서 실시간 검색
+        long likeCount = lhRepository.countByPostIdAndType(postId, RecommendationType.L);
+        long hateCount = lhRepository.countByPostIdAndType(postId, RecommendationType.H);
+
+        model.addAttribute("post", post);
+        model.addAttribute("likeCount", likeCount); // HTML의 ${likeCount}와 매칭
+        model.addAttribute("hateCount", hateCount); 
+        return "post-detail";
+    }
+
+    // 2. 추천/비추천 버튼 클릭 처리 (API)
+    @PostMapping("/api/{postId}/like-hate")
+    @ResponseBody // RestController처럼 결과만 반환
+    public ResponseEntity<String> likeHate(@PathVariable Long postId, 
+                                       @RequestParam RecommendationType type,
+                                       HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId"); 
+    
+        if (userId == null) {
+        // 2. body 없이 401 상태 코드만 반환
+        return ResponseEntity.status(401).build();
+    }
+
+        // 3. 서비스 호출 (리턴값을 받지 않음)
+        lhService.toggleLikeHate(userId, postId, type); 
+        
+        // 4. 성공 응답 반환
+        return ResponseEntity.ok().build();
+    }
     /**
      * Service 계층 주입
      * 
@@ -46,13 +93,13 @@ public class PostController {
      * - Controller는 Repository를 직접 사용하지 않음
      * - Service를 통해 비즈니스 로직을 처리
      */
-    @Autowired
-    private PostService postService;
+    
 
     // ============================================
     // 게시글 목록
     // ============================================
-
+    @Autowired
+    private PostService postService;
     /**
      * 게시글 목록 조회
      * URL: /posts (GET)
@@ -187,27 +234,43 @@ public class PostController {
             Model model
     ) {
         try {
-            // 게시글 조회 (조회수도 자동 증가)
+            // 1. 게시글 정보 조회 (postService 내에 getPostById 메서드 사용)
             Post post = postService.getPostById(id);
             model.addAttribute("post", post);
 
-            // 로그인 정보
+            // 2. LH 테이블에서 해당 게시물의 'L' 개수와 'H' 개수를 각각 검색 (Count)
+            long likeCount = lhRepository.countByPostIdAndType(id, RecommendationType.L);
+            long hateCount = lhRepository.countByPostIdAndType(id, RecommendationType.H);
+            
+            model.addAttribute("likeCount", likeCount); 
+            model.addAttribute("hateCount", hateCount); 
+
+            // 3. 로그인 정보 및 권한 확인
             String username = (String) session.getAttribute("loginUser");
             model.addAttribute("username", username);
-
-            // 작성자 확인 (수정/삭제 버튼 표시용)
-            // 현재 로그인한 사용자가 글쓴이인지 확인
+            
             boolean isAuthor = username != null && post.isAuthor(username);
             model.addAttribute("isAuthor", isAuthor);
 
-            return "post-detail";  // templates/post-detail.html
+            Long userId = (Long) session.getAttribute("userId");
+            String userChoice = ""; // 기본값 (아무것도 안 누름)
+
+            if (userId != null) {
+                // DB에서 해당 유저가 이 게시글에 남긴 기록이 있는지 조회
+                Optional<Lh> myLh = lhRepository.findByUserIdAndPostId(userId, id);
+                if (myLh.isPresent()) {
+                    userChoice = myLh.get().getType().toString(); // "L" 또는 "H"
+                }
+            }
+
+    model.addAttribute("userChoice", userChoice); // HTML로 "L", "H" 혹은 "" 전달
+            return "post-detail"; 
 
         } catch (Exception e) {
             System.out.println("❌ 게시글 조회 실패: " + e.getMessage());
-            return "redirect:/posts";  // 실패 시 목록으로
+            return "redirect:/posts";
         }
     }
-
     // ============================================
     // 게시글 삭제
     // ============================================

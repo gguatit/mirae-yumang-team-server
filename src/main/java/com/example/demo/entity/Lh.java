@@ -8,33 +8,37 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "LH")
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lh {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 기본키를 따로 두는 것이 관리가 편합니다.
 
-    @Column(name = "USER_ID", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
-    @Column(name = "POST_ID", nullable = false)
-    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 
-    /**
-     * L : 좋아요
-     * H : 싫어요
-     */
-    @Column(name = "TYPE", nullable = false, length = 1)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "TYPE", length = 1)
+    private RecommendationType type; // 'L' 또는 'H'를 담는 Enum
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    @Builder
+    public Lh(User user, Post post, RecommendationType type) {
+        this.user = user;
+        this.post = post;
+        this.type = type;
     }
+
+    public void changeType(RecommendationType type) {
+        this.type = type;
+    }
+    
 }
