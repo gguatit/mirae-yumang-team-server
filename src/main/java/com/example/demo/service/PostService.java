@@ -1,10 +1,18 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Post;
+import com.example.demo.entity.RecommendationType;
 import com.example.demo.entity.User;
+import com.example.demo.repository.LhRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class PostService {
 
@@ -20,6 +29,8 @@ public class PostService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    private final LhRepository lhRepository;
 
     // ============================================
     // 게시글 작성
@@ -79,6 +90,10 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
         return postRepository.findByUserOrderByCreatedAtDesc(user);
+    }
+    public Page<Post> getPopularPosts(int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return postRepository.findAllByOrderByLikeCountDescCreatedAtAsc(pageable);
     }
 
     // ============================================
@@ -159,3 +174,4 @@ public class PostService {
 
         return postRepository.countByUser(user);
     }}
+    

@@ -6,6 +6,7 @@ import com.example.demo.entity.RecommendationType;
 import com.example.demo.repository.LhRepository;
 import com.example.demo.service.LhService;
 import com.example.demo.service.PostService;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
 
 /**
  * 📌 게시글(Post) 관련 컨트롤러
@@ -49,6 +52,7 @@ public class PostController {
     
     private final LhRepository lhRepository;
     private final LhService lhService;
+    
 
     
     // 1. 상세 페이지 조회 (여기서 카운트를 수행해서 HTML에 넘김)
@@ -125,6 +129,11 @@ public class PostController {
         model.addAttribute("posts", posts);
 
         System.out.println("게시글 목록 조회: " + posts.size() + "개");
+
+        // 3. 🔥 인기 게시글 목록 (추천순, 상위 5개만)
+        // getPopularPosts(0)를 호출해 첫 페이지(5개)를 가져옵니다.
+        Page<Post> popularPage = postService.getPopularPosts(0);
+        model.addAttribute("bestPosts", popularPage.getContent());
 
         return "post-list";  // templates/post-list.html
     }
@@ -443,4 +452,5 @@ public class PostController {
         System.out.println("게시글 수정 완료: " + id);
         return "redirect:/posts/" + id;
     }
+    
 }

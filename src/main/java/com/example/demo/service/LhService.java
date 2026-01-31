@@ -8,6 +8,7 @@ import com.example.demo.repository.LhRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,25 +27,42 @@ public class LhService {
     private final PostRepository postRepository;
 
     public void toggleLikeHate(Long userId, Long postId, RecommendationType type) {
-        // 기존 기록 조회
+        Post post = postRepository.findById(postId).orElseThrow();
         Optional<Lh> alreadyLH = lhRepository.findByUserIdAndPostId(userId, postId);
 
         if (alreadyLH.isPresent()) {
             Lh existing = alreadyLH.get();
             if (existing.getType() == type) {
-                lhRepository.delete(existing); // 같은 타입이면 취소
-                return;
+                // 같은 버튼 클릭 시: 취소 (숫자 -1)
+                if (type == RecommendationType.L) post.updateLikeCount(-1);
+                else post.updateHateCount(-1);
+                lhRepository.delete(existing);
             } else {
-                existing.changeType(type); // 다른 타입이면 변경 (Entity에 메서드 필요)
-                return;
+                // 다른 버튼 클릭 시: 변경 (한쪽 -1, 다른쪽 +1)
+                if (type == RecommendationType.L) {
+                    post.updateLikeCount(1);
+                    post.updateHateCount(-1);
+                } else {
+                    post.updateLikeCount(-1);
+                    post.updateHateCount(1);
+                }
+                existing.changeType(type);
             }
-        }
+        } else {
+            // 처음 클릭 시: 생성 (숫자 +1)
+            User user = userRepository.findById(userId).orElseThrow(); // 유저 정보 가져오기
 
-        // 기록 없으면 신규 생성
-        User user = userRepository.findById(userId).orElseThrow();
-        Post post = postRepository.findById(postId).orElseThrow();
-        
-        lhRepository.save(Lh.builder().user(user).post(post).type(type).build());
-        return;
+            if (type == RecommendationType.L) post.updateLikeCount(1);
+            else post.updateHateCount(1);
+
+            // 🔥 실제 DB에 기록을 남기는 코드가 반드시 있어야 합니다!
+            Lh newLh = Lh.builder()
+                    .user(user)
+                    .post(post)
+                    .type(type)
+                    .build();
+            
+            lhRepository.save(newLh); 
+        }
     }
 }

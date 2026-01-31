@@ -47,27 +47,28 @@
     <div class="post-table">
         <!-- 게시글 목록 테이블 -->
         <table th:if="${posts.size() > 0}">
-            <!-- <thead>
-            <tr>
-                <th class="col-id">번호</th>
-                <th class="col-title">제목</th>
-                <th class="col-author">작성자</th>
-                <th class="col-date">작성일</th>
-                <th class="col-views">조회수</th>
-            </tr>
-            </thead> -->
+            <thead>
+                <tr>
+                    <th class="col-id">번호</th>
+                    <th class="col-title">제목</th>
+                    <th class="col-author">작성자</th>
+                    <th class="col-date">날짜</th>
+                    <th class="col-views">조회수</th>
+                    <th class="col-likes">추천</th> </tr>
+            </thead>
             <tbody>
-            <tr th:each="post, iterStat : ${posts}" th:onclick="|location.href='@{/posts/{id}(id=${post.id})}'|" style="cursor:pointer;">
-                <td class="col-id" th:text="${iterStat.count}"></td>
-                <td class="col-title">
-                    <a th:href="@{/posts/{id}(id=${post.id})}"
-                       th:text="${post.title}"
-                       class="post-title"></a>
-                </td>
-                    <td class="col-author" th:text="${post.author}" ></td>
+                <tr th:each="post, iterStat : ${posts}" th:onclick="|location.href='@{/posts/{id}(id=${post.id})}'|" style="cursor:pointer;">
+                    <td class="col-id" th:text="${iterStat.count}"></td>
+                    <td class="col-title">
+                        <a th:href="@{/posts/{id}(id=${post.id})}"
+                        th:text="${post.title}"
+                        class="post-title"></a>
+                    </td>
+                    <td class="col-author" th:text="${post.author}"></td>
                     <td class="col-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td class="col-views" th:text="${post.viewCount} ?: 0"></td>
-            </tr>
+                    <td class="col-likes" th:text="${post.likeCount} ?: 0"></td> 
+                </tr>
             </tbody>
         </table>
 
@@ -78,49 +79,31 @@
         
         </div>
         <div class="bastpost-main">
+
+        <a th:if="${username}" href="/posts/write" class="btn">글쓰기</a>
+        <a th:unless="${username}" href="/auth/login" class="btn">로그인 후 글쓰기</a>
+
         <div class="bastpost">
-                <h3 class="best-title">인기 게시글</h3>
-                <ul class="best-list">
-                    <li class="best-item">
-                        <a href="post-detail.html" class="best-link">
-                            <img src="images/프로필 이미지.png" alt="프로필">
-                            <div class="best-text">
-                                <span class="best-nickname">user1</span>
-                                <p class="best-content">인기 게시글 내용</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="best-item">
-                        <a href="post-detail.html" class="best-link">
-                            <img src="images/프로필 이미지.png" alt="프로필">
-                            <div class="best-text">
-                                <span class="best-nickname">user2</span>
-                                <p class="best-content">인기 게시글 내용</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="best-item">
-                        <a href="post-detail.html" class="best-link">
-                            <img src="images/프로필 이미지.png" alt="프로필">
-                            <div class="best-text">
-                                <span class="best-nickname">user3</span>
-                                <p class="best-content">인기 게시글 내용</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="best-item">
-                        <a href="post-detail.html" class="best-link">
-                            <img src="images/프로필 이미지.png" alt="프로필">
-                            <div class="best-text">
-                                <span class="best-nickname">user4</span>
-                                <p class="best-content">인기 게시글 내용</p>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+            <div class="tmp">
+                <h3 class="best-title">인기 게시글 </h3>
+                <span class="title-sub">(추천수)</span>
             </div>
-            <a th:if="${username}" href="/posts/write" class="btn">글쓰기</a>
-            <a th:unless="${username}" href="/auth/login" class="btn">로그인 후 글쓰기</a>
+            <ul class="best-list">
+                <li class="best-item" th:each="post : ${bestPosts}">
+                    <a th:href="@{/posts/{id}(id=${post.id})}" class="best-link">
+                        <div class="best-text">
+                            <span class="best-nickname" th:text="${post.user.username}">user1</span>
+                            <p class="best-content" th:text="${post.title}">인기 게시글 제목</p>
+                        </div>
+                        <span class="best-likes" th:text="${post.likeCount} ?: 0">0</span>
+                    </a>
+                </li>
+                
+                <li class="best-item" th:if="${#lists.isEmpty(bestPosts)}">
+                    <p class="best-content" style="text-align: center; color: #9DB2F5;">인기 게시글이 없습니다.</p>
+                </li>
+            </ul>
+        </div>
             </div>
         </div>
         </div>

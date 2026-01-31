@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -40,6 +42,12 @@ public class Post {
     @Column(name = "view_count")
     private Integer viewCount = 0;
 
+    @Column(columnDefinition = "integer default 0")
+    private int likeCount = 0; // 초기값도 0으로 설정
+
+    @Column(columnDefinition = "integer default 0")
+    private int hateCount = 0;
+
     // 편의 생성자
     public Post(String title, String content, User user) {
         this.title = title;
@@ -47,6 +55,8 @@ public class Post {
         this.user = user;
         this.createdAt = LocalDateTime.now();
         this.viewCount = 0;
+        this.likeCount = 0;
+        this.hateCount = 0;
     }
 
     // ✨ 생성 시 자동으로 현재 시간 설정
@@ -67,7 +77,14 @@ public class Post {
     // ============================================
     // 비즈니스 로직 메서드
     // ============================================
+    // 비즈니스 로직: 숫자를 증감시키는 메서드
+    public void updateLikeCount(int amount) {
+        this.likeCount += amount;
+    }
 
+    public void updateHateCount(int amount) {
+        this.hateCount += amount;
+    }
     /**
      * 조회수 증가 메서드
      * 
@@ -136,4 +153,8 @@ public class Post {
                 ", createdAt=" + createdAt +
                 '}';
     }
+    // 🔥 추가: CascadeType.ALL과 orphanRemoval을 설정
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    // 초기화를 꼭 해주어야 NullPointerException이 발생하지 않습니다.
+    private List<Lh> likesHates = new ArrayList<>();
 }

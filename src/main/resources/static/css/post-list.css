@@ -1,11 +1,11 @@
-
+    
     * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             list-style:none;
-            font-family:"맑은 고딕";
-            color:#C7D7F9;
+            /* font-family:"맑은 고딕"; */
+            /* color:#C7D7F9; */
         }
 
         body {
@@ -110,128 +110,129 @@
 
 
 
-        .container {
-            width: 1500px;
-            margin: 40px auto;
-            padding: 0 20px;
-            overflow: hidden;
-        }
+.container {
+    width: 1500px;
+    margin: 40px auto;
+    padding: 0 20px;
+    overflow: hidden;
+}
 
-        .page-header {
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+.page-header {
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
 
-        .post-count {
-            padding: 20px 0 20px 0;
-        }
+.post-count {
+    padding: 20px 0 20px 0;
+}
 
-        .btn {
-            width: 100%;
-            display: inline-block;
-            padding: 12px 24px;
-            background:  #5C68B2;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: transform 0.2s;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-        }
+.btn {
+    width: 100%;
+    display: inline-block;
+    padding: 12px 24px;
+    background:  #5C68B2;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: transform 0.2s;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
 
-        .btn:hover {
-            transform: translateY(-2px);
-        }
+.btn:hover {
+    transform: translateY(-2px);
+}
 
-        .post-table {
-            width: 1000px;
-            height: 1300px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+.post-table {
+    width: 1000px;
+    height: 1300px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
 
-        table {
-            width: 1000px;
-            height: 100%;
-            border-collapse: collapse;
-        }
+table {
+    width: 1000px;
+    height: 100%;
+    border-collapse: collapse;
+}
 
-        thead {
-            
-        }
-
-
-        td {
-            padding: 30px 15px 15px 15px;
-            color: #5C68B2;
-            align-content: center;
-        }
-
-        td.col-title a{width: 600px; display: block; text-decoration: none; color: #5C68B2; font-weight: 600;}
-        td.col-author {}
-        td.col-date {}
-        td.col-id { text-align: center; color: #5C68B2; }
-        td.col-views { text-align: center; color: #5C68B2;}
-
-        tbody{
-            width: 1000px;
-            height: 100%;
-            display: block;
-        }
-
-        tr{
-            width: 1000px;
-            display: block;
-            height: 100px;
-            background: #9DB2F5;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            padding: 10px;
-        }
-        tr:last-child{
-            margin-bottom: 0;
-        }
-
-        tr:hover {
-            background: #f9f9f9;
-        }
-
-        .post-title {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            
-        }
-
-        .post-main{
-            display: flex;
-            justify-content: space-between;
-        }
+thead {
+    
+}
 
 
+td {
+    padding: 30px 15px 15px 15px;
+    color: #5C68B2;
+    align-content: center;
+}
 
-        .empty-message {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-            font-size: 18px;
-        }
+td.col-title a{width: 447px; display: block; text-decoration: none; color: #5C68B2; font-weight: 600;}
+/* td.col-author {}
+td.col-date {}
+td.col-id { text-align: center; color: #5C68B2; }
+td.col-views { text-align: center; color: #5C68B2;}
+td.col-likes { text-align: center; color: #5C68B2;} */
 
-        .post-count {
-            color: #fff;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
+tbody{
+    width: 1000px;
+    height: 100%;
+    display: block;
+}
 
-    .post-count-v{
-        color: #9DB2F5;
-    }
+tr{
+    width: 1000px;
+    display: block;
+    height: 100px;
+    background: #9DB2F5;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+tr:last-child{
+    margin-bottom: 0;
+}
 
-        .bastpost{
+tr:hover {
+    background: #f9f9f9;
+}
+
+.post-title {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+    
+}
+
+.post-main{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.empty-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 18px;
+}
+
+.post-count {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.post-count-v{
+color: #9DB2F5;
+}
+
+.bastpost{
     background:#9DB2F5;
     height:300px;
     width:100%;
@@ -240,7 +241,7 @@
     box-sizing:border-box;
     display:flex;
     flex-direction:column;
-    margin-bottom: 20px;
+    margin-top: 20px;
 }
 .best-title {
     font-weight: normal;
@@ -287,6 +288,31 @@
     align-items: center;
     gap: 10px;
 }
+.tmp {
+    display: flex;
+    justify-content: space-between;
+}
+.best-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FAE8D3;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center; /* 아이콘, 제목, 서브텍스트를 일직선으로 */
+    gap: 8px;
+}
+
+/* (추천수) 문구 스타일 */
+.title-sub {
+    color: #fff;
+    text-align: right;
+    font-size: 12px;
+    margin-left: 2px;
+}
+.best-likes {
+    font-size: 12px;
+    color: #5C68B2;
+}
 .pagination {
     margin-top: 20px;
     display: flex;
@@ -304,3 +330,35 @@
     transition: 0.2s;
 }
 .page-btn:hover { opacity:0.8; }
+
+/* 테이블 헤더 전체 스타일 */
+.post-table thead tr {
+    background: transparent; /* 헤더는 배경색 없이 투명하게 */
+    height: 50px;             /* 헤더 높이 조절 */
+    margin-bottom: 10px;      /* 아래 행과의 간격 */
+    display: flex;            /* td들과 정렬을 맞추기 위해 flex 사용 */
+    align-items: center;      /* 세로 중앙 정렬 */
+    padding: 0 10px;
+}
+
+.post-table thead th {
+    color: #FAE8D3;           /* 인기글 제목과 같은 베이지색으로 포인트 */
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left; /* 기본 왼쪽 정렬 */
+    padding: 0 15px;
+}
+
+/* 각 컬럼 너비 설정 (tbody의 td들과 일치시키기) */
+.col-id     { width: 60px; text-align: center !important; }
+.col-title  { flex: 1;  }  /* 제목이 남은 공간을 다 차지함 */
+.col-author { width: 120px; text-align: center !important;}
+.col-date   { width: 170px; text-align: center !important;}
+.col-views  { width: 80px; text-align: center !important; }
+.col-likes  { width: 80px; text-align: center !important; } /* 추천수 강조 */
+
+/* 기존 tbody tr 설정 수정 (기존 tr 설정이 있으면 덮어씌워짐) */
+tbody tr {
+    display: flex;
+    align-items: center;
+}

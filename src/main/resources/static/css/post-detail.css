@@ -196,6 +196,7 @@
         gap: 10px;
     }
     .recommend-section{
+        margin-top: 20px;
         position: absolute;
         width: 210px;
         display: flex;
