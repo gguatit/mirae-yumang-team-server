@@ -76,9 +76,5 @@
     .nav a:hover {
         color: white;
     }
-    .header-menu a:hover {
-        color: white;
-        background: var(--rackley);
-    }
 
     

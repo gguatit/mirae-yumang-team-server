@@ -52,9 +52,8 @@ section {
 .header-menu>div>a {
     font-size: 16px;
     color:#FAE8D3;
-    border: 1px solid #FAE8D3;
     padding: 8px;
-    border-radius: 50px;
+    border-radius: 8px;
     margin:4px;
 }
 .intro0{
@@ -190,7 +189,9 @@ section {
     padding: 8px;
     border-radius: 50px;
 }
-.today-buttom:hover{
+li a:hover {
+    color: white;
+    background: var(--rackley);
     
 }
 
@@ -313,4 +314,35 @@ footer{
      width: 1440px;
      height: 120px;
      background: #484848;
+}
+
+header{
+    width: 100%;
+    padding-top: 30px;
+}
+header div{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+header a {
+    font-size: 16px;
+    color:#FAE8D3;
+    padding: 8px;
+    border-radius: 8px;
+    margin:4px;
+}
+header a:hover {
+    color: white;
+    background: var(--rackley);
+}
+.header-menu a:hover {
+    color: white;
+    background: var(--rackley);
+}
+.header-logo{
+    position: fixed;
+    top: 30px;
+    left: 10px;
 }
