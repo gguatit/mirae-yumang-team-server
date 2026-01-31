@@ -191,7 +191,7 @@ section {
 }
 li a:hover {
     color: white;
-    background: var(--rackley);
+    background: rgba(255,255,255,0.2);
     
 }
 
@@ -335,14 +335,14 @@ header a {
 }
 header a:hover {
     color: white;
-    background: var(--rackley);
+    background: rgba(255,255,255,0.2);
 }
 .header-menu a:hover {
     color: white;
-    background: var(--rackley);
+    background: rgba(255,255,255,0.2);
 }
 .header-logo{
     position: fixed;
     top: 30px;
-    left: 10px;
+    left: 20px;
 }
