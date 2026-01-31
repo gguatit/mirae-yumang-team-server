@@ -81,6 +81,7 @@
         border-right: 2px solid #202353;
         border-left: 2px solid #202353;
         border-top: 2px solid #202353;
+        font-family: "맑은 고딕";
     }
 
     input::placeholder{

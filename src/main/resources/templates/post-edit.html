@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="navbar">
-  <a href="/home" class="navbar-brand">스프링 게시판</a>
+  <a href="/home" class="navbar-brand">STARLOG</a>
     <div class="navbar-menu">
         <span th:if="${username}" style="color: white;" ></span>
         <a href="/posts">게시판</a>
@@ -23,7 +23,7 @@
 
     <!-- 학습용: 수정과 작성의 차이를 보여주는 정보 박스 -->
     <div class="info-box">
-      <span>💡 수정 중인 글: #<span th:text="${post.id}"></span> | 작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+      <span>수정 중인 글: #<span th:text="${post.id}"></span> | 작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
     </div>
 
     <!-- 에러 메시지 표시 -->

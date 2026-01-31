@@ -18,7 +18,8 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: 'Cafe24ClassicType';
+        font-family: '맑은 고딕';
+        font-weight: 600;
     }
     a {
         color: inherit;
