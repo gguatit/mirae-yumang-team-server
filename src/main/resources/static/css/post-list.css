@@ -123,9 +123,8 @@
             margin-bottom: 30px;
         }
 
-        .page-header h1 {
-            font-size: 32px;
-            color: #333;
+        .post-count {
+            padding: 20px 0 20px 0;
         }
 
         .btn {
@@ -223,10 +222,14 @@
         }
 
         .post-count {
-            color: #666;
+            color: #fff;
             font-size: 14px;
             margin-bottom: 10px;
         }
+
+    .post-count-v{
+        color: #9DB2F5;
+    }
 
         .bastpost{
     background:#9DB2F5;

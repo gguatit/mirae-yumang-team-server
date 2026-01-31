@@ -41,13 +41,13 @@
         font-weight: 200;
         /* padding-righit: 30px; */
     }
-
+/* 
     .header-logo {
         text-shadow: 10px 10px 3px gray;
         text-align: center;
         font-size: 40px;
         font-weight: 400;
-    }
+    } */
 
     .header-menu {
         display: flex;
