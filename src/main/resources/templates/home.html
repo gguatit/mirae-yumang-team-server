@@ -7,15 +7,26 @@
     <link rel="stylesheet" href="/static/css/home.css">
 </head>
 <body>
-    <header></header>
+    
     <main>
         <section class="hero">
           <img src="/static/images/STARLOG.png" alt="" class="hero-bg">
         
           <div class="wrap">
             <div class="hero-content">
+                <header>
+                    <div>
+                        <a href="/posts">학교 커뮤니티</a>
+                        <a href="/chatai">오늘의 운세</a>
+                        <a href="#">채용공고</a>
+                    </div>
+                </header>
+            <div class="header-logo">
+                <a href="/home">STARLOG</a>
+            </div>
               <img class="MainTitle" src="/static/images/STARLOG 메인타이틀3.png" alt="StarLogMainTitle">
               <div class="header-menu">
+                
                  <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
                  <div th:if="${username}">
                    <a href="/mypage" th:text="${username} + '님'"></a>
@@ -24,7 +35,7 @@
                  <div th:unless="${username}">
                    <a href="/auth/login">로그인</a>
                    <a href="/auth/register">회원가입</a>
-                 </div>
+                </div>
             </div>
           </div>
         </section>
