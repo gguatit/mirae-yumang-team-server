@@ -80,6 +80,7 @@
         border-right: 2px solid #202353;
         border-left: 2px solid #202353;
         border-top: 2px solid #202353;
+        font-family:"Cafe24ClassicType";
     }
 
     input::placeholder{
@@ -98,7 +99,7 @@
         width: 100%;
         padding: 12px;
         font-size: 14px;
-        font-family: inherit;
+        font-family: "Cafe24ClassicType";
         transition: border-color 0.3s;
     }
 
@@ -192,4 +193,30 @@
         margin-bottom: 10px;
         display: flex;
         justify-content: right;
+        gap: 10px;
+    }
+    .suggestion{
+        position: absolute;
+        width: 200px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        right: 45%;
+    }
+    .suggestion button {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        background: none;
+        border: 2px solid #C7D7F9;
+        border-radius: 50%;
+        color: #C7D7F9;
+        display: inline-block;
+        padding: 14px;
+        text-align: center;
+        align-content: center;
+    }
+    .suggestion button:hover {
+        background: #C7D7F9;
+        color: #272A66;
     }
