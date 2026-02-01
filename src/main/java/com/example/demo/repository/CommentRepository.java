@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     // 게시글 ID로 댓글 목록을 작성 시간 순으로 가져오기
-    List<Comment> findByPostIdOrderByCreatedAtDesc(Long postId);
+    List<Comment> findByPostIdOrderByCreatedAtAsc(Long postId);
 }

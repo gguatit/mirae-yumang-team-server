@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Post;
+import com.example.demo.entity.PostImage;
 import com.example.demo.entity.RecommendationType;
 import com.example.demo.entity.User;
 import com.example.demo.repository.LhRepository;
@@ -175,7 +176,8 @@ public class PostService {
 
         return postRepository.countByUser(user);
     }
-    public Post createPost(String title, String content, String username, String fileName, String filePath) {
+
+    public Post createPost(String title, String content, String username, List<String> fileNames, List<String> filePaths) {
         // findByUsername이 Optional을 반환하는 경우
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다.")); // 또는 유저 찾는 로직
@@ -184,11 +186,17 @@ public class PostService {
         post.setTitle(title);
         post.setContent(content);
         post.setUser(user);
-        post.setFileName(fileName);
-        post.setFilePath(filePath);
         post.setCreatedAt(LocalDateTime.now());
         
-        return postRepository.save(post);
+        // 💡 여러 이미지 정보를 PostImage 객체로 만들어 Post에 추가
+        if (filePaths != null) {
+            for (int i = 0; i < filePaths.size(); i++) {
+                PostImage image = new PostImage(fileNames.get(i), filePaths.get(i), post);
+                post.getImages().add(image); // Post 엔티티의 리스트에 추가
+            }
+        }
+
+        return postRepository.save(post); // CascadeType.ALL 설정 덕분에 이미지들도 함께 저장됩니다.
     }
 }
 

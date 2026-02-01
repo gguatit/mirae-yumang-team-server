@@ -52,8 +52,9 @@ public class Post {
     @Column
     private String fileName; // 실제 저장된 파일 이름 (UUID_원본이름.jpg 형태)
 
-    @Column
-    private String filePath; // 브라우저에서 접근할 경로 (/upload/UUID_원본이름.jpg)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostImage> images = new ArrayList<>();
+
     // 편의 생성자
     public Post(String title, String content, User user) {
         this.title = title;
@@ -63,8 +64,6 @@ public class Post {
         this.viewCount = 0;
         this.likeCount = 0;
         this.hateCount = 0;
-        this.fileName = fileName;
-        this.filePath = filePath;
     }
 
     // ✨ 생성 시 자동으로 현재 시간 설정
