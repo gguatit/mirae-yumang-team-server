@@ -132,14 +132,4 @@ public class HomeController {
 
         return "mypage";  // templates/mypage.html 렌더링
     }
-    public class FortuneController {
-
-        @GetMapping("/chatai")
-        public String redirectToFortune() {
-            // "redirect:" 뒤에 외부 풀 주소를 적어주면 됩니다.
-            return "redirect:https://kalpha.c01.kr/";
-        }
-    }
-
-    
 }
