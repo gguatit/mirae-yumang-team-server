@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>STARLOG</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/announcement.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <main>
+    <section class="hero">
+
+    
+    <div class="wrap">
+            <div class="hero-content">
+                <header>
+                    <div>
+                        <a href="/posts">학교 커뮤니티</a>
+                        <a href="/chatai">오늘의 운세</a>
+                        <a href="/announcement">채용공고</a>
+                    </div>
+                </header>
+
+                <div class="header-bg"></div>
+
+            <div class="header-logo">
+                <a href="/home">STARLOG</a>
+            </div>
+              <div class="header-menu">
+                
+                 <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
+                 <div th:if="${username}">
+                   <a href="/mypage" th:text="${username} + '님'"></a>
+                   <a href="/auth/logout">로그아웃</a>
+                 </div>
+                 <div th:unless="${username}">
+                   <a href="/auth/login">로그인</a>
+                   <a href="/auth/register">회원가입</a>
+                </div>
+            </div>
+          </div>
+        </section>
+        <section class="announcement-section">
+            <div class="announcement-wrap">
+                <ul class="announcement-list">
+                    <li th:each="announcement : ${announcements}">
+
+
+                    </li>
+                </ul>
+            </div>
+
+        </section>
+        </main>
+</body>
+</html>
