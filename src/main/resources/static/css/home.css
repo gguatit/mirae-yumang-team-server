@@ -369,6 +369,7 @@ header a:hover {
         left: 0%;
         background: rgba(16,18,38,0.8);
         padding: 10px 0 10px 0;
+        z-index: 10;
     }
     .hero-bg {
     position: absolute;
@@ -403,7 +404,7 @@ header a:hover {
     section, .hero, .intro1, .today, .intro2, .community {
         height: auto !important;
         min-height: 100vh;
-        padding: 50px 0;
+        padding: 5px 0;
     }
 
     /* 3. 좌우 배치를 세로 배치로 전환 (Today, Community 섹션) */
