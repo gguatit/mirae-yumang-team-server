@@ -132,7 +132,4 @@ public class HomeController {
 
         return "mypage";  // templates/mypage.html 렌더링
     }
-
-
-    
 }

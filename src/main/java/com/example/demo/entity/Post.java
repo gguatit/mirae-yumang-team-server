@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "posts")
@@ -47,6 +48,12 @@ public class Post {
 
     @Column(columnDefinition = "integer default 0")
     private int hateCount = 0;
+    //이미지 추가
+    @Column
+    private String fileName; // 실제 저장된 파일 이름 (UUID_원본이름.jpg 형태)
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PostImage> images = new ArrayList<>();
 
     // 편의 생성자
     public Post(String title, String content, User user) {
@@ -157,4 +164,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     // 초기화를 꼭 해주어야 NullPointerException이 발생하지 않습니다.
     private List<Lh> likesHates = new ArrayList<>();
+
+    // 2. 댓글 데이터와의 관계 (이 부분이 없거나 설정이 부족할 확률이 높습니다)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }

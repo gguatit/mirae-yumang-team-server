@@ -7,42 +7,50 @@
   <link rel="stylesheet" href="/static/css/post-write.css">
 </head>
 <body>
-<div class="navbar">
-  <a href="/home" class="navbar-brand">STARLOG</a>
-    <div class="navbar-menu">
-        <a href="/posts">게시판</a>
-        <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
-        <a th:if="${username}" href="/auth/logout">로그아웃</a>
-  </div>
-</div>
-
-
-
-
-<div class="container">
-  <div class="write-box">
-
-    <div th:if="${error}" class="error-message">
-      <span th:text="${error}"></span>
+  <div class="navbar">
+    <a href="/home" class="navbar-brand">STARLOG</a>
+      <div class="navbar-menu">
+          <a href="/posts">게시판</a>
+          <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
+          <a th:if="${username}" href="/auth/logout">로그아웃</a>
     </div>
-
-    <form action="/posts/write" method="post">
-      <div class="form-group">
-        <input type="text" id="title" name="title"
-               placeholder="제목을 입력하세요" required>
-      </div>
-
-      <div class="form-group">
-        <textarea id="content" name="content"
-                  placeholder="나누고 싶은 이야기를 적어보세요." required></textarea>
-      </div>
-
-      <div class="button-group">
-        <button type="submit">작성완료</button>
-        <a href="/posts" class="btn-cancel">취소</a>
-      </div>
-    </form>
   </div>
+
+  <div class="container">
+    <div class="write-box">
+
+      <div th:if="${error}" class="error-message">
+        <span th:text="${error}"></span>
+      </div>
+
+      <form th:action="@{/posts/write}" method="post" enctype="multipart/form-data">
+        
+        <div class="form-group">
+          <input type="text" id="title" name="title"
+                placeholder="제목을 입력하세요" required>
+        </div>
+
+        <div class="form-group">
+          <textarea id="content" name="content"
+                    placeholder="나누고 싶은 이야기를 적어보세요." required></textarea>
+        </div>
+
+        <div class="tmp">
+          <div class="form-group">
+              <label style="color: #C7D7F9; display: block; margin-bottom: 10px;">이미지 첨부</label>
+              <input type="file" name="imageFile" accept="image/*" multiple style="color: #C7D7F9;">
+          </div>
+
+          <div class="button-group">
+            <button type="submit">작성완료</button>
+            <a href="/posts" class="btn-cancel">취소</a>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>
