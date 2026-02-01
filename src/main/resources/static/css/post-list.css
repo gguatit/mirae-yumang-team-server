@@ -73,7 +73,7 @@
     padding-top: 70px;
     padding-left:50px;
 }
-.titlebox>h1 { font-weight: 300; }
+.titlebox>h1 { font-weight: 300; color:white ;}
 .titlebox>span {
     font-weight: 100;
     font-size: 16px;
@@ -105,6 +105,9 @@
     background:#9DB2F5;
     border:none;
     cursor:pointer;
+}
+.search-box button{
+    color:white ;
 }
 .search-box button:hover{ background:#8aa3f0; }
 
@@ -197,7 +200,7 @@ tr:last-child{
 }
 
 tr:hover {
-    background: #f9f9f9;
+    background: #8aa3f0;
 }
 
 .post-title {
@@ -258,10 +261,8 @@ color: #9DB2F5;
     align-items:center;
     gap:10px;
 }
-.best-item img{
-    width:32px;
-    height:32px;
-    border-radius:50%;
+.best-item:hover{
+    background: #8aa3f0;
 }
 .best-text{
     overflow:hidden;

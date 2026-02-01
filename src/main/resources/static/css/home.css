@@ -5,10 +5,13 @@
 	font-family:"맑은 고딕";
 	color:#C7D7F9
 }
-body{
-	height:100vh; 
+body {
+    height: 100vh; 
     background: #161838;
-	font-size:20px;
+    font-size: 20px;
+    /* 가로 스크롤 방지 핵심 */
+    overflow-x: hidden; 
+    width: 100%;
 }
 a{ 
 	text-decoration:none;
@@ -48,6 +51,7 @@ section {
     top: 30px;
     right: 10px;
     position: fixed;
+    z-index: 10;
 }
 .header-menu>div>a {
     font-size: 16px;
@@ -345,4 +349,90 @@ header a:hover {
     position: fixed;
     top: 30px;
     left: 20px;
+    z-index: 10;
+}
+.header-bg{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10%;
+    background: rgba(16,18,38,0.8);
+    z-index: 5;
+    display: none;
+}
+@media screen and (max-width: 1200px) { 
+    
+    header{
+        position: fixed;
+        bottom: 0%;
+        left: 0%;
+        background: rgba(16,18,38,0.8);
+        padding: 10px 0 10px 0;
+    }
+    .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%; /* 부모인 .hero의 높이(1000px)를 따라갑니다 */
+    
+    /* 핵심 코드 */
+    object-fit: cover;    /* 이미지가 비율을 유지하며 요소의 빈 공간을 가득 채웁니다 */
+    object-position: center; /* 이미지의 중앙을 기준으로 배치합니다 */
+    
+    z-index: -1;
+    }
+    .MainTitle{
+        position: absolute;
+        top: 50%;
+        left: 66%;
+        transform: translate(-50%, -66%);
+    }
+    .header-bg{
+        display: block;
+    }
+
+    /* 1. 전체 레이아웃의 고정 너비 해제 */
+    .wrap, .intro0>div, .intro1ImgBox, .intro2ImgBox {
+        width: 90% !important; /* 화면의 90%만 차지하도록 유연하게 변경 */
+        max-width: none !important;
+        height: auto !important;
+    }
+
+    /* 2. 섹션 높이 고정 해제 (내용이 넘치는 것 방지) */
+    section, .hero, .intro1, .today, .intro2, .community {
+        height: auto !important;
+        min-height: 100vh;
+        padding: 50px 0;
+    }
+
+    /* 3. 좌우 배치를 세로 배치로 전환 (Today, Community 섹션) */
+    .today>.wrap, .community>.wrap {
+        display: flex !important;
+        flex-direction: column !important; /* 세로 정렬 */
+        align-items: center !important;
+    }
+
+    /* 4. 세로로 바뀐 박스들의 너비를 100%로 확장 */
+    .today>.wrap>div, .community>.wrap>div {
+        width: 100% !important;
+        max-width: 500px; /* 너무 퍼지지 않게 적당히 제한 */
+    }
+
+    /* 5. 이미지 크기 자동 조절 */
+    .imgbox, .intro1ImgBox, .intro2ImgBox {
+        height: auto !important;
+    }
+    
+    img:not(.hero-bg) {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* 6. 고정되어 화면을 가리는 요소들 해제 */
+    /* .header-logo, .header-menu {
+        position: static !important; /* fixed 해제 */
+        /* text-align: center;
+        padding: 10px 0; */
+    /* } */ 
 }
