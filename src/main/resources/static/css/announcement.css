@@ -1,15 +1,20 @@
 *{
-	margin:0 auto;
+	margin:0;
 	padding:0;
 	list-style:none;
 	font-family:"맑은 고딕";
-	color:#C7D7F9
+	color:#C7D7F9;
+    box-sizing: border-box;
 }
 body{
     height: 100vh; 
     background: #161838;
     font-size: 20px;
     width: 100%;
+}
+main{
+    width: 100%;
+    height: 100%;
 }
 header{
     width: 100%;
@@ -44,28 +49,16 @@ header a:hover {
 }
 .wrap {
     width: 100%;
-    height: 100%;
+    height: 130%;
     margin: 0 auto;
     /* border: 1px solid #ffcd04; */
 }
 .hero {
-    /* border: 1px solid #9d00ff; */
+    width: 100%;
     height: 1000px;
     position: relative;
 }
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-}
-.MainTitle {
-    width: 90%;
-    height: 90%;
-    margin-top: 50px;
-}
+
 /* 로그인 회원가입 버튼 */
 .header-menu {
     top: 30px;
@@ -80,8 +73,59 @@ header a:hover {
     border-radius: 8px;
     margin:4px;
 }
-.announcement-section{
+.main-content {
+    width: 60%;
+    height: 90%;
+    margin: 0 auto;
+    padding: 20px;
+}
+.announcement{
     width: 100%;
     height: 100%;
-    background: #000;
+    background: #1E2256;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+.main-announcement{
+    display: grid;
+    /* 화면 너비에 맞춰 최소 400px인 박스들을 꽉 채워서 배치 */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+    align-content: flex-start;
+    width: 100%;
+    height: 100%;
+    background: #ffffff81;
+    border-radius: 20px;
+    padding: 40px;
+}
+.main-announcement ul{
+    width: 100%;
+    height: 200px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    cursor: pointer;
+    margin: 0;
+}
+.main-announcement div{
+    width: 400px;
+    height: 200px;
+    margin: 0;
+}
+.main-announcement div, 
+.main-announcement ul {
+    width: 100% !important; 
+    height: 200px;
+}
+.main-announcement ul li{
+    color: #333;
+}
+.main-announcement ul:hover{
+    background: #f0f0f0;
+}
+.main-announcement ul li:nth-child(1){
+    font-size: 24px;
+    margin-bottom: 10px;
 }
