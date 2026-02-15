@@ -1,151 +1,403 @@
-# Spring 게시판(Educational Board) 🌸
+# STARLOG
 
-Spring Boot 게시판 프로젝트
----
+> 학교 커뮤니티 기반 웹 애플리케이션
 
-## 핵심 요약
-- 프로젝트: 게시판(Spring Boot + Thymeleaf + Spring Data JPA + H2)
-- 목적: MVC 아키텍처와 레이어 분리를 보여주기 위한 샘플
-- 기본 포트: `8080`
+미래유망팀의 Spring Boot 기반 통합 커뮤니티 플랫폼입니다. 게시판, 채용공고, AI 챗봇 등 다양한 기능을 제공합니다.
 
-## 데모 스크린샷
-
-<p align="center">
-  <img src="docs/images/1.png" alt="스크린샷 1" width="900" />
-</p>
-
-<p align="center">
-  <img src="docs/images/2.png" alt="스크린샷 2" width="900" />
-</p>
-
-<p align="center">
-  <img src="docs/images/3.png" alt="스크린샷 3" width="900" />
-</p>
-
-<p align="center">
-  <img src="docs/images/4.png" alt="스크린샷 4" width="900" />
-</p>
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 빠른 시작 (Windows PowerShell)
+## Table of Contents
 
-1) 프로젝트 루트로 이동:
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running the Application](#running-the-application)
+- [Project Structure](#project-structure)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [API Endpoints](#api-endpoints)
+- [Database](#database)
+- [Development](#development)
+- [Security](#security)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
 
-```powershell
-cd "c:\Users\2C-20\OneDrive\문서\SpringProjects\demo"
+---
+
+## Overview
+
+STARLOG는 학교 커뮤니티를 위한 종합 웹 플랫폼으로, 게시글 작성/조회, 사용자 인증, 파일 업로드, 채용공고 확인, AI 챗봇 등의 기능을 제공합니다. Spring Boot의 MVC 아키텍처와 계층형 구조를 기반으로 설계되었습니다.
+
+### Key Highlights
+
+- 완전한 CRUD 기능을 갖춘 게시판 시스템
+- 세션 기반 사용자 인증 및 권한 관리
+- 이미지 업로드 및 파일 관리
+- 반응형 UI (Thymeleaf)
+- H2 인메모리 데이터베이스 사용
+
+---
+
+## Features
+
+- **사용자 인증**: 회원가입, 로그인, 로그아웃, 세션 관리
+- **게시판**: 게시글 작성, 수정, 삭제, 조회수, 좋아요/싫어요, 검색 및 정렬
+- **댓글 시스템**: 게시글별 댓글 작성 및 관리
+- **파일 업로드**: 이미지 업로드 및 저장 (최대 10MB)
+- **채용공고**: 채용 정보 조회
+- **AI 챗봇**: 챗봇 인터페이스
+- **마이페이지**: 사용자 프로필 및 작성글 관리
+- **홈페이지**: 메인 대시보드
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Backend** | Spring Boot 3.5.7, Java 17 |
+| **Web Framework** | Spring MVC |
+| **Template Engine** | Thymeleaf |
+| **ORM** | Spring Data JPA, Hibernate |
+| **Database** | H2 (In-Memory) |
+| **Build Tool** | Maven |
+| **Server** | Tomcat (Embedded) |
+| **External Libraries** | Jsoup 1.15.3, Lombok |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+다음 소프트웨어가 설치되어 있어야 합니다:
+
+- **Java 17** or higher
+- **Maven 3.6+** (또는 포함된 Maven Wrapper 사용)
+- **Git**
+
+### Installation
+
+1. 저장소 클론
+
+```bash
+git clone https://github.com/mirae-yumang-team-project/mirae-yumang-team.git
+cd mirae-yumang-team
 ```
 
-2) 실행 (Gradle/Maven Wrapper 사용):
+2. 의존성 설치
 
-```powershell
-# 개발용 실행
-.mvnw.cmd spring-boot:run
-
-# 또는 빌드 후 실행
-.mvnw.cmd package
-java -jar .\target\demo-0.0.1-SNAPSHOT.jar
+```bash
+./mvnw clean install
 ```
 
-3) 브라우저로 접속: `http://localhost:8080`
+### Running the Application
 
-4) H2 콘솔 (DB 직접 확인): `http://localhost:8080/h2-console`
-   - JDBC URL: `jdbc:h2:~/testdb`
-   - 사용자: `sa` (패스워드 없음)
+#### 옵션 1: Maven Wrapper 사용 (권장)
 
----
+```bash
+./mvnw spring-boot:run
+```
 
-## 프로젝트 구조 (중요한 파일들)
+#### 옵션 2: JAR 파일 빌드 후 실행
 
-`src/main/java/com/example/demo`
-- `DemoApplication.java` - Spring Boot 애플리케이션 엔트리
-- `entity/` - 도메인 모델 (DB 테이블 매핑)
-  - `User.java`, `Post.java`
-- `repository/` - DB 접근 계층 (Spring Data JPA)
-  - `UserRepository.java`, `PostRepository.java`
-- `service/` - 비즈니스 로직 계층 (트랜잭션 포함)
-  - `UserService.java`, `PostService.java`
-- `controller/` - HTTP 요청을 처리하고 뷰를 반환하는 계층
-  - `AuthController.java`, `HomeController.java`, `PostController.java`
+```bash
+./mvnw package
+java -jar target/demo-0.0.1-SNAPSHOT.jar
+```
 
-`src/main/resources/templates` - Thymeleaf 뷰 템플릿 (`*.html`)
+#### 옵션 3: 백그라운드 실행 (nohup)
 
----
+```bash
+nohup ./mvnw spring-boot:run > ~/spring-boot.log 2>&1 &
+```
 
-## MVC 패턴이 어디에 어떻게 구현되어 있나
+서버가 시작되면 브라우저에서 다음 URL로 접속:
 
-- Model (데이터/도메인): 엔티티 `Post`, `User`
-  - JPA 어노테이션으로 DB 컬럼 매핑
-  - 엔티티 내부에 간단한 비즈니스 메서드(예: `incrementViewCount`, `isAuthor`) 포함
-
-- View (화면 렌더링): `src/main/resources/templates/*.html`
-  - Thymeleaf 사용 (서버사이드 템플릿)
-  - `Model` 객체에 담긴 데이터를 `${}`로 바인딩
-
-- Controller (요청/응답 흐름): `*Controller.java`
-  - HTTP 요청을 받고 적절한 Service를 호출한 뒤 뷰 이름을 반환
-  - 세션 관리는 `HttpSession`을 사용 (간단한 예제용)
-
-- Service (비즈니스 계층): `*Service.java`
-  - 데이터 검증, 권한 검사, 트랜잭션 경계 설정(@Transactional)
-  - Repository와 상호작용하여 DB 상태를 변경
-
-- Repository (영속성 계층): `*Repository.java`
-  - `JpaRepository`를 상속하여 CRUD/쿼리 메서드 사용
-  - 쿼리 메서드는 메서드 이름으로 SQL 생성 (예: `findByTitleContaining`)
-
-요약: Controller → Service → Repository → DB, 그리고 Controller는 Model을 채워 View에 전달합니다.
+```
+http://localhost:8090
+```
 
 ---
 
-## 파일 작성 순서
+## Project Structure
 
-새 기능(예: 게시글) 추가 시 추천 순서:
+```
+src/
+├── main/
+│   ├── java/com/example/demo/
+│   │   ├── DemoApplication.java          # 애플리케이션 진입점
+│   │   ├── config/
+│   │   │   └── WebConfig.java            # 웹 설정 (파일 업로드 경로 등)
+│   │   ├── controller/                   # HTTP 요청 처리
+│   │   │   ├── HomeController.java
+│   │   │   ├── AuthController.java
+│   │   │   ├── PostController.java
+│   │   │   ├── CommentController.java
+│   │   │   ├── AnnouncementController.java
+│   │   │   ├── ChatBotAiController.java
+│   │   │   └── ...
+│   │   ├── service/                      # 비즈니스 로직
+│   │   │   ├── UserService.java
+│   │   │   ├── PostService.java
+│   │   │   └── ...
+│   │   ├── repository/                   # 데이터 접근 계층
+│   │   │   ├── UserRepository.java
+│   │   │   ├── PostRepository.java
+│   │   │   └── ...
+│   │   ├── entity/                       # JPA 엔티티
+│   │   │   ├── User.java
+│   │   │   ├── Post.java
+│   │   │   └── ...
+│   │   ├── dto/                          # 데이터 전송 객체
+│   │   └── crawler/                      # 크롤링 유틸리티
+│   └── resources/
+│       ├── application.properties        # 애플리케이션 설정
+│       ├── static/                       # 정적 리소스
+│       │   ├── css/
+│       │   └── images/
+│       └── templates/                    # Thymeleaf 템플릿
+│           ├── home.html
+│           ├── login.html
+│           ├── post-list.html
+│           └── ...
+└── test/                                 # 테스트 코드
+```
 
-1. Entity 작성 (`entity/Post.java`) — DB 스키마와 도메인 모델 정의
-2. Repository 작성 (`repository/PostRepository.java`) — DB 조회 메서드 정의
-3. Service 작성 (`service/PostService.java`) — 비즈니스 로직 구현
-4. Controller 작성 (`controller/PostController.java`) — HTTP 엔드포인트 구현
-5. View 작성 (`templates/post-list.html`, `post-detail.html` 등) — 화면 구성
+---
 
-이 순서는 의존성을 따라 자연스럽게 코드가 쌓이도록 합니다 (하위 계층 먼저).
+## Architecture
+
+### MVC Pattern
+
+이 프로젝트는 전형적인 Spring MVC 패턴을 따릅니다:
+
+```
+Client → Controller → Service → Repository → Database
+           ↓
+         View (Thymeleaf)
+```
+
+#### Layer Responsibilities
+
+| Layer | Responsibility | Example |
+|-------|---------------|---------|
+| **Controller** | HTTP 요청 처리, 라우팅 | `PostController.java` |
+| **Service** | 비즈니스 로직, 트랜잭션 관리 | `PostService.java` |
+| **Repository** | 데이터 영속성, CRUD | `PostRepository.java` |
+| **Entity** | 도메인 모델, DB 매핑 | `Post.java`, `User.java` |
+| **View** | 화면 렌더링 | `post-list.html` |
+
+### Data Flow Example
+
+1. 사용자가 게시글 목록 요청: `GET /posts`
+2. `PostController`가 요청을 받음
+3. `PostService`의 비즈니스 로직 호출
+4. `PostRepository`에서 데이터베이스 조회
+5. 결과를 `Model`에 담아 `post-list.html` 반환
+6. Thymeleaf가 HTML 렌더링
 
 ---
 
-## 코드에 달아둔 주석
+## Configuration
 
-- `controller/*.java` : 각 엔드포인트의 역할, 요청 URL, RESTful 설계, 보안(POST vs GET) 설명
-- `service/*.java` : 트랜잭션 경계, 권한 검사, 저장/수정/삭제 흐름 설명
-- `entity/*.java` : JPA 매핑, `@PrePersist/@PreUpdate` 사용법, 도메인 메서드(조회수 증가 등)
-- `repository/*.java` : 쿼리 메서드 문법과 예제
+### application.properties
+
+주요 설정 항목:
+
+```properties
+# 서버 포트
+server.port=8090
+
+# 데이터베이스
+spring.datasource.url=jdbc:h2:~/testdb
+spring.datasource.username=sa
+spring.datasource.password=
+
+# JPA 설정
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# H2 콘솔 (프로덕션에서는 비활성화)
+spring.h2.console.enabled=false
+
+# 파일 업로드
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
+file.upload-dir=/home/kalpha/starlog/upload/
+
+# 세션 타임아웃
+server.servlet.session.timeout=30m
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/auth/login` | 로그인 페이지 |
+| POST | `/auth/login` | 로그인 처리 |
+| GET | `/auth/register` | 회원가입 페이지 |
+| POST | `/auth/register` | 회원가입 처리 |
+| GET | `/auth/logout` | 로그아웃 |
+
+### Posts
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/posts` | 게시글 목록 (검색, 정렬) |
+| GET | `/posts/{id}` | 게시글 상세 |
+| GET | `/posts/write` | 게시글 작성 페이지 |
+| POST | `/posts/write` | 게시글 작성 |
+| GET | `/posts/{id}/edit` | 게시글 수정 페이지 |
+| POST | `/posts/{id}/edit` | 게시글 수정 |
+| POST | `/posts/{id}/delete` | 게시글 삭제 |
+| POST | `/api/{postId}/like-hate` | 좋아요/싫어요 |
+
+### Others
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/home` | 홈페이지 |
+| GET | `/mypage` | 마이페이지 |
+| GET | `/announcement` | 채용공고 |
+| GET | `/chatai` | AI 챗봇 |
 
 ---
 
-## 포트폴리오용 꾸미기 아이디어
+## Database
 
-- README: 프로젝트 목표와 본인이 맡은 부분(개선, 리팩토링, UI 등)을 간단히 기술
-- UI: Bootstrap이나 Tailwind를 살짝 적용하여 화면을 정돈
-- 데이터: 더미 데이터를 seed하거나 초기 SQL 스크립트를 추가
-- 테스트: 통합 테스트(Controller 통합, Service 단위)를 추가하여 신뢰성 강조
-- 배포: Heroku / Render / Azure App Service에 배포 예시 추가
+### H2 Database
+
+개발 단계에서는 H2 인메모리 데이터베이스를 사용합니다:
+
+- **JDBC URL**: `jdbc:h2:~/testdb`
+- **Username**: `sa`
+- **Password**: (empty)
+
+### Entity Relationships
+
+```
+User (1) ←→ (N) Post
+Post (1) ←→ (N) Comment
+```
+
+### Schema Auto-Generation
+
+`spring.jpa.hibernate.ddl-auto=update` 설정으로 엔티티 기반 스키마가 자동 생성됩니다.
+
+---
+
+## Development
+
+### Adding New Features
+
+기능 추가 시 권장 순서:
+
+1. **Entity 작성**: 도메인 모델 정의 (`entity/`)
+2. **Repository 작성**: DB 접근 메서드 정의 (`repository/`)
+3. **Service 작성**: 비즈니스 로직 구현 (`service/`)
+4. **Controller 작성**: HTTP 엔드포인트 구현 (`controller/`)
+5. **View 작성**: 화면 템플릿 작성 (`templates/`)
+
+### Code Style
+
+- 각 계층의 책임을 명확히 분리
+- Service 계층에 `@Transactional` 적용
+- Repository는 `JpaRepository` 상속
+- Controller에서 세션 관리 (`HttpSession`)
+
+### Testing
+
+```bash
+./mvnw test
+```
 
 ---
 
-## 보안 및 개선 제안
+## Security
 
-- 현재 비밀번호는 평문 저장 → 반드시 BCrypt로 해시 저장할 것
-- 세션 인증 대신 Spring Security 적용 권장 (권한, CSRF 보호)
-- Form validation 강화 (서버/클라이언트 양쪽)
-- 파일 업로드, 이미지 첨부 기능 추가
+### Current Implementation
+
+- 세션 기반 인증 (`HttpSession`)
+- 비밀번호 평문 저장 (개발 환경)
+
+### Recommended Improvements
+
+- **Spring Security 도입**: 인증/인가 강화
+- **비밀번호 암호화**: BCrypt 해싱
+- **CSRF 보호**: Spring Security CSRF 토큰
+- **입력 검증**: Bean Validation (JSR-380)
+- **H2 콘솔 비활성화**: 프로덕션 환경에서 필수
+
+---
+
+## Troubleshooting
+
+### 포트 충돌
+
+```bash
+# 8090 포트를 사용 중인 프로세스 확인
+lsof -i :8090
+
+# 프로세스 종료
+kill -9 <PID>
+```
+
+### 서버 로그 확인
+
+```bash
+# 실시간 로그 모니터링
+tail -f ~/spring-boot.log
+
+# 최근 100줄 확인
+tail -100 ~/spring-boot.log
+```
+
+### 서버 프로세스 관리
+
+```bash
+# 실행 중인 서버 확인
+ps aux | grep spring-boot
+
+# 서버 중지
+pkill -f "spring-boot:run"
+
+# 서버 재시작
+pkill -f "spring-boot:run" && nohup ./mvnw spring-boot:run > ~/spring-boot.log 2>&1 &
+```
 
 ---
 
-## FAQ
+## Contributing
 
-- Q: DB는 무엇을 사용하나요?
-  - A: 개발 편의를 위해 H2를 사용합니다. `application.properties`에서 설정 확인 가능
+이 프로젝트에 기여하고 싶으시다면:
 
-- Q: ORM 이해가 어렵습니다. 어디를 보나요?
-  - A: `entity/` 폴더의 JPA 어노테이션과 `repository/`의 쿼리 메서드를 집중적으로 보세요
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Contact
+
+**Team**: 미래유망팀  
+**Repository**: [mirae-yumang-team](https://github.com/mirae-yumang-team-project/mirae-yumang-team)
