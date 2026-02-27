@@ -5,45 +5,45 @@
     }
 
     body {
-        font-family:"맑은 고딕";
+        font-family: "맑은 고딕";
         background-color: #161838;
     }
 
-         .navbar {
-            width: 1500px;
-            color: #C7D7F9;
-            padding: 15px 10px 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 auto;
-            
-        }
+    .navbar {
+        width: 1500px;
+        color: #C7D7F9;
+        padding: 15px 10px 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
 
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: 700;
-            text-decoration: none;
-            color: white;
-        }
+    }
 
-        .navbar-menu {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: 700;
+        text-decoration: none;
+        color: white;
+    }
 
-        .navbar-menu a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    .navbar-menu {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
 
-        .navbar-menu a:hover {
-            background: rgba(255,255,255,0.2);
-        }
+    .navbar-menu a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
+
+    .navbar-menu a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 
     .container {
         width: 1000px;
@@ -58,7 +58,7 @@
         padding: 40px;
         border-radius: 15px;
         border: 1px solid #C7D7F9;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         background: #202353;
     }
 
@@ -84,7 +84,7 @@
         font-family: "맑은 고딕";
     }
 
-    input::placeholder{
+    input::placeholder {
         font-size: 24px;
     }
 
@@ -112,7 +112,8 @@
 
     textarea {
         width: 100%;
-        height: 700px; /* 기본 높이 */
+        height: 700px;
+        /* 기본 높이 */
         background: #272A66;
         border: 1px solid #C7D7F9;
         border-radius: 12px;
@@ -129,7 +130,8 @@
         justify-content: right;
     }
 
-    button, .btn-cancel {
+    button,
+    .btn-cancel {
         width: 120px;
         padding: 14px;
         border: none;
@@ -156,7 +158,8 @@
         display: inline-block;
     }
 
-    button:hover, .btn-cancel:hover {
+    button:hover,
+    .btn-cancel:hover {
         transform: translateY(-2px);
     }
 
@@ -174,10 +177,10 @@
         width: 100%;
         padding: 15px;
         background: #272A66;      /* 텍스트 박스와 동일한 배경색 */
-        /* border: 1px dashed #C7D7F9; /* 업로드 구역임을 알리는 점선 테두리 */
-        /* border-radius: 12px;
+    /* border: 1px dashed #C7D7F9; /* 업로드 구역임을 알리는 점선 테두리 */
+    /* border-radius: 12px;
         color: #C4BBAB;           /* 텍스트 색상 */
-        /* font-family: inherit;
+    /* font-family: inherit;
         cursor: pointer;
         transition: all 0.3s ease; */
     /* } */
@@ -185,14 +188,17 @@
     /* 2. 마우스를 올렸을 때 효과 */
     input[type="file"]:hover {
         border-color: #9DB2F5;
-        background: #2e327a;      /* 약간 더 밝은 느낌 */
+        background: #2e327a;
+        /* 약간 더 밝은 느낌 */
         box-shadow: 0 0 10px rgba(157, 178, 245, 0.2);
     }
 
     /* 3. 브라우저 기본 "파일 선택" 버튼 스타일링 (Webkit 기반 브라우저) */
     input[type="file"]::file-selector-button {
-        background: #9DB2F5;      /* 작성완료 버튼과 동일한 색상 */
-        color: #161838;           /* 가독성을 위한 어두운 글자색 */
+        background: #9DB2F5;
+        /* 작성완료 버튼과 동일한 색상 */
+        color: #161838;
+        /* 가독성을 위한 어두운 글자색 */
         border: none;
         border-radius: 6px;
         padding: 8px 16px;
@@ -211,4 +217,68 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+    }
+
+    /* ===== 모바일 반응형 (768px 이하) ===== */
+    @media screen and (max-width: 768px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            width: 100% !important;
+            padding: 12px 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+        }
+
+        .navbar-menu {
+            gap: 8px;
+        }
+
+        .navbar-menu a {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        .container {
+            width: 100% !important;
+            height: auto !important;
+            padding: 0 15px;
+        }
+
+        .write-box {
+            padding: 20px;
+        }
+
+        #title {
+            font-size: 18px;
+        }
+
+        textarea {
+            height: 400px !important;
+            font-size: 14px;
+        }
+
+        .tmp {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .button-group {
+            width: 100%;
+            justify-content: flex-end;
+        }
+
+        button,
+        .btn-cancel {
+            width: auto;
+            font-size: 14px;
+            padding: 10px 16px;
+        }
     }

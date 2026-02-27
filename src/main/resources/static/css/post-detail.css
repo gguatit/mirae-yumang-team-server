@@ -5,11 +5,11 @@
     }
 
     body {
-        font-family:"맑은 고딕";
+        font-family: "맑은 고딕";
         background-color: #161838;
     }
 
-        .navbar {
+    .navbar {
         width: 1500px;
         color: #C7D7F9;
         padding: 15px 10px 15px 30px;
@@ -17,7 +17,7 @@
         justify-content: space-between;
         align-items: center;
         margin: 0 auto;
-        
+
     }
 
     .navbar-brand {
@@ -42,7 +42,7 @@
     }
 
     .navbar-menu a:hover {
-        background: rgba(255,255,255,0.2);
+        background: rgba(255, 255, 255, 0.2);
     }
 
     .container {
@@ -58,7 +58,7 @@
         padding: 40px;
         border-radius: 15px;
         border: 1px solid #C7D7F9;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         background: #202353;
     }
 
@@ -80,10 +80,10 @@
         border-right: 2px solid #202353;
         border-left: 2px solid #202353;
         border-top: 2px solid #202353;
-        font-family:"Cafe24ClassicType";
+        font-family: "Cafe24ClassicType";
     }
 
-    input::placeholder{
+    input::placeholder {
         font-size: 24px;
     }
 
@@ -111,8 +111,10 @@
 
     .post-content {
         width: 100%;
-        min-height: 700px; /* 기본 높이 */
-        height: auto; /* 내용에 따라 높이 자동 조절 */
+        min-height: 700px;
+        /* 기본 높이 */
+        height: auto;
+        /* 내용에 따라 높이 자동 조절 */
         background: #272A66;
         border: 1px solid #C7D7F9;
         border-radius: 12px;
@@ -121,20 +123,24 @@
         font-size: 16px;
         resize: none;
         outline: none;
-        margin-bottom: 40px; /* 추천 버튼과의 간격 */
+        margin-bottom: 40px;
+        /* 추천 버튼과의 간격 */
     }
 
     .post-footer {
-        margin-right: auto ;
+        margin-right: auto;
         margin-bottom: 20px;
     }
 
-    button, .btn {
-        display: inline-flex;  /* 중앙 정렬을 위해 flex 사용 */
+    button,
+    .btn {
+        display: inline-flex;
+        /* 중앙 정렬을 위해 flex 사용 */
         align-items: center;
         justify-content: center;
         width: 120px;
-        height: 45px;          /* 높이를 고정하면 정렬이 깔끔해집니다 */
+        height: 45px;
+        /* 높이를 고정하면 정렬이 깔끔해집니다 */
         border-radius: 8px;
         font-size: 14px;
         font-weight: 600;
@@ -149,7 +155,8 @@
         gap: 10px;
     }
 
-    button, .btn-primary{
+    button,
+    .btn-primary {
         width: 120px;
         padding: 14px;
         border: none;
@@ -160,7 +167,7 @@
         text-decoration: none;
         text-align: center;
         transition: transform 0.2s;
-        
+
     }
 
 
@@ -173,11 +180,14 @@
 
     .btn-secondary {
         background: none;
-        border: 2px solid #C7D7F9 !important; /* !important로 기존 스타일 강제 덮어쓰기 */
+        border: 2px solid #C7D7F9 !important;
+        /* !important로 기존 스타일 강제 덮어쓰기 */
         color: #C7D7F9 !important;
     }
 
-    button:hover, .btn-secondary:hover , .btn-primary:hover {
+    button:hover,
+    .btn-secondary:hover,
+    .btn-primary:hover {
         transform: translateY(-2px);
     }
 
@@ -192,7 +202,8 @@
     }
 
     .recommend-section button {
-        width: 100px !important;  /* 일반 .btn 설정을 무시하도록 !important */
+        width: 100px !important;
+        /* 일반 .btn 설정을 무시하도록 !important */
         height: 100px !important;
         border-radius: 50% !important;
         display: flex;
@@ -218,6 +229,7 @@
         padding: 12px;
         font-size: 12px;
     }
+
     .post-meta {
         color: #C7D7F9;
         font-size: 10px;
@@ -227,14 +239,18 @@
         justify-content: right;
         gap: 10px;
     }
-    .recommend-section{
-       position: relative; /* absolute 대신 relative 사용하여 흐름 유지 */
+
+    .recommend-section {
+        position: relative;
+        /* absolute 대신 relative 사용하여 흐름 유지 */
         width: 100%;
         display: flex;
         gap: 20px;
         justify-content: center;
-        right: auto; /* 기존 absolute 값 제거 */
+        right: auto;
+        /* 기존 absolute 값 제거 */
     }
+
     .recommend-section button {
         width: 100px;
         height: 100px;
@@ -248,8 +264,9 @@
         text-align: center;
         align-content: center;
     }
+
     /* 추천/비추천 버튼이 활성화되었을 때 (색상 통일) */
-    .recommend-section button.active { 
+    .recommend-section button.active {
         background: #C7D7F9;
         color: #272A66;
     }
@@ -260,44 +277,121 @@
     } */
 
     .comment-list {
-    margin-top: 50px;
-    border-top: 1px solid rgba(199, 215, 249, 0.3);
-    padding-top: 20px;
-}
+        margin-top: 50px;
+        border-top: 1px solid rgba(199, 215, 249, 0.3);
+        padding-top: 20px;
+    }
 
-.comment-item {
-    padding: 15px 0;
-    color: #C7D7F9;
-}
+    .comment-item {
+        padding: 15px 0;
+        color: #C7D7F9;
+    }
 
-.comment-item strong {
-    color: #9DB2F5;
-    margin-right: 10px;
-}
+    .comment-item strong {
+        color: #9DB2F5;
+        margin-right: 10px;
+    }
 
-.comment-item p {
-    margin-top: 8px;
-    color: #C4BBAB;
-}
+    .comment-item p {
+        margin-top: 8px;
+        color: #C4BBAB;
+    }
 
-/* --- 댓글 입력창 스타일 --- */
-.comment-form {
-    margin-top: 30px;
-}
+    /* --- 댓글 입력창 스타일 --- */
+    .comment-form {
+        margin-top: 30px;
+    }
 
-.comment-form textarea {
-    width: 100%;
-    height: 100px;
-    background: #161838;
-    border: 1px solid #C7D7F9;
-    color: #C4BBAB;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 10px;
-}
+    .comment-form textarea {
+        width: 100%;
+        height: 100px;
+        background: #161838;
+        border: 1px solid #C7D7F9;
+        color: #C4BBAB;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+    }
 
-.comment-form button {
-    float: right; /* 버튼 우측 정렬 */
-    background: #9DB2F5;
-    color: #161838;
-}
+    .comment-form button {
+        float: right;
+        /* 버튼 우측 정렬 */
+        background: #9DB2F5;
+        color: #161838;
+    }
+
+    /* ===== 모바일 반응형 (768px 이하) ===== */
+    @media screen and (max-width: 768px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            width: 100% !important;
+            padding: 12px 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+        }
+
+        .navbar-menu {
+            gap: 8px;
+        }
+
+        .navbar-menu a {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        .container {
+            width: 100% !important;
+            padding: 0 15px;
+        }
+
+        .post-detail {
+            padding: 20px;
+        }
+
+        .post-title {
+            font-size: 18px;
+        }
+
+        .post-content {
+            min-height: 300px;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            flex-wrap: wrap;
+        }
+
+        button,
+        .btn {
+            width: auto;
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        .recommend-section button {
+            width: 70px !important;
+            height: 70px !important;
+            font-size: 12px;
+        }
+
+        .comment-form textarea {
+            padding: 10px;
+        }
+
+        .reply-item {
+            margin-left: 15px !important;
+        }
+
+        .post-meta {
+            flex-wrap: wrap;
+            font-size: 10px;
+        }
+    }

@@ -1,370 +1,579 @@
-    
     * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            list-style:none;
-            /* font-family:"맑은 고딕"; */
-            /* color:#C7D7F9; */
-        }
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        list-style: none;
+        /* font-family:"맑은 고딕"; */
+        /* color:#C7D7F9; */
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #161838;
-            height: 2000px;
-        }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #161838;
+        height: 2000px;
+    }
 
-        .navbar {
-            width: 1500px;
-            color: #C7D7F9;
-            padding: 15px 10px 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0 auto;
-            
-        }
+    .navbar {
+        width: 1500px;
+        color: #C7D7F9;
+        padding: 15px 10px 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 auto;
 
-        .navbar-brand {
-            font-size: 24px;
-            font-weight: 700;
-            text-decoration: none;
-            color: white;
-        }
+    }
 
-        .navbar-menu {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: 700;
+        text-decoration: none;
+        color: white;
+    }
 
-        .navbar-menu a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    .navbar-menu {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
 
-        .navbar-menu a:hover {
-            background: rgba(255,255,255,0.2);
-        }
+    .navbar-menu a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        transition: background 0.3s;
+    }
 
-
-
-.community-header {
-    position: relative;
-    width: 1500px;
-    height: 300px;
-    border-radius: 4px;
-    margin: 0 auto;
-}
-.community-header>img {
-    filter: sepia(100%) hue-rotate(190deg) saturate(200%);
-    position: absolute;
-    top: 0;
-    left: 0;
-    object-fit: cover;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-}
-.titlebox {
-    padding-top: 70px;
-    padding-left:50px;
-}
-.titlebox>h1 { font-weight: 300; color:white ;}
-.titlebox>span {
-    font-weight: 100;
-    font-size: 16px;
-    color:#FAE8D3 ;
-}
-.search-box{
-    width:490px;
-    height:36px;
-    background:#C7D7F9;
-    display:flex;
-    align-items:center;
-    overflow:hidden;
-    margin-top:12px;
-}
-.search-box input{
-    flex:1;
-    height:100%;
-    border:none;
-    background:transparent;
-    padding:0 12px;
-    color:#161838;
-    font-size:14px;
-    outline: none;
-}
-.search-box input::placeholder{ color:#9DB2F5; }
-.search-box button{
-    width:36px;
-    height:36px;
-    background:#9DB2F5;
-    border:none;
-    cursor:pointer;
-}
-.search-box button{
-    color:white ;
-}
-.search-box button:hover{ background:#8aa3f0; }
+    .navbar-menu a:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 
 
 
-.container {
-    width: 1500px;
-    margin: 40px auto;
-    padding: 0 20px;
-    overflow: hidden;
-}
+    .community-header {
+        position: relative;
+        width: 1500px;
+        height: 300px;
+        border-radius: 4px;
+        margin: 0 auto;
+    }
 
-.page-header {
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
+    .community-header>img {
+        filter: sepia(100%) hue-rotate(190deg) saturate(200%);
+        position: absolute;
+        top: 0;
+        left: 0;
+        object-fit: cover;
+        z-index: -1;
+        width: 100%;
+        height: 100%;
+    }
 
-.post-count {
-    padding: 20px 0 20px 0;
-}
+    .titlebox {
+        padding-top: 70px;
+        padding-left: 50px;
+    }
 
-.btn {
-    width: 100%;
-    display: inline-block;
-    padding: 12px 24px;
-    background:  #5C68B2;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: transform 0.2s;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-}
+    .titlebox>h1 {
+        font-weight: 300;
+        color: white;
+    }
 
-.btn:hover {
-    transform: translateY(-2px);
-}
+    .titlebox>span {
+        font-weight: 100;
+        font-size: 16px;
+        color: #FAE8D3;
+    }
 
-.post-table {
-    width: 1000px;
-    height: 1300px;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-    overflow: hidden;
-}
+    .search-box {
+        width: 490px;
+        height: 36px;
+        background: #C7D7F9;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        margin-top: 12px;
+    }
 
-table {
-    width: 1000px;
-    height: 100%;
-    border-collapse: collapse;
-}
+    .search-box input {
+        flex: 1;
+        height: 100%;
+        border: none;
+        background: transparent;
+        padding: 0 12px;
+        color: #161838;
+        font-size: 14px;
+        outline: none;
+    }
 
-thead {
-    
-}
+    .search-box input::placeholder {
+        color: #9DB2F5;
+    }
+
+    .search-box button {
+        width: 36px;
+        height: 36px;
+        background: #9DB2F5;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search-box button {
+        color: white;
+    }
+
+    .search-box button:hover {
+        background: #8aa3f0;
+    }
 
 
-td {
-    padding: 30px 15px 15px 15px;
-    color: #5C68B2;
-    align-content: center;
-}
 
-td.col-title a{width: 447px; display: block; text-decoration: none; color: #5C68B2; font-weight: 600;}
-/* td.col-author {}
+    .container {
+        width: 1500px;
+        margin: 40px auto;
+        padding: 0 20px;
+        overflow: hidden;
+    }
+
+    .page-header {
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .post-count {
+        padding: 20px 0 20px 0;
+    }
+
+    .btn {
+        width: 100%;
+        display: inline-block;
+        padding: 12px 24px;
+        background: #5C68B2;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: transform 0.2s;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .post-table {
+        width: 1000px;
+        height: 1300px;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    table {
+        width: 1000px;
+        height: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {}
+
+
+    td {
+        padding: 30px 15px 15px 15px;
+        color: #5C68B2;
+        align-content: center;
+    }
+
+    td.col-title a {
+        width: 447px;
+        display: block;
+        text-decoration: none;
+        color: #5C68B2;
+        font-weight: 600;
+    }
+
+    /* td.col-author {}
 td.col-date {}
 td.col-id { text-align: center; color: #5C68B2; }
 td.col-views { text-align: center; color: #5C68B2;}
 td.col-likes { text-align: center; color: #5C68B2;} */
 
-tbody{
-    width: 1000px;
-    height: 100%;
-    display: block;
-}
+    tbody {
+        width: 1000px;
+        height: 100%;
+        display: block;
+    }
 
-tr{
-    width: 1000px;
-    display: block;
-    height: 100px;
-    background: #9DB2F5;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    padding: 10px;
-}
-tr:last-child{
-    margin-bottom: 0;
-}
+    tr {
+        width: 1000px;
+        display: block;
+        height: 100px;
+        background: #9DB2F5;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
 
-tr:hover {
-    background: #8aa3f0;
-}
+    tr:last-child {
+        margin-bottom: 0;
+    }
 
-.post-title {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-    
-}
+    tr:hover {
+        background: #8aa3f0;
+    }
 
-.post-main{
-    display: flex;
-    justify-content: space-between;
-}
+    .post-title {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
 
+    }
 
-
-.empty-message {
-    text-align: center;
-    padding: 60px 20px;
-    color: #999;
-    font-size: 18px;
-}
-
-.post-count {
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.post-count-v{
-color: #9DB2F5;
-}
-
-.bastpost{
-    background:#9DB2F5;
-    height:300px;
-    width:100%;
-    border-radius:16px;
-    padding:16px;
-    box-sizing:border-box;
-    display:flex;
-    flex-direction:column;
-    margin-top: 20px;
-}
-.best-title {
-    font-weight: normal;
-    color: #FAE8D3;
-    margin-bottom: 30px;
-}
-.best-list{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
-.best-item{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-.best-item:hover{
-    background: #8aa3f0;
-}
-.best-text{
-    overflow:hidden;
-}
-.best-nickname{
-    color: #FAE8D3;
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.2; 
-    margin-bottom: 2px; 
-}
-.best-content{
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.2;
-    color: #5C68B2;
-    width: 200px;
-}
-.best-link {
-   display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.tmp {
-    display: flex;
-    justify-content: space-between;
-}
-.best-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #FAE8D3;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center; /* 아이콘, 제목, 서브텍스트를 일직선으로 */
-    gap: 8px;
-}
-
-/* (추천수) 문구 스타일 */
-.title-sub {
-    color: #fff;
-    text-align: right;
-    font-size: 12px;
-    margin-left: 2px;
-}
-.best-likes {
-    font-size: 12px;
-    color: #5C68B2;
-}
-.pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-}
-.page-btn {
-    background: #5C68B2;
-    color: #C7D7F9;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 12px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-.page-btn:hover { opacity:0.8; }
-
-.pagination .page-info{
-    color: #C7D7F9;
-}
+    .post-main {
+        display: flex;
+        justify-content: space-between;
+    }
 
 
-/* 테이블 헤더 전체 스타일 */
-.post-table thead tr {
-    background: transparent; /* 헤더는 배경색 없이 투명하게 */
-    height: 50px;             /* 헤더 높이 조절 */
-    margin-bottom: 10px;      /* 아래 행과의 간격 */
-    display: flex;            /* td들과 정렬을 맞추기 위해 flex 사용 */
-    align-items: center;      /* 세로 중앙 정렬 */
-    padding: 0 10px;
-}
 
-.post-table thead th {
-    color: #FAE8D3;           /* 인기글 제목과 같은 베이지색으로 포인트 */
-    font-size: 15px;
-    font-weight: 600;
-    text-align: left; /* 기본 왼쪽 정렬 */
-    padding: 0 15px;
-}
+    .empty-message {
+        text-align: center;
+        padding: 60px 20px;
+        color: #999;
+        font-size: 18px;
+    }
 
-/* 각 컬럼 너비 설정 (tbody의 td들과 일치시키기) */
-.col-id     { width: 60px; text-align: center !important; }
-.col-title  { flex: 1;  }  /* 제목이 남은 공간을 다 차지함 */
-.col-author { width: 120px; text-align: center !important;}
-.col-date   { width: 170px; text-align: center !important;}
-.col-views  { width: 80px; text-align: center !important; }
-.col-likes  { width: 80px; text-align: center !important; } /* 추천수 강조 */
+    .post-count {
+        color: #fff;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
 
-/* 기존 tbody tr 설정 수정 (기존 tr 설정이 있으면 덮어씌워짐) */
-tbody tr {
-    display: flex;
-    align-items: center;
-}
+    .post-count-v {
+        color: #9DB2F5;
+    }
+
+    .bastpost {
+        background: #9DB2F5;
+        height: 300px;
+        width: 100%;
+        border-radius: 16px;
+        padding: 16px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .best-title {
+        font-weight: normal;
+        color: #FAE8D3;
+        margin-bottom: 30px;
+    }
+
+    .best-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .best-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .best-item:hover {
+        background: #8aa3f0;
+    }
+
+    .best-text {
+        overflow: hidden;
+    }
+
+    .best-nickname {
+        color: #FAE8D3;
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.2;
+        margin-bottom: 2px;
+    }
+
+    .best-content {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+        color: #5C68B2;
+        width: 200px;
+    }
+
+    .best-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .tmp {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .best-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #FAE8D3;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        /* 아이콘, 제목, 서브텍스트를 일직선으로 */
+        gap: 8px;
+    }
+
+    /* (추천수) 문구 스타일 */
+    .title-sub {
+        color: #fff;
+        text-align: right;
+        font-size: 12px;
+        margin-left: 2px;
+    }
+
+    .best-likes {
+        font-size: 12px;
+        color: #5C68B2;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .page-btn {
+        background: #5C68B2;
+        color: #C7D7F9;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .page-btn:hover {
+        opacity: 0.8;
+    }
+
+    .pagination .page-info {
+        color: #C7D7F9;
+    }
+
+
+    /* 테이블 헤더 전체 스타일 */
+    .post-table thead tr {
+        background: transparent;
+        /* 헤더는 배경색 없이 투명하게 */
+        height: 50px;
+        /* 헤더 높이 조절 */
+        margin-bottom: 10px;
+        /* 아래 행과의 간격 */
+        display: flex;
+        /* td들과 정렬을 맞추기 위해 flex 사용 */
+        align-items: center;
+        /* 세로 중앙 정렬 */
+        padding: 0 10px;
+    }
+
+    .post-table thead th {
+        color: #FAE8D3;
+        /* 인기글 제목과 같은 베이지색으로 포인트 */
+        font-size: 15px;
+        font-weight: 600;
+        text-align: left;
+        /* 기본 왼쪽 정렬 */
+        padding: 0 15px;
+    }
+
+    /* 각 컬럼 너비 설정 (tbody의 td들과 일치시키기) */
+    .col-id {
+        width: 60px;
+        text-align: center !important;
+    }
+
+    .col-title {
+        flex: 1;
+    }
+
+    /* 제목이 남은 공간을 다 차지함 */
+    .col-author {
+        width: 120px;
+        text-align: center !important;
+    }
+
+    .col-date {
+        width: 170px;
+        text-align: center !important;
+    }
+
+    .col-views {
+        width: 80px;
+        text-align: center !important;
+    }
+
+    .col-likes {
+        width: 80px;
+        text-align: center !important;
+    }
+
+    /* 추천수 강조 */
+
+    /* 기존 tbody tr 설정 수정 (기존 tr 설정이 있으면 덮어씌워짐) */
+    tbody tr {
+        display: flex;
+        align-items: center;
+    }
+
+    /* ===== 모바일 반응형 (768px 이하) ===== */
+    @media screen and (max-width: 768px) {
+        body {
+            height: auto;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            width: 100% !important;
+            padding: 12px 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .navbar-brand {
+            font-size: 18px;
+        }
+
+        .navbar-menu {
+            gap: 8px;
+        }
+
+        .navbar-menu a {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        /* 커뮤니티 헤더 */
+        .community-header {
+            width: 100% !important;
+            height: 200px;
+        }
+
+        .titlebox {
+            padding-top: 30px;
+            padding-left: 20px;
+        }
+
+        .titlebox>h1 {
+            font-size: 22px;
+        }
+
+        .titlebox>span {
+            font-size: 13px;
+        }
+
+        .search-box {
+            width: 100% !important;
+            max-width: 300px;
+        }
+
+        /* 컨테이너 */
+        .container {
+            width: 100% !important;
+            padding: 0 15px;
+        }
+
+        /* 메인 레이아웃 세로 전환 */
+        .post-main {
+            flex-direction: column-reverse;
+        }
+
+        /* 테이블 */
+        .post-table {
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        table {
+            width: 100% !important;
+        }
+
+        tbody {
+            width: 100% !important;
+        }
+
+        tr {
+            width: 100% !important;
+            height: auto !important;
+            padding: 10px;
+        }
+
+        thead tr {
+            width: 100% !important;
+        }
+
+        td {
+            padding: 8px 5px;
+            font-size: 13px;
+        }
+
+        /* 모바일에서 불필요 컬럼 숨김 */
+        .col-date,
+        .col-views,
+        .col-likes {
+            display: none !important;
+        }
+
+        .col-id {
+            width: 35px !important;
+        }
+
+        .col-author {
+            width: 70px !important;
+            font-size: 12px !important;
+        }
+
+        td.col-title a {
+            width: auto !important;
+            font-size: 13px;
+        }
+
+        /* 인기 게시글 */
+        .bastpost-main {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .bastpost {
+            height: auto !important;
+        }
+
+        .btn {
+            font-size: 14px;
+            padding: 10px 16px;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            padding: 0 15px;
+        }
+
+        .page-btn {
+            font-size: 13px;
+            padding: 5px 10px;
+        }
+    }

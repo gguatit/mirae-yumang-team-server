@@ -1,51 +1,60 @@
-*{
-	margin:0 auto;
-	padding:0;
-	list-style:none;
-	font-family:"맑은 고딕";
-	color:#C7D7F9
+* {
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    font-family: "맑은 고딕";
+    color: #C7D7F9
 }
+
 body {
-    height: 100vh; 
+    height: 100vh;
     background: #161838;
     font-size: 20px;
     /* 가로 스크롤 방지 핵심 */
-    overflow-x: hidden; 
+    overflow-x: hidden;
     width: 100%;
 }
-a{ 
-	text-decoration:none;
-	/* display:block; */
+
+a {
+    text-decoration: none;
+    /* display:block; */
 }
+
 section {
-  align-items: center; /* 세로 중앙 정렬 */
-  max-width: 100%;
-  height: 100%;
+    align-items: center;
+    /* 세로 중앙 정렬 */
+    max-width: 100%;
+    height: 100%;
 }
+
 .wrap {
     width: 100%;
     height: 100%;
     margin: 0 auto;
     /* border: 1px solid #ffcd04; */
 }
+
 .hero {
     /* border: 1px solid #9d00ff; */
     height: 1000px;
     position: relative;
 }
+
 .hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
 }
+
 .MainTitle {
     width: 90%;
     height: 90%;
     margin-top: 50px;
 }
+
 /* 로그인 회원가입 버튼 */
 .header-menu {
     top: 30px;
@@ -53,118 +62,144 @@ section {
     position: fixed;
     z-index: 10;
 }
+
 .header-menu>div>a {
     font-size: 16px;
-    color:#FAE8D3;
+    color: #FAE8D3;
     padding: 8px;
     border-radius: 8px;
-    margin:4px;
+    margin: 4px;
 }
-.intro0{
+
+.intro0 {
     width: 100%;
     height: 450px;
     display: flex;
     align-items: center;
     background-color: #5C68B2;
 }
+
 .intro0>div {
-    width: 850px; 
+    width: 850px;
     margin: 0 auto;
     text-align: center;
     line-height: 40px;
 }
+
 .intro0>div>p {
     font-size: 36px;
     margin-bottom: 16px;
 }
+
 .intro0>div>span {
     font-size: 20px;
 }
+
 .intro1 {
     height: 1059px;
     background: #202353;
 }
+
 .intro1>.wrap>p {
     text-align: center;
     line-height: 40px;
 }
+
 .intro1ImgBox {
     margin: auto;
     padding: 117px 0;
     width: 1200px;
     height: 850px;
 }
+
 .intro1ImgBox>img {
     width: 100%;
     height: 100%;
 }
+
 .today {
     height: 1027px;
 }
+
 .today>.wrap>div {
     width: 720px;
     height: 100%;
 }
+
 .today>.wrap {
     display: flex;
 }
+
 /* today 왼쪽 박스 버튼x */
-.today-box1{
+.today-box1 {
     background: #5C68B2;
 }
-.today-box1>.titlebox{
+
+.today-box1>.titlebox {
     height: 380px;
 }
+
 .titlebox>div {
     width: 500px;
     margin: 100px auto;
     padding: 80px;
 }
-.titlebox>div>p{
+
+.titlebox>div>p {
     font-size: 44px;
     margin-bottom: 30px;
 }
+
 .titlebox>div>span {
     line-height: 40px;
     font-size: 20px;
 }
-.today-box1>.imgbox{
+
+.today-box1>.imgbox {
     height: 547px;
 }
-.today-box1>.imgbox>img{
+
+.today-box1>.imgbox>img {
     width: 100%;
     height: 100%;
 }
+
 /* today 오른쪽 박스 버튼o */
 .today-box2 {
     display: flex;
     align-items: center;
     background: #9DB2F5;
 }
+
 .today-box2>.card {
     width: 450px;
     height: 700px;
 }
-.card-top{
+
+.card-top {
     font-size: 24px;
     width: 100%;
     height: 450px;
     background: #5C68B2;
-    border-radius:16px 16px 0 0 ;
+    border-radius: 16px 16px 0 0;
 }
-.card-top>.fortune-title{
+
+.card-top>.fortune-title {
     font-size: 28px;
     line-height: 40px;
     padding: 40px 0 10px;
     padding-left: 20px;
-}  
-.fortune-list{
+}
+
+.fortune-list {
     margin-top: 30px;
     padding-left: 20px;
 }
+
 .fortune-list>li {
     padding: 16px 0;
 }
+
 /* 카드 하단 */
 .card-buttom {
     border-radius: 0 0 16px 16px;
@@ -173,30 +208,33 @@ section {
     background: #202353;
     position: relative;
 }
+
 .card-buttom>p {
     font-weight: 100;
-    color:#FAE8D3; 
+    color: #FAE8D3;
     font-size: 12px;
     text-align: center;
     padding-top: 80px;
 }
+
 /* 오늘의 운세 버튼 */
-.today-buttom{
-    font-size: 20px; 
+.today-buttom {
+    font-size: 20px;
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 16px;
-    color:#FAE8D3;
+    color: #FAE8D3;
     border: 1px solid #FAE8D3;
     padding: 8px;
     border-radius: 50px;
 }
+
 li a:hover {
     color: white;
-    background: rgba(255,255,255,0.2);
-    
+    background: rgba(255, 255, 255, 0.2);
+
 }
 
 /* 서비스 설명 */
@@ -204,16 +242,19 @@ li a:hover {
     height: 1059px;
     background: #202353;
 }
+
 .intro2>.wrap>p {
     text-align: center;
     line-height: 40px;
 }
+
 .intro2ImgBox {
     margin: auto;
     padding: 117px 0;
     width: 1200px;
     height: 600px;
 }
+
 .intro2ImgBox>img {
     width: 100%;
     height: 100%;
@@ -223,44 +264,53 @@ li a:hover {
     /* border: 1px solid #9d00ff; */
     height: 1027px;
 }
+
 .community>.wrap {
     display: flex;
 }
+
 .community>.wrap>div {
     width: 720px;
     height: 100%;
 }
+
 /* 커무니티 카드 */
-.community-box2{
+.community-box2 {
     display: flex;
     align-items: center;
     background: #9DB2F5;
 }
+
 /* 카드 */
 .community-box2>.card {
     width: 450px;
     height: 700px;
 }
-.community-box2>.card-top{
+
+.community-box2>.card-top {
     font-size: 24px;
     width: 100%;
     height: 450px;
     background: #5C68B2;
-    border-radius:16px 16px 0 0 ;
+    border-radius: 16px 16px 0 0;
 }
-.community-box2 .fortune-title{
+
+.community-box2 .fortune-title {
     font-size: 28px;
     line-height: 40px;
     padding: 40px 0 10px;
     padding-left: 20px;
-}  
-.community-box2>.fortune-list{
+}
+
+.community-box2>.fortune-list {
     margin-top: 30px;
     padding-left: 20px;
 }
+
 .fortune-list>li {
     padding: 16px 0;
 }
+
 /* 카드 하단 */
 .community-box2>.card-buttom {
     border-radius: 0 0 16px 16px;
@@ -269,162 +319,200 @@ li a:hover {
     background: #202353;
     position: relative;
 }
+
 .community-box2>.card-buttom>p {
     font-weight: 100;
-    color:#FAE8D3; 
+    color: #FAE8D3;
     font-size: 12px;
     text-align: center;
     padding-top: 80px;
 }
+
 /* 커뮤니티 버튼 */
-.community-buttom{
-    font-size: 20px; 
+.community-buttom {
+    font-size: 20px;
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 16px;
-    color:#FAE8D3;
+    color: #FAE8D3;
     border: 1px solid #FAE8D3;
     padding: 8px;
     border-radius: 50px;
 }
-.community-box1{
+
+.community-box1 {
     background: #5C68B2;
 }
-.community-box1>.titlebox{
+
+.community-box1>.titlebox {
     height: 380px;
 }
+
 .titlebox>div {
     width: 500px;
     margin: 100px auto;
     padding: 80px;
 }
-.titlebox>div>p{
+
+.titlebox>div>p {
     font-size: 44px;
     margin-bottom: 30px;
 }
+
 .titlebox>div>span {
     font-size: 20px;
 }
-.community-box1>.imgbox{
+
+.community-box1>.imgbox {
     height: 547px;
 }
-.community-box1>.imgbox>img{
+
+.community-box1>.imgbox>img {
     width: 100%;
     height: 100%;
 }
-footer{
-     width: 1440px;
-     height: 120px;
-     background: #484848;
+
+footer {
+    width: 1440px;
+    height: 120px;
+    background: #484848;
 }
 
-header{
+header {
     width: 100%;
     padding-top: 30px;
 }
-header div{
+
+header div {
     width: 100%;
     display: flex;
     justify-content: center;
     gap: 10px;
 }
+
 header a {
     font-size: 16px;
-    color:#FAE8D3;
+    color: #FAE8D3;
     padding: 8px;
     border-radius: 8px;
-    margin:4px;
+    margin: 4px;
 }
+
 header a:hover {
     color: white;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
+
 .header-menu a:hover {
     color: white;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
-.header-logo{
+
+.header-logo {
     position: fixed;
     top: 30px;
     left: 20px;
     z-index: 10;
 }
-.header-bg{
+
+.header-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 10%;
-    background: rgba(16,18,38,0.8);
+    background: rgba(16, 18, 38, 0.8);
     z-index: 5;
     display: none;
 }
-@media screen and (max-width: 1200px) { 
-    
-    header{
+
+@media screen and (max-width: 1200px) {
+
+    header {
         position: fixed;
         bottom: 0%;
         left: 0%;
-        background: rgba(16,18,38,0.8);
+        background: rgba(16, 18, 38, 0.8);
         padding: 10px 0 10px 0;
         z-index: 10;
     }
+
     .hero-bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%; /* 부모인 .hero의 높이(1000px)를 따라갑니다 */
-    
-    /* 핵심 코드 */
-    object-fit: cover;    /* 이미지가 비율을 유지하며 요소의 빈 공간을 가득 채웁니다 */
-    object-position: center; /* 이미지의 중앙을 기준으로 배치합니다 */
-    
-    z-index: -1;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        /* 부모인 .hero의 높이(1000px)를 따라갑니다 */
+
+        /* 핵심 코드 */
+        object-fit: cover;
+        /* 이미지가 비율을 유지하며 요소의 빈 공간을 가득 채웁니다 */
+        object-position: center;
+        /* 이미지의 중앙을 기준으로 배치합니다 */
+
+        z-index: -1;
     }
-    .MainTitle{
+
+    .MainTitle {
         position: absolute;
         top: 50%;
         left: 66%;
         transform: translate(-50%, -66%);
     }
-    .header-bg{
+
+    .header-bg {
         display: block;
     }
 
     /* 1. 전체 레이아웃의 고정 너비 해제 */
-    .wrap, .intro0>div, .intro1ImgBox, .intro2ImgBox {
-        width: 90% !important; /* 화면의 90%만 차지하도록 유연하게 변경 */
+    .wrap,
+    .intro0>div,
+    .intro1ImgBox,
+    .intro2ImgBox {
+        width: 90% !important;
+        /* 화면의 90%만 차지하도록 유연하게 변경 */
         max-width: none !important;
         height: auto !important;
     }
 
     /* 2. 섹션 높이 고정 해제 (내용이 넘치는 것 방지) */
-    section, .hero, .intro1, .today, .intro2, .community {
+    section,
+    .hero,
+    .intro1,
+    .today,
+    .intro2,
+    .community {
         height: auto !important;
         min-height: 100vh;
         padding: 5px 0;
     }
 
     /* 3. 좌우 배치를 세로 배치로 전환 (Today, Community 섹션) */
-    .today>.wrap, .community>.wrap {
+    .today>.wrap,
+    .community>.wrap {
         display: flex !important;
-        flex-direction: column !important; /* 세로 정렬 */
+        flex-direction: column !important;
+        /* 세로 정렬 */
         align-items: center !important;
     }
 
     /* 4. 세로로 바뀐 박스들의 너비를 100%로 확장 */
-    .today>.wrap>div, .community>.wrap>div {
+    .today>.wrap>div,
+    .community>.wrap>div {
         width: 100% !important;
-        max-width: 500px; /* 너무 퍼지지 않게 적당히 제한 */
+        max-width: 500px;
+        /* 너무 퍼지지 않게 적당히 제한 */
     }
 
     /* 5. 이미지 크기 자동 조절 */
-    .imgbox, .intro1ImgBox, .intro2ImgBox {
+    .imgbox,
+    .intro1ImgBox,
+    .intro2ImgBox {
         height: auto !important;
     }
-    
+
     img:not(.hero-bg) {
         max-width: 100% !important;
         height: auto !important;
@@ -433,7 +521,200 @@ header a:hover {
     /* 6. 고정되어 화면을 가리는 요소들 해제 */
     /* .header-logo, .header-menu {
         position: static !important; /* fixed 해제 */
-        /* text-align: center;
+    /* text-align: center;
         padding: 10px 0; */
-    /* } */ 
+    /* } */
+}
+
+/* ===== 모바일 반응형 (768px 이하) ===== */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+
+    /* 히어로 섹션 */
+    .hero {
+        height: auto !important;
+        min-height: 500px;
+    }
+
+    .MainTitle {
+        width: 95% !important;
+        height: auto !important;
+        margin-top: 20px;
+    }
+
+    /* 헤더 - 모바일에서 잘림 방지 */
+    .header-bg {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 42px !important;
+        background: rgba(16, 18, 38, 0.92);
+        z-index: 100;
+    }
+
+    .header-logo {
+        position: fixed !important;
+        top: 10px;
+        left: 10px;
+        z-index: 200;
+    }
+
+    .header-logo a {
+        font-size: 13px;
+    }
+
+    .header-menu {
+        position: fixed !important;
+        top: 8px;
+        right: 8px;
+        left: auto !important;
+        z-index: 200;
+    }
+
+    .header-menu>div {
+        display: flex !important;
+        gap: 2px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .header-menu>div>a,
+    .header-menu>div>form button {
+        font-size: 11px !important;
+        padding: 4px 5px !important;
+        white-space: nowrap;
+    }
+
+    /* 인트로 섹션 */
+    .intro0 {
+        height: auto !important;
+        min-height: auto;
+        padding: 40px 15px;
+    }
+
+    .intro0>div {
+        width: 100% !important;
+        line-height: 30px !important;
+    }
+
+    .intro0>div>p {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .intro0>div>span {
+        font-size: 14px;
+    }
+
+    /* 서비스 설명 섹션들 */
+    .intro1,
+    .intro2 {
+        height: auto !important;
+        min-height: auto;
+        padding: 30px 0;
+    }
+
+    .intro1ImgBox {
+        width: 95% !important;
+        height: auto !important;
+        padding: 30px 0 !important;
+    }
+
+    .intro1>.wrap>p,
+    .intro2>.wrap>p {
+        font-size: 14px;
+        line-height: 24px;
+        padding: 0 15px;
+    }
+
+    /* Today / Community 섹션 */
+    .today,
+    .community {
+        height: auto !important;
+        min-height: auto;
+    }
+
+    .today>.wrap,
+    .community>.wrap {
+        flex-direction: column !important;
+    }
+
+    .today>.wrap>div,
+    .community>.wrap>div {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    /* 제목 박스 */
+    .titlebox>div {
+        width: 100% !important;
+        margin: 30px auto !important;
+        padding: 20px !important;
+    }
+
+    .titlebox>div>p {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .titlebox>div>span {
+        font-size: 14px;
+        line-height: 24px;
+    }
+
+    /* 이미지 박스 */
+    .today-box1>.imgbox,
+    .community-box1>.imgbox {
+        height: auto !important;
+    }
+
+    /* 카드 */
+    .today-box2>.card,
+    .community-box2>.card {
+        width: 90% !important;
+        height: auto !important;
+    }
+
+    .card-top {
+        height: auto !important;
+        padding-bottom: 30px;
+    }
+
+    .card-buttom {
+        height: auto !important;
+        padding: 30px 0;
+    }
+
+    .card-buttom>p {
+        padding-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .community-buttom,
+    .today-buttom {
+        position: static !important;
+        transform: none !important;
+        display: block;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    /* 상단 네비게이션 */
+    header {
+        padding-top: 15px;
+    }
+
+    header a {
+        font-size: 13px;
+        padding: 6px;
+    }
+
+    /* 푸터 */
+    footer {
+        width: 100% !important;
+    }
 }

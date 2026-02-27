@@ -1,49 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>마이페이지</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/mypage.css">
 </head>
+
 <body>
 
-<div class="profile-wrapper">
+  <div class="profile-wrapper">
 
     <!-- 프로필 카드 -->
     <div class="profile-card">
 
-        <div class="profile-header">
-            <img src="/static/images/profile.png" alt="프로필 이미지" class="profile-img">
-            <div class="profile-text">
-                <h2 class="profile-name"><span th:text="${username}"></span></h2>
-                <span class="profile-zodiac">물병자리 · 01.20 ~ 02.18</span>
-            </div>
+      <div class="profile-header">
+        <img src="/static/images/profile.png" alt="프로필 이미지" class="profile-img">
+        <div class="profile-text">
+          <h2 class="profile-name"><span th:text="${username}"></span></h2>
+          <span class="profile-zodiac">물병자리 · 01.20 ~ 02.18</span>
         </div>
+      </div>
 
-        <!-- 자기소개 -->
-        <div class="profile-section">
-            <h3 class="section-title">자기소개</h3>
-            <p class="profile-bio">
-                자기소개를 작성해 보세요
-            </p>
-        </div>
+      <!-- 자기소개 -->
+      <div class="profile-section">
+        <h3 class="section-title">자기소개</h3>
+        <p class="profile-bio">
+          자기소개를 작성해 보세요
+        </p>
+      </div>
 
-        <!-- 활동 요약 -->
-        <div class="profile-section">
-            <h3 class="section-title">활동</h3>
-     
-        </div>
+      <!-- 활동 요약 -->
+      <div class="profile-section">
+        <h3 class="section-title">활동</h3>
 
-        <!-- 버튼 -->
-        <div class="profile-actions">
-            <button class="btn-primary"><a href="#" >운세 기록 보기</a></button>
-            <button class="btn-outline"><a href="#" >돌아가기</a></button>
-        </div>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="profile-actions">
+        <button class="btn-primary"><a href="#">운세 기록 보기</a></button>
+        <button class="btn-outline"><a href="#">돌아가기</a></button>
+      </div>
 
     </div>
 
-</div>
+  </div>
 
 </body>
 <script>
@@ -61,4 +64,5 @@
     history.back();
   });
 </script>
+
 </html>

@@ -12,14 +12,14 @@ body {
   font-size: 20px;
 }
 
-header a{
-	position: fixed;
-	top: 20px;
-	border: #161838 2px solid;
-	padding: 10px 20px;
-	border-radius: 10px;
-	z-index: 10;
-	left: 10px;
+header a {
+  position: fixed;
+  top: 20px;
+  border: #161838 2px solid;
+  padding: 10px 20px;
+  border-radius: 10px;
+  z-index: 10;
+  left: 10px;
 }
 
 
@@ -48,7 +48,7 @@ a {
   height: 100%;
 }
 
-.leftbox > img {
+.leftbox>img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -72,9 +72,11 @@ a {
   text-align: center;
   padding: 80px 0 60px;
 }
+
 .starlog:hover {
-    opacity: 70%;
+  opacity: 70%;
 }
+
 /* 입력칸 */
 .form-group {
   margin-bottom: 30px;
@@ -138,4 +140,86 @@ button:hover {
 
 .signup-link:hover {
   color: #9DB2F5;
+}
+
+/* ===== 모바일 반응형 (768px 이하) ===== */
+@media screen and (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+    height: auto;
+  }
+
+  header a {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    font-size: 14px;
+    padding: 8px 14px;
+    z-index: 100;
+    background: rgba(16, 18, 38, 0.6);
+    border-radius: 8px;
+    border-color: transparent !important;
+  }
+
+  .wrap {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .centerbox {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: column;
+  }
+
+  .leftbox {
+    display: none;
+  }
+
+  .rightbox {
+    width: 100% !important;
+    min-height: 100vh;
+    padding: 0 30px;
+    justify-content: center;
+  }
+
+  .starlog {
+    padding: 40px 0 30px;
+    font-size: 28px;
+  }
+
+  .register-container {
+    width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group input,
+  .form-group input[type="text"],
+  .form-group input[type="password"],
+  .form-group input[type="email"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 55px;
+    margin-top: 30px;
+    font-size: 18px;
+  }
+
+  .link-group {
+    margin-top: 20px;
+    padding-bottom: 30px;
+  }
 }
