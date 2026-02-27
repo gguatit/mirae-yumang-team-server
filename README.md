@@ -1,3 +1,5 @@
+> 📌 **오늘의 운세** 관련 코드와 각종 정보들은 [Today-s-horoscope](https://github.com/gguatit/Today-s-horoscope) 레포지토리에서 확인할 수 있습니다.
+
 # STARLOG
 
 > 학교 커뮤니티 기반 웹 애플리케이션
