@@ -1,77 +1,83 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${post.title}">게시글 상세</title>
-  <link rel="stylesheet" href="/static/css/reset.css">
-  <link rel="stylesheet" href="/static/css/post-detail.css">
+    <meta charset="UTF-8">
+    <title th:text="${post.title}">게시글 상세</title>
+    <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/post-detail.css">
+    <!-- CSRF 토큰 (AJAX 요청에 필요) -->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
+
 <body>
-<div class="navbar">
-  <a href="/home" class="navbar-brand">STARLOG</a>
-    <div class="navbar-menu">
-        <span th:if="${username}" style="color: white;" ></span>
-        <a href="/posts">게시판</a>
-        <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
-        <a th:if="${username}" href="/auth/logout">로그아웃</a>
-        <a th:unless="${username}" href="/auth/login">로그인</a>
-  </div>
-</div>
-
-<div class="container">
-  <div class="post-footer">
-      <!-- 작성자만 수정/삭제 버튼 표시 -->
-      <div class="btn-group" th:if="${isAuthor}">
-        <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn btn-primary">수정</a>
-        <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" style="display: inline;"
-              onsubmit="return confirm('정말 삭제하시겠습니까?');">
-          <button type="submit" class="btn btn-danger">삭제</button>
-        </form>
-      </div>
-    </div>
-  <div class="post-detail">
-    <div class="post-header">
-      <h1 class="post-title" th:text="${post.title}"></h1>
-    <div class="post-meta">
-        <span> 작성자: <span th:text="${post.author}"></span></span>
-        <span> 작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
-        <span> 조회수: <span th:text="${post.viewCount}"></span></span>
-      </div>
-      
-    </div>
-
-
-    <div class="post-content">
-    <div th:text="${post.content}" style="white-space: pre-wrap; margin-bottom: 30px;">본문 내용이 여기에 출력됩니다.</div>
-
-    <div class="post-image-container" th:if="${post.images != null and !post.images.empty}" 
-      style="text-align: center; margin-bottom: 20px;">
-      
-      <div th:each="img : ${post.images}" style="margin-bottom: 15px;">
-          <img th:src="${img.filePath}" 
-              alt="게시글 이미지"
-              style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
-      </div>
-  </div>
-</div>
-
-  <div class="recommend-wrapper">
-    <div class="recommend-section">
-            <button type="button" class="btn-like" 
-                    th:classappend="${userChoice == 'L'} ? 'active' : ''"
-                    th:onclick="'handleLikeHate(' + ${post.id} + ', \'L\')'">
-                추천 <span id="like-count" th:text="${likeCount}">0</span>
-            </button>
-
-            <button type="button" class="btn-hate"
-                    th:classappend="${userChoice == 'H'} ? 'active' : ''" 
-                    th:onclick="'handleLikeHate(' + ${post.id} + ', \'H\')'">
-                비추천 <span id="hate-count" th:text="${hateCount}">0</span>
-            </button>
+    <div class="navbar">
+        <a href="/home" class="navbar-brand">STARLOG</a>
+        <div class="navbar-menu">
+            <span th:if="${username}" style="color: white;"></span>
+            <a href="/posts">게시판</a>
+            <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
+            <form th:if="${username}" th:action="@{/auth/logout}" method="post" style="display:inline;">
+                <button type="submit"
+                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">로그아웃</button>
+            </form>
+            <a th:unless="${username}" href="/auth/login">로그인</a>
         </div>
     </div>
-    
-    <!-- <div class="comment-list">
+
+    <div class="container">
+        <div class="post-footer">
+            <!-- 작성자만 수정/삭제 버튼 표시 -->
+            <div class="btn-group" th:if="${isAuthor}">
+                <a th:href="@{/posts/{id}/edit(id=${post.id})}" class="btn btn-primary">수정</a>
+                <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post" style="display: inline;"
+                    onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                    <button type="submit" class="btn btn-danger">삭제</button>
+                </form>
+            </div>
+        </div>
+        <div class="post-detail">
+            <div class="post-header">
+                <h1 class="post-title" th:text="${post.title}"></h1>
+                <div class="post-meta">
+                    <span> 작성자: <span th:text="${post.author}"></span></span>
+                    <span> 작성일: <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+                    <span> 조회수: <span th:text="${post.viewCount}"></span></span>
+                </div>
+
+            </div>
+
+
+            <div class="post-content">
+                <div th:text="${post.content}" style="white-space: pre-wrap; margin-bottom: 30px;">본문 내용이 여기에 출력됩니다.
+                </div>
+
+                <div class="post-image-container" th:if="${post.images != null and !post.images.empty}"
+                    style="text-align: center; margin-bottom: 20px;">
+
+                    <div th:each="img : ${post.images}" style="margin-bottom: 15px;">
+                        <img th:src="${img.filePath}" alt="게시글 이미지"
+                            style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommend-wrapper">
+                <div class="recommend-section">
+                    <button type="button" class="btn-like" th:classappend="${userChoice == 'L'} ? 'active' : ''"
+                        th:onclick="'handleLikeHate(' + ${post.id} + ', \'L\')'">
+                        추천 <span id="like-count" th:text="${likeCount}">0</span>
+                    </button>
+
+                    <button type="button" class="btn-hate" th:classappend="${userChoice == 'H'} ? 'active' : ''"
+                        th:onclick="'handleLikeHate(' + ${post.id} + ', \'H\')'">
+                        비추천 <span id="hate-count" th:text="${hateCount}">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- <div class="comment-list">
       <h3>댓글 (<span th:text="${comments.size()}">0</span>)</h3>
       <div th:each="comment : ${comments}" class="comment-item">
           <strong th:text="${comment.user.username}">작성자</strong>
@@ -79,150 +85,163 @@
           <p th:text="${comment.content}">댓글 내용</p>
           <hr>
       </div> -->
-      <div class="comment-list">
-        <h3>댓글 (<span th:text="${comments.size()}">0</span>)</h3>
-        
-        <div th:each="comment : ${comments}" th:if="${comment.parent == null}" class="comment-item">
-            <strong th:text="${comment.user.username}">작성자</strong>
-            <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">시간</span>
-            <p th:text="${comment.content}">댓글 내용</p>
-            
-            <button type="button" th:onclick="'toggleReplyForm(' + ${comment.id} + ')'" 
-                    style="background:none; border:none; color:#C7D7F9; cursor:pointer; font-size:12px; padding:0;">[답글 달기]</button>
+            <div class="comment-list">
+                <h3>댓글 (<span th:text="${comments.size()}">0</span>)</h3>
 
-            <div th:id="'reply-form-' + ${comment.id}" style="display: none; margin: 10px 0 10px 20px;">
-                <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post" onsubmit="return submitComment(event, this)">
-                    <input type="hidden" name="parentId" th:value="${comment.id}">
-                    <textarea name="content" style="width:80%; background:#1e1e1e; color:white; border:1px solid #333;" required></textarea>
-                    <button type="submit">등록</button>
-                </form>
-            </div>
+                <div th:each="comment : ${comments}" th:if="${comment.parent == null}" class="comment-item">
+                    <strong th:text="${comment.user.username}">작성자</strong>
+                    <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">시간</span>
+                    <p th:text="${comment.content}">댓글 내용</p>
 
-            <div th:each="child : ${comment.children}" class="reply-item" style="margin-left: 30px; margin-top: 10px; border-left: 2px solid #444; padding-left: 15px;">
-                <span style="color: #888;">ㄴ</span>
-                <strong th:text="${child.user.username}">작성자</strong>
-                <span th:text="${#temporals.format(child.createdAt, 'yyyy-MM-dd HH:mm')}" style="font-size: 12px;">시간</span>
-                <p th:text="${child.content}">대댓글 내용</p>
+                    <button type="button" th:onclick="'toggleReplyForm(' + ${comment.id} + ')'"
+                        style="background:none; border:none; color:#C7D7F9; cursor:pointer; font-size:12px; padding:0;">[답글
+                        달기]</button>
+
+                    <div th:id="'reply-form-' + ${comment.id}" style="display: none; margin: 10px 0 10px 20px;">
+                        <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post"
+                            onsubmit="return submitComment(event, this)">
+                            <input type="hidden" name="parentId" th:value="${comment.id}">
+                            <textarea name="content"
+                                style="width:80%; background:#1e1e1e; color:white; border:1px solid #333;"
+                                required></textarea>
+                            <button type="submit">등록</button>
+                        </form>
+                    </div>
+
+                    <div th:each="child : ${comment.children}" class="reply-item"
+                        style="margin-left: 30px; margin-top: 10px; border-left: 2px solid #444; padding-left: 15px;">
+                        <span style="color: #888;">ㄴ</span>
+                        <strong th:text="${child.user.username}">작성자</strong>
+                        <span th:text="${#temporals.format(child.createdAt, 'yyyy-MM-dd HH:mm')}"
+                            style="font-size: 12px;">시간</span>
+                        <p th:text="${child.content}">대댓글 내용</p>
+                    </div>
+
+                </div>
             </div>
-            
-            </div>
+        </div>
+        <div class="comment-form">
+            <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post"
+                onsubmit="return submitComment(event, this)">
+                <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
+                <button type="submit">댓글 등록</button>
+            </form>
+        </div>
+        <a href="/posts" class="btn btn-secondary">돌아가기</a>
+
     </div>
-  </div>
-  <div class="comment-form">
-      <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post" onsubmit="return submitComment(event, this)">
-          <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
-          <button type="submit">댓글 등록</button>
-      </form>
-  </div>
-  <a href="/posts" class="btn btn-secondary">돌아가기</a>
+    </div>
+    <script>
+        async function handleLikeHate(postId, type) {
+            const url = `/posts/api/${postId}/like-hate?type=${type}`;
 
-  </div>
-</div>
-<script>
-  async function handleLikeHate(postId, type) {
-    // 1. 서버에 요청 보내기 (PostController에 만든 API 주소)
-    // URL 구조: /posts/api/{postId}/like-hate?type=L 또는 H
-    const url = `/posts/api/${postId}/like-hate?type=${type}`;
-    
-    console.log("요청 주소:", url); // 브라우저 콘솔(F12)에서 주소가 맞는지 확인용
-    
-    try {
-        const response = await fetch(url, {
-            method: 'POST'
-        });
+            // CSRF 토큰 가져오기
+            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
-        // 2. 로그인 안 된 경우 처리 (401 에러)
-        if (response.status === 401) {
-            alert("로그인이 필요한 서비스입니다.");
-            window.location.href = "/auth/login";
-            return;
-        }
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { [csrfHeader]: csrfToken }
+                });
 
-        // 3. 성공 시 메시지 출력 후 페이지 새로고침
-        if (response.ok) {
-            location.reload(); // 숫자를 업데이트하기 위해 화면 새로고침
-        } else {
-            // 상세 에러 파악을 위한 로그
-            console.error("Response Status:", response.status);
-            if (response.status === 404) {
-                alert("에러 404: 주소를 찾을 수 없습니다. 컨트롤러 매핑을 확인하세요.");
-            } else if (response.status === 400) {
-                alert("에러 400: 보낸 데이터(type)가 서버의 Enum 형식과 맞지 않습니다.");
-            } else if (response.status === 403) {
-                alert("에러 403: 보안(CSRF) 권한 문제입니다.");
-            } else {
-                alert("처리 중 오류가 발생했습니다. 코드: " + response.status);
+                // 2. 로그인 안 된 경우 처리 (401 에러)
+                if (response.status === 401) {
+                    alert("로그인이 필요한 서비스입니다.");
+                    window.location.href = "/auth/login";
+                    return;
+                }
+
+                // 3. 성공 시 메시지 출력 후 페이지 새로고침
+                if (response.ok) {
+                    location.reload(); // 숫자를 업데이트하기 위해 화면 새로고침
+                } else {
+                    // 상세 에러 파악을 위한 로그
+                    console.error("Response Status:", response.status);
+                    if (response.status === 404) {
+                        alert("에러 404: 주소를 찾을 수 없습니다. 컨트롤러 매핑을 확인하세요.");
+                    } else if (response.status === 400) {
+                        alert("에러 400: 보낸 데이터(type)가 서버의 Enum 형식과 맞지 않습니다.");
+                    } else if (response.status === 403) {
+                        alert("에러 403: 보안(CSRF) 권한 문제입니다.");
+                    } else {
+                        alert("처리 중 오류가 발생했습니다. 코드: " + response.status);
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("서버와 통신할 수 없습니다.");
             }
         }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("서버와 통신할 수 없습니다.");
-    }
-  }
 
-  function toggleReplyForm(commentId) {
-    const form = document.getElementById('reply-form-' + commentId);
-    if (form.style.display === 'none') {
-        form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
-    }
-  }
-  // 댓글 비동기 등록 함수
-  async function submitComment(event, form) {
-      event.preventDefault(); // 페이지 이동 방지
+        function toggleReplyForm(commentId) {
+            const form = document.getElementById('reply-form-' + commentId);
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+        // 댓글 비동기 등록 함수
+        async function submitComment(event, form) {
+            event.preventDefault(); // 페이지 이동 방지
 
-      const formData = new FormData(form);
-      const url = form.action; // form의 th:action 주소를 그대로 사용
+            const formData = new FormData(form);
+            const url = form.action; // form의 th:action 주소를 그대로 사용
 
-      try {
-          const response = await fetch(url, {
-              method: 'POST',
-              body: formData,
-          });
+            try {
+                // CSRF 토큰 가져오기
+                const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
 
-          // 💡 서버에서 401(로그인 안됨)을 보냈을 때 처리
-          if (response.status === 401) {
-              alert("로그인이 필요한 서비스입니다.");
-              window.location.href = "/auth/login"; // 로그인 페이지 주소 확인!
-              return;
-          }
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { [csrfHeader]: csrfToken },
+                    body: formData,
+                });
 
-          if (response.ok) {
-              const newComment = await response.json(); // 서버에서 준 DTO 받기
-              appendComment(newComment); // 화면에 즉시 추가
-              form.querySelector('textarea').value = ''; // 입력창 비우기
-              
-              // 대댓글 폼이었으면 다시 숨기기
-              if (form.closest('[id^="reply-form-"]')) {
-                  form.parentElement.style.display = 'none';
-              }
-          } else if (response.status === 401) {
-              alert("로그인이 필요합니다.");
-              window.location.href = "/auth/login";
-          }
-      } catch (error) {
-          console.error("Error:", error);
-          alert("댓글 등록 중 오류가 발생했습니다.");
-      }
-      return false;
-  }
+                // 💡 서버에서 401(로그인 안됨)을 보냈을 때 처리
+                if (response.status === 401) {
+                    alert("로그인이 필요한 서비스입니다.");
+                    window.location.href = "/auth/login"; // 로그인 페이지 주소 확인!
+                    return;
+                }
 
-  // 화면에 새 댓글 HTML을 꽂아주는 함수
-  function appendComment(comment) {
-    // 1. 이 클래스 이름(.comment-list)이 HTML의 <div> 클래스와 일치하는지 확인!
-    const commentList = document.querySelector('.comment-list');
-    
-    if (!commentList) {
-        console.error("댓글 리스트 영역을 찾을 수 없습니다!");
-        return;
-    }
+                if (response.ok) {
+                    const newComment = await response.json(); // 서버에서 준 DTO 받기
+                    appendComment(newComment); // 화면에 즉시 추가
+                    form.querySelector('textarea').value = ''; // 입력창 비우기
 
-    if (comment.parentId) {
-        // 대댓글 로직...
-        const parentForm = document.getElementById('reply-form-' + comment.parentId);
-        // 부모 폼이 있는 감싸는 div(comment-item)를 찾아서 그 끝에 추가
-        parentForm.closest('.comment-item').insertAdjacentHTML('beforeend', `
+                    // 대댓글 폼이었으면 다시 숨기기
+                    if (form.closest('[id^="reply-form-"]')) {
+                        form.parentElement.style.display = 'none';
+                    }
+                } else if (response.status === 401) {
+                    alert("로그인이 필요합니다.");
+                    window.location.href = "/auth/login";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("댓글 등록 중 오류가 발생했습니다.");
+            }
+            return false;
+        }
+
+        // 화면에 새 댓글 HTML을 꽂아주는 함수
+        function appendComment(comment) {
+            // 1. 이 클래스 이름(.comment-list)이 HTML의 <div> 클래스와 일치하는지 확인!
+            const commentList = document.querySelector('.comment-list');
+
+            if (!commentList) {
+                console.error("댓글 리스트 영역을 찾을 수 없습니다!");
+                return;
+            }
+
+            if (comment.parentId) {
+                // 대댓글 로직...
+                const parentForm = document.getElementById('reply-form-' + comment.parentId);
+                // 부모 폼이 있는 감싸는 div(comment-item)를 찾아서 그 끝에 추가
+                parentForm.closest('.comment-item').insertAdjacentHTML('beforeend', `
             <div class="reply-item" style="margin-left: 30px; margin-top: 10px; border-left: 2px solid #444; padding-left: 15px;">
                 <span style="color: #888;">ㄴ</span>
                 <strong>${comment.username}</strong>
@@ -230,9 +249,9 @@
                 <p>${comment.content}</p>
             </div>
         `);
-    } else {
-        // 일반 댓글 로직: commentList의 맨 뒤(beforeend)에 추가
-        const commentHtml = `
+            } else {
+                // 일반 댓글 로직: commentList의 맨 뒤(beforeend)에 추가
+                const commentHtml = `
             <div class="comment-item">
                 <strong>${comment.username}</strong>
                 <span style="font-size: 12px;">방금 전</span>
@@ -248,13 +267,14 @@
                 </div>
             </div>
         `;
-        commentList.insertAdjacentHTML('beforeend', commentHtml);
-    }
-      
-      // 댓글 수 숫자 업데이트 (선택 사항)
-      const countSpan = document.querySelector('.comment-list h3 span');
-      if(countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
-  }
-</script>
+                commentList.insertAdjacentHTML('beforeend', commentHtml);
+            }
+
+            // 댓글 수 숫자 업데이트 (선택 사항)
+            const countSpan = document.querySelector('.comment-list h3 span');
+            if (countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
+        }
+    </script>
 </body>
+
 </html>

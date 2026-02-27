@@ -16,29 +16,28 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 
  * @RequestMapping("/auth")를 사용하는 이유:
  * 1. URL 구조화: 인증 관련 기능을 /auth 하위로 그룹화
- *    - /auth/login    : 로그인
- *    - /auth/register : 회원가입
- *    - /auth/logout   : 로그아웃
+ * - /auth/login : 로그인
+ * - /auth/register : 회원가입
+ * - /auth/logout : 로그아웃
  * 
  * 2. RESTful 설계: 기능별로 URL을 계층적으로 구성
- *    - /auth/*   : 인증 관련
- *    - /posts/*  : 게시글 관련
- *    - /users/*  : 사용자 관련 (만약 추가한다면)
+ * - /auth/* : 인증 관련
+ * - /posts/* : 게시글 관련
+ * - /users/* : 사용자 관련 (만약 추가한다면)
  * 
  * 3. 보안 설정 용이: Spring Security 적용 시 경로별 권한 설정이 쉬워짐
- *    예) /auth/** 는 모두 permitAll()
- *        /admin/** 는 ROLE_ADMIN만 접근 가능
+ * 예) /auth/** 는 모두 permitAll()
+ * /admin/** 는 ROLE_ADMIN만 접근 가능
  * 
  * 4. 유지보수성: 나중에 API를 추가할 때도 일관된 구조 유지
- *    예) /api/auth/login (REST API용)
+ * 예) /api/auth/login (REST API용)
  */
 @Controller
-@RequestMapping("/auth")  // 이 컨트롤러의 모든 메서드는 /auth로 시작
+@RequestMapping("/auth") // 이 컨트롤러의 모든 메서드는 /auth로 시작
 public class AuthController {
 
     @Autowired
     private UserService userService;
-    
 
     // ============================================
     // 로그인 처리
@@ -57,7 +56,7 @@ public class AuthController {
         if (session.getAttribute("loginUser") != null) {
             return "redirect:/home";
         }
-        return "login";  // templates/login.html 렌더링
+        return "login"; // templates/login.html 렌더링
     }
 
     /**
@@ -71,8 +70,7 @@ public class AuthController {
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             HttpSession session,
-            Model model
-    ) {
+            Model model) {
         System.out.println("🔐 로그인 시도: " + username);
 
         // 1. 사용자 인증 (UserService 활용)
@@ -81,14 +79,14 @@ public class AuthController {
         if (user == null) {
             // 로그인 실패
             model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
-            return "login";  // login.html로 다시 이동
+            return "login"; // login.html로 다시 이동
         }
 
         // [중요!] 이 줄이 있어야 PostController에서 userId를 꺼낼 수 있습니다.
         session.setAttribute("userId", user.getId());
-        
+
         // 2. 로그인 성공 → 세션에 사용자 정보 저장
-        session.setAttribute("loginUser", username);  // 핵심!
+        session.setAttribute("loginUser", username); // 핵심!
         session.setAttribute("loginEmail", user.getEmail());
 
         System.out.println("로그인 성공! 세션ID: " + session.getId());
@@ -120,17 +118,16 @@ public class AuthController {
      * 실제 URL: /auth/register (POST)
      * 
      * @RequestParam으로 form 데이터를 받습니다:
-     * - username: 사용자 아이디
-     * - password: 비밀번호
-     * - email: 이메일
+     *                 - username: 사용자 아이디
+     *                 - password: 비밀번호
+     *                 - email: 이메일
      */
     @PostMapping("/register")
     public String register(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
-            Model model
-    ) {
+            Model model) {
         System.out.println("회원가입 시도: " + username);
 
         // 1. 입력값 검증
@@ -183,28 +180,6 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
-    // ============================================
-    // GET 요청 처리 (학습용 - 실무에서는 POST만 권장)
-    // ============================================
+    // GET 방식 로그아웃은 보안상 제거됨 (POST만 허용)
 
-    /**
-     * 로그아웃 GET 요청 처리
-     * 실제 URL: /auth/logout (GET)
-     * 
-     * 학습 단계에서는 편의상 GET도 허용하지만,
-     * 실무에서는 보안을 위해 POST만 사용하는 것이 좋습니다.
-     * 
-     * GET 허용 시 문제점:
-     * - 브라우저 캐시에 URL이 남을 수 있음
-     * - 이미지 태그 등으로 의도치 않은 로그아웃 가능
-     *   예) <img src="/auth/logout">
-     */
-    @GetMapping("/logout")
-    public String logoutGet(HttpSession session) {
-        // GET 요청도 로그아웃 처리 (브라우저 주소창 입력 대응)
-        return logout(session);
-    }
-
-    
-    
 }

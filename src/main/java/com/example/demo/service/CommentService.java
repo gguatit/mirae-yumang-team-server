@@ -8,6 +8,8 @@ import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ public class CommentService {
         Post post = postRepository.findById(postId).orElseThrow();
         User user = userRepository.findById(userId).orElseThrow();
 
+        // XSS 방지: HTML 태그 제거
+        content = Jsoup.clean(content, Safelist.none());
+
         Comment comment = Comment.builder()
                 .content(content)
                 .post(post)
@@ -36,8 +41,10 @@ public class CommentService {
     public CommentResponseDto saveComment(Long postId, String username, String content, Long parentId) {
         Post post = postRepository.findById(postId).orElseThrow();
         User user = userRepository.findByUsername(username).orElseThrow();
-        
-        
+
+        // XSS 방지: HTML 태그 제거
+        content = Jsoup.clean(content, Safelist.none());
+
         Comment comment = new Comment(content, post, user);
 
         // 💡 대댓글 로직: 부모가 있다면 연결해줌
@@ -50,11 +57,11 @@ public class CommentService {
 
         // 컨트롤러에 전달할 DTO 반환
         return new CommentResponseDto(
-            savedComment.getId(),
-            savedComment.getContent(),
-            savedComment.getUser().getUsername(),
-            parentId,
-            "방금 전" // 혹은 포맷팅된 시간
+                savedComment.getId(),
+                savedComment.getContent(),
+                savedComment.getUser().getUsername(),
+                parentId,
+                "방금 전" // 혹은 포맷팅된 시간
         );
     }
 }

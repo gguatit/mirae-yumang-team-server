@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -44,12 +45,12 @@ import org.springframework.data.domain.Page;
  * 4. @PathVariable을 활용한 동적 URL 매핑
  * 
  * URL 구조:
- * - GET  /posts             → 게시글 목록
- * - GET  /posts/write       → 글쓰기 폼
- * - POST /posts/write       → 글쓰기 처리
- * - GET  /posts/{id}        → 게시글 상세 조회
- * - GET  /posts/{id}/edit   → 게시글 수정 폼
- * - POST /posts/{id}/edit   → 게시글 수정 처리
+ * - GET /posts → 게시글 목록
+ * - GET /posts/write → 글쓰기 폼
+ * - POST /posts/write → 글쓰기 처리
+ * - GET /posts/{id} → 게시글 상세 조회
+ * - GET /posts/{id}/edit → 게시글 수정 폼
+ * - POST /posts/{id}/edit → 게시글 수정 처리
  * - POST /posts/{id}/delete → 게시글 삭제
  * 
  * 💡 왜 Service를 사용할까?
@@ -60,9 +61,13 @@ import org.springframework.data.domain.Page;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/posts")  // 이 컨트롤러의 모든 URL은 /posts로 시작
+@RequestMapping("/posts") // 이 컨트롤러의 모든 URL은 /posts로 시작
 public class PostController {
-    
+
+    // 허용된 이미지 확장자 (보안)
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
+            "jpg", "jpeg", "png", "gif", "webp");
+
     private final LhRepository lhRepository;
     private final LhService lhService;
     private final CommentService commentService;
@@ -71,43 +76,41 @@ public class PostController {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    
-
-    
     // 1. 상세 페이지 조회 (여기서 카운트를 수행해서 HTML에 넘김)
     @GetMapping("/post/{postId}")
     public String getPostDetail(@PathVariable Long postId, Model model) {
         Post post = postService.getPostById(postId);
-        
+
         // LH 테이블에서 실시간 검색
         long likeCount = lhRepository.countByPostIdAndType(postId, RecommendationType.L);
         long hateCount = lhRepository.countByPostIdAndType(postId, RecommendationType.H);
 
         model.addAttribute("post", post);
         model.addAttribute("likeCount", likeCount); // HTML의 ${likeCount}와 매칭
-        model.addAttribute("hateCount", hateCount); 
+        model.addAttribute("hateCount", hateCount);
         return "post-detail";
     }
-    
+
     // 2. 추천/비추천 버튼 클릭 처리 (API)
     @PostMapping("/api/{postId}/like-hate")
     @ResponseBody // RestController처럼 결과만 반환
-    public ResponseEntity<String> likeHate(@PathVariable Long postId, 
-                                       @RequestParam RecommendationType type,
-                                       HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId"); 
-    
+    public ResponseEntity<String> likeHate(@PathVariable Long postId,
+            @RequestParam RecommendationType type,
+            HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+
         if (userId == null) {
-        // 2. body 없이 401 상태 코드만 반환
-        return ResponseEntity.status(401).build();
-    }
+            // 2. body 없이 401 상태 코드만 반환
+            return ResponseEntity.status(401).build();
+        }
 
         // 3. 서비스 호출 (리턴값을 받지 않음)
-        lhService.toggleLikeHate(userId, postId, type); 
-        
+        lhService.toggleLikeHate(userId, postId, type);
+
         // 4. 성공 응답 반환
         return ResponseEntity.ok().build();
     }
+
     /**
      * Service 계층 주입
      * 
@@ -116,13 +119,13 @@ public class PostController {
      * - Controller는 Repository를 직접 사용하지 않음
      * - Service를 통해 비즈니스 로직을 처리
      */
-    
 
     // ============================================
     // 게시글 목록
     // ============================================
     @Autowired
     private PostService postService;
+
     /**
      * 게시글 목록 조회
      * URL: /posts (GET)
@@ -154,7 +157,7 @@ public class PostController {
         Page<Post> popularPage = postService.getPopularPosts(0);
         model.addAttribute("bestPosts", popularPage.getContent());
 
-        return "post-list";  // templates/post-list.html
+        return "post-list"; // templates/post-list.html
     }
 
     // ============================================
@@ -180,7 +183,7 @@ public class PostController {
         }
 
         model.addAttribute("username", username);
-        return "post-write";  // templates/post-write.html
+        return "post-write"; // templates/post-write.html
     }
 
     // ============================================
@@ -207,8 +210,7 @@ public class PostController {
             @RequestParam("content") String content,
             @RequestParam("imageFile") List<MultipartFile> imageFiles,
             HttpSession session,
-            Model model
-    ) throws IOException{
+            Model model) throws IOException {
         // 로그인 확인
         String username = (String) session.getAttribute("loginUser");
 
@@ -226,7 +228,6 @@ public class PostController {
             model.addAttribute("error", "내용을 입력해주세요.");
             return "post-write";
         }
-        
 
         // 게시글 작성
         try {
@@ -236,20 +237,28 @@ public class PostController {
 
             String uploadDir = "C:/starlog/upload/";
             File folder = new File(uploadDir);
-            if (!folder.exists()) folder.mkdirs();
+            if (!folder.exists())
+                folder.mkdirs();
 
             for (MultipartFile file : imageFiles) {
                 if (file != null && !file.isEmpty()) {
                     String originalFilename = file.getOriginalFilename();
+                    String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+                    // 파일 확장자 검증
+                    if (!ALLOWED_EXTENSIONS.contains(extension)) {
+                        model.addAttribute("error", "허용되지 않는 파일 형식입니다. (jpg, png, gif, webp만 가능)");
+                        return "post-write";
+                    }
+
                     String uuid = UUID.randomUUID().toString();
-                    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                    String fileName = uuid + extension;
+                    String fileName = uuid + "." + extension;
 
                     file.transferTo(new File(uploadDir + fileName));
-                    
+
                     fileNames.add(fileName);
                     filePaths.add("/upload/" + fileName);
-                    
+
                     System.out.println("✅ 파일 저장 성공: " + fileName);
                 }
             }
@@ -285,10 +294,9 @@ public class PostController {
      */
     @GetMapping("/{id}")
     public String detail(
-            @PathVariable("id") Long id,  // URL의 {id}를 Long 타입으로 받음
+            @PathVariable("id") Long id, // URL의 {id}를 Long 타입으로 받음
             HttpSession session,
-            Model model
-    ) {
+            Model model) {
         try {
             // 1. 게시글 정보 조회 (postService 내에 getPostById 메서드 사용)
             Post post = postService.getPostById(id);
@@ -297,14 +305,14 @@ public class PostController {
             // 2. LH 테이블에서 해당 게시물의 'L' 개수와 'H' 개수를 각각 검색 (Count)
             long likeCount = lhRepository.countByPostIdAndType(id, RecommendationType.L);
             long hateCount = lhRepository.countByPostIdAndType(id, RecommendationType.H);
-            
-            model.addAttribute("likeCount", likeCount); 
-            model.addAttribute("hateCount", hateCount); 
+
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("hateCount", hateCount);
 
             // 3. 로그인 정보 및 권한 확인
             String username = (String) session.getAttribute("loginUser");
             model.addAttribute("username", username);
-            
+
             boolean isAuthor = username != null && post.isAuthor(username);
             model.addAttribute("isAuthor", isAuthor);
 
@@ -322,7 +330,7 @@ public class PostController {
 
             List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtAsc(id);
             model.addAttribute("comments", comments);
-            return "post-detail"; 
+            return "post-detail";
 
         } catch (Exception e) {
             System.out.println("❌ 게시글 조회 실패: " + e.getMessage());
@@ -331,14 +339,14 @@ public class PostController {
     }
     // //댓글달기
     // @PostMapping("/{id}/comments")
-    // public String addComment(@PathVariable("id") Long id, 
-    //                         @RequestParam String content, 
-    //                         HttpSession session) {
-    //     Long userId = (Long) session.getAttribute("userId");
-    //     if (userId == null) return "redirect:/auth/login";
+    // public String addComment(@PathVariable("id") Long id,
+    // @RequestParam String content,
+    // HttpSession session) {
+    // Long userId = (Long) session.getAttribute("userId");
+    // if (userId == null) return "redirect:/auth/login";
 
-    //     commentService.createComment(id, userId, content);
-    //     return "redirect:/posts/" + id; // 작성 후 상세페이지로 리다이렉트
+    // commentService.createComment(id, userId, content);
+    // return "redirect:/posts/" + id; // 작성 후 상세페이지로 리다이렉트
     // }
     // ============================================
     // 게시글 삭제
@@ -363,8 +371,7 @@ public class PostController {
     @PostMapping("/{id}/delete")
     public String delete(
             @PathVariable("id") Long id,
-            HttpSession session
-    ) {
+            HttpSession session) {
         // 로그인 확인
         String username = (String) session.getAttribute("loginUser");
         if (username == null) {
@@ -378,7 +385,7 @@ public class PostController {
             System.out.println("❌ 게시글 삭제 실패: 권한 없음 또는 존재하지 않는 게시글");
         }
 
-        return "redirect:/posts";  // 삭제 후 목록으로
+        return "redirect:/posts"; // 삭제 후 목록으로
     }
 
     // ============================================
@@ -404,8 +411,7 @@ public class PostController {
     public String editForm(
             @PathVariable("id") Long id,
             HttpSession session,
-            Model model
-    ) {
+            Model model) {
         // 1. 로그인 확인
         String username = (String) session.getAttribute("loginUser");
         if (username == null) {
@@ -420,7 +426,7 @@ public class PostController {
             // 3. 작성자 확인 (중요!)
             if (!post.isAuthor(username)) {
                 System.out.println("❌ 권한 없는 사용자가 수정 시도: " + username);
-                return "redirect:/posts/" + id;  // 상세 페이지로 리다이렉트
+                return "redirect:/posts/" + id; // 상세 페이지로 리다이렉트
             }
 
             // 4. 폼에 데이터 전달
@@ -428,7 +434,7 @@ public class PostController {
             model.addAttribute("username", username);
 
             System.out.println("게시글 수정 폼 접근: " + id);
-            return "post-edit";  // templates/post-edit.html
+            return "post-edit"; // templates/post-edit.html
 
         } catch (Exception e) {
             System.out.println("❌ 게시글 조회 실패: " + e.getMessage());
@@ -461,8 +467,7 @@ public class PostController {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             HttpSession session,
-            Model model
-    ) {
+            Model model) {
         // 1. 로그인 확인
         String username = (String) session.getAttribute("loginUser");
         if (username == null) {
@@ -514,45 +519,51 @@ public class PostController {
     }
 
     @PostMapping("/save")
-        public String savePost(@ModelAttribute Post post, 
-                            @RequestParam("imageFile") List<MultipartFile> imageFiles, 
-                            HttpSession session) throws IOException {
-            
-            Long userId = (Long) session.getAttribute("userId");
-            User user = userRepository.findById(userId).orElseThrow();
-            post.setUser(user);
+    public String savePost(@ModelAttribute Post post,
+            @RequestParam("imageFile") List<MultipartFile> imageFiles,
+            HttpSession session) throws IOException {
 
-            String uploadDir = "C:/starlog/upload/";
-            File folder = new File(uploadDir);
-            
-            // 폴더가 없으면 생성 (이 코드가 실행되는지 로그를 찍어보세요)
-            if (!folder.exists()) {
-                folder.mkdirs(); 
-                System.out.println("폴더 생성 완료: " + uploadDir);
-            }
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(userId).orElseThrow();
+        post.setUser(user);
 
-            // 이미지 파일이 비어있지 않은 경우에만 처리
-            if (imageFiles != null && !imageFiles.isEmpty()) {
-                for (MultipartFile file : imageFiles) {
-                    if (!file.isEmpty()) {
-                        String originalFilename = file.getOriginalFilename();
-                        String uuid = UUID.randomUUID().toString();
-                        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
-                        String savedName = uuid + extension;
+        String uploadDir = "C:/starlog/upload/";
+        File folder = new File(uploadDir);
 
-                        // 1. 파일 시스템에 저장
-                        File saveFile = new File(uploadDir + savedName);
-                        file.transferTo(saveFile);
+        // 폴더가 없으면 생성 (이 코드가 실행되는지 로그를 찍어보세요)
+        if (!folder.exists()) {
+            folder.mkdirs();
+            System.out.println("폴더 생성 완료: " + uploadDir);
+        }
 
-                        // 2. PostImage 객체 생성 및 Post와 연결 (setFilePath 대신 이 방식을 씁니다)
-                        PostImage postImage = new PostImage(savedName, "/upload/" + savedName, post);
-                        post.getImages().add(postImage); // Post 엔티티 내부의 List에 추가
+        // 이미지 파일이 비어있지 않은 경우에만 처리
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile file : imageFiles) {
+                if (!file.isEmpty()) {
+                    String originalFilename = file.getOriginalFilename();
+                    String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+                    // 파일 확장자 검증
+                    if (!ALLOWED_EXTENSIONS.contains(extension)) {
+                        continue; // 허용되지 않는 확장자는 건너뜀
                     }
+
+                    String uuid = UUID.randomUUID().toString();
+                    String savedName = uuid + "." + extension;
+
+                    // 1. 파일 시스템에 저장
+                    File saveFile = new File(uploadDir + savedName);
+                    file.transferTo(saveFile);
+
+                    // 2. PostImage 객체 생성 및 Post와 연결 (setFilePath 대신 이 방식을 씁니다)
+                    PostImage postImage = new PostImage(savedName, "/upload/" + savedName, post);
+                    post.getImages().add(postImage); // Post 엔티티 내부의 List에 추가
                 }
             }
-
-            postRepository.save(post);
-            return "redirect:/posts";
         }
-    
+
+        postRepository.save(post);
+        return "redirect:/posts";
+    }
+
 }

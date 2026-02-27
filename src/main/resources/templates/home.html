@@ -35,7 +35,10 @@
                         <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
                         <div th:if="${username}">
                             <a href="/mypage" th:text="${username} + '님'"></a>
-                            <a href="/auth/logout">로그아웃</a>
+                            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                                <button type="submit"
+                                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">로그아웃</button>
+                            </form>
                         </div>
                         <div th:unless="${username}">
                             <a href="/auth/login">로그인</a>

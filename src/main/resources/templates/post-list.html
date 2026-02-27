@@ -14,7 +14,10 @@
         <div class="navbar-menu">
             <a href="/posts">게시판</a>
             <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
-            <a th:if="${username}" href="/auth/logout">로그아웃</a>
+            <form th:if="${username}" th:action="@{/auth/logout}" method="post" style="display:inline;">
+                <button type="submit"
+                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">로그아웃</button>
+            </form>
             <a th:unless="${username}" href="/auth/login">로그인</a>
         </div>
     </div>
