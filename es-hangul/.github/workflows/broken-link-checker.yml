@@ -1,0 +1,32 @@
+name: Broken link checker
+
+on:
+  schedule:
+    - cron: '0 5 * * 1-5'
+  workflow_dispatch:
+    inputs: { url: { description: 'URL to check', required: false, default: 'https://es-hangul.slash.page' } }
+
+jobs:
+  broken-link-checker:
+    if: github.repository == 'toss/es-hangul'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Check broken link
+        env:
+          url: ${{ github.event.inputs.url || 'https://es-hangul.slash.page' }}
+        run: yarn blc $url --ro

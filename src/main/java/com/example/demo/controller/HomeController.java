@@ -15,23 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-/**
- * 📌 홈 페이지 및 마이페이지 컨트롤러
- * 
- * 학습 포인트:
- * 1. @Autowired를 통한 의존성 주입 (Dependency Injection)
- * 2. HttpSession을 활용한 로그인 상태 관리
- * 3. Repository를 직접 주입하는 방식 vs Service를 통한 방식 비교
- * 
- * 📚 설계 선택지:
- * - HomeController는 UserRepository를 직접 주입받아 사용
- * - AuthController는 UserService를 통해 간접적으로 사용
- * 
- * 어떤 방식이 더 좋을까요?
- * → 일반적으로 Service를 사용하는 것이 권장됩니다!
- *   (비즈니스 로직 분리, 트랜잭션 관리, 재사용성 등)
- * → 하지만 간단한 조회만 할 경우 Repository 직접 사용도 가능합니다.
- */
+
 @Controller
 public class HomeController {
 
@@ -88,25 +72,6 @@ public class HomeController {
         return "home";  // templates/home.html 렌더링
     }
 
-
-    // ============================================
-    // 마이페이지 (로그인 필수!)
-    // ============================================
-
-    /**
-     * 마이페이지 조회
-     * 
-     * 학습 포인트:
-     * 1. 세션 기반 인증 확인
-     * 2. 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
-     * 3. DB에서 최신 사용자 정보 조회
-     * 4. Optional을 활용한 안전한 데이터 처리
-     * 
-     * 💡 왜 세션 정보만으로는 부족할까?
-     * - 세션: 일부 정보만 저장 (username, email 정도)
-     * - DB 조회: createdAt(가입일) 등 추가 정보 필요
-     * - 또한 DB 정보가 변경되었을 수 있으므로 최신 정보 확인
-     */
     @GetMapping("/mypage")
     public String mypage(HttpSession session, Model model) {
         // 1. 세션 확인: 로그인 여부 체크

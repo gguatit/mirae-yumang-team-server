@@ -30,9 +30,13 @@
             <div class="titlebox">
                 <h1>학교 커뮤니티</h1>
                 <span>학생들의 작은 이야기들이 모이는 곳</span>
-                <form class="search-box">
-                    <input type="search" placeholder="게시글 검색" />
+                <form class="search-box" action="/posts" method="get" id="searchForm">
+                    <input type="search" id="searchInput" name="keyword"
+                        th:value="${keyword}"
+                        placeholder="게시글 검색 (초성 검색 지원, 예: ㅅㄱ)"
+                        autocomplete="off" />
                     <button type="submit">검색</button>
+                    <a th:if="${!#strings.isEmpty(keyword)}" href="/posts" class="search-clear">✕ 초기화</a>
                 </form>
             </div>
         </div>
@@ -42,7 +46,12 @@
 
         <div class="page-header">
             <div>
-                <div class="post-count">총 <span th:text="${posts.size()}" class="post-count-v"></span>개의 게시글</div>
+                <div class="post-count">
+                    <span th:if="${!#strings.isEmpty(keyword)}">
+                        &lsquo;<strong th:text="${keyword}"></strong>&rsquo; 검색 결과:
+                    </span>
+                    총 <span th:text="${posts.size()}" class="post-count-v"></span>개의 게시글
+                </div>
             </div>
 
             <div class="post-main">
@@ -124,42 +133,108 @@
     </div>
 </body>
 <script>
-    const postsPerPage = 10; // 한 페이지 최대 6개
+    // ─────────────────────────────────────────────
+    // es-hangul: getChoseong 인라인 구현
+    // 출처: https://github.com/toss/es-hangul (MIT)
+    // ─────────────────────────────────────────────
+    const CHOSEONGS = [
+        'ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ',
+        'ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'
+    ];
+
+    function getChoseong(word) {
+        return [...word].map(char => {
+            const code = char.charCodeAt(0);
+            if (code >= 0xAC00 && code <= 0xD7A3) {
+                return CHOSEONGS[Math.floor((code - 0xAC00) / 588)];
+            }
+            return char;
+        }).join('');
+    }
+
+    // 검색 매칭: 일반 포함 검색 + 초성 검색
+    function matchesQuery(text, query) {
+        if (!query) return true;
+        const lower = text.toLowerCase();
+        const q = query.toLowerCase();
+        if (lower.includes(q)) return true;
+        // 쿼리가 자음(초성)으로만 구성된 경우 초성 검색
+        if (/^[ㄱ-ㅎ\s]+$/.test(query)) {
+            return getChoseong(text).includes(query);
+        }
+        return false;
+    }
+
+    // ─────────────────────────────────────────────
+    // 페이지네이션 + 실시간 초성 검색
+    // ─────────────────────────────────────────────
+    const postsPerPage = 10;
     let currentPage = 1;
 
-    const allPosts = Array.from(document.querySelectorAll('.post-table tbody tr'));
-    const totalPages = Math.ceil(allPosts.length / postsPerPage);
+    const allRows = Array.from(document.querySelectorAll('.post-table tbody tr'));
     const pageInfo = document.querySelector('.page-info');
+    const searchInput = document.getElementById('searchInput');
+
+    function getTotalPages(filtered) {
+        return Math.max(1, Math.ceil(filtered.length / postsPerPage));
+    }
+
+    function getFilteredRows() {
+        const query = searchInput ? searchInput.value.trim() : '';
+        if (!query) return allRows;
+        return allRows.filter(row => {
+            const titleEl = row.querySelector('.col-title');
+            const authorEl = row.querySelector('.col-author');
+            const title = titleEl ? titleEl.textContent.trim() : '';
+            const author = authorEl ? authorEl.textContent.trim() : '';
+            return matchesQuery(title, query) || matchesQuery(author, query);
+        });
+    }
 
     function showPage(page) {
-        currentPage = page;
-        allPosts.forEach((post, index) => {
-            const start = (currentPage - 1) * postsPerPage;
-            const end = currentPage * postsPerPage;
-            post.style.display = (index >= start && index < end) ? 'block' : 'none';
-        });
-        pageInfo.textContent = `${currentPage} / ${totalPages}`;
+        const filtered = getFilteredRows();
+        const total = getTotalPages(filtered);
+        currentPage = Math.max(1, Math.min(page, total));
+
+        const start = (currentPage - 1) * postsPerPage;
+        const end = currentPage * postsPerPage;
+
+        // 모든 행 숨기고
+        allRows.forEach(row => row.style.display = 'none');
+        // 현재 페이지 해당 행만 표시
+        filtered.slice(start, end).forEach(row => row.style.display = '');
+
+        pageInfo.textContent = `${currentPage} / ${total}`;
+
+        // 빈 메시지 처리
+        const emptyMsg = document.querySelector('.empty-message');
+        if (emptyMsg) {
+            emptyMsg.style.display = filtered.length === 0 ? '' : 'none';
+        }
     }
 
     // 초기 화면
     showPage(1);
 
-    // 버튼 이벤트
+    // 페이지 버튼
     document.querySelectorAll('.page-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            const filtered = getFilteredRows();
+            const total = getTotalPages(filtered);
             if (btn.dataset.page === 'prev' && currentPage > 1) {
                 showPage(currentPage - 1);
-            } else if (btn.dataset.page === 'next' && currentPage < totalPages) {
+            } else if (btn.dataset.page === 'next' && currentPage < total) {
                 showPage(currentPage + 1);
             }
         });
     });
-    function openModal() {
-        const modal = document.getElementById('postModal');
-        if (modal) {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
+
+    // 실시간 초성 검색 (클라이언트 필터링)
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            showPage(1);
+        });
     }
 </script>
 
