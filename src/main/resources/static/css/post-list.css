@@ -382,10 +382,43 @@ td.col-likes { text-align: center; color: #5C68B2;} */
         padding: 6px 12px;
         cursor: pointer;
         transition: 0.2s;
+        text-decoration: none;
+        font-size: 14px;
     }
 
     .page-btn:hover {
         opacity: 0.8;
+    }
+
+    .page-btn.disabled {
+        opacity: 0.35;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .page-num {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 32px;
+        height: 32px;
+        padding: 0 6px;
+        border-radius: 6px;
+        color: #C7D7F9;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+
+    .page-num:hover {
+        background: rgba(92, 104, 178, 0.5);
+    }
+
+    .page-num.active {
+        background: #5C68B2;
+        color: #fff;
+        font-weight: 700;
+        pointer-events: none;
     }
 
     .pagination .page-info {

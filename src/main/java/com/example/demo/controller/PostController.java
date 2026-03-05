@@ -147,26 +147,21 @@ public class PostController {
      */
     @GetMapping
     public String list(@RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "0") int page,
             HttpSession session, Model model) {
-        // 로그인 정보 확인 (게시글 목록은 비로그인도 볼 수 있음)
         String username = (String) session.getAttribute("loginUser");
         model.addAttribute("username", username);
         model.addAttribute("keyword", keyword);
 
-        // 검색어가 있으면 검색, 없으면 전체 조회
-        List<Post> posts;
-        if (!keyword.isEmpty()) {
-            posts = postService.searchPosts(keyword);
-        } else {
-            posts = postService.getAllPosts();
-        }
-        model.addAttribute("posts", posts);
+        Page<Post> postsPage = postService.getPagedPosts(keyword, page);
+        model.addAttribute("postsPage", postsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", postsPage.getTotalPages());
 
-        // 인기 게시글 목록 (추천순, 상위 5개만)
         Page<Post> popularPage = postService.getPopularPosts(0);
         model.addAttribute("bestPosts", popularPage.getContent());
 
-        return "post-list"; // templates/post-list.html
+        return "post-list";
     }
 
     // ============================================

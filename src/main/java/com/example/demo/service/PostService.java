@@ -1,29 +1,27 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.demo.entity.Post;
 import com.example.demo.entity.PostImage;
-import com.example.demo.entity.RecommendationType;
 import com.example.demo.entity.User;
 import com.example.demo.repository.LhRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
-
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -104,6 +102,15 @@ public class PostService {
     public Page<Post> getPopularPosts(int page) {
         Pageable pageable = PageRequest.of(page, 5);
         return postRepository.findAllByOrderByLikeCountDescCreatedAtAsc(pageable);
+    }
+
+    public Page<Post> getPagedPosts(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        if (keyword != null && !keyword.isEmpty()) {
+            return postRepository.findByTitleContainingOrContentContainingOrderByCreatedAtDesc(
+                    keyword, keyword, pageable);
+        }
+        return postRepository.findAllByOrderByCreatedAtDesc(pageable);
     }
 
     // ============================================

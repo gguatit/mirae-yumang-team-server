@@ -1,19 +1,14 @@
 package com.example.demo.controller;
 
-import com.example.demo.crawler.CrawlingUtils;
-import com.example.demo.entity.Unsae;
-import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -42,8 +37,8 @@ public class HomeController {
      * @throws Exception 
      */
     @GetMapping("/")
-    public String index(HttpSession session, Model model) throws Exception {
-        return home(session, model);  // home() 메서드 재활용
+    public String index(HttpSession session, Model model) {
+        return home(session, model);
     }
 
     /**
@@ -55,7 +50,7 @@ public class HomeController {
      * @throws Exception 
      */
     @GetMapping("/home")
-    public String home(HttpSession session, Model model) throws Exception {
+    public String home(HttpSession session, Model model) {
         // 세션에서 로그인 정보 확인
         // getAttribute()는 Object를 반환하므로 String으로 캐스팅 필요
         String username = (String) session.getAttribute("loginUser");
