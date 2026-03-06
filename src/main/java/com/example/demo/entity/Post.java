@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class Post {
     // ✨ User와의 관계 설정 (핵심!)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"posts", "password", "createdAt", "updatedAt"})
     private User user;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -53,6 +56,7 @@ public class Post {
     private String fileName; // 실제 저장된 파일 이름 (UUID_원본이름.jpg 형태)
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"post"})
     private List<PostImage> images = new ArrayList<>();
 
     // 편의 생성자

@@ -570,4 +570,25 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    // ============================================
+    // 실시간 업데이트: 새 게시글 조회 API
+    // ============================================
+    /**
+     * 실시간 폴링을 위한 새 게시글 조회 API
+     * URL: /posts/api/new (GET)
+     * 
+     * @param since - 마지막 확인 시간 (ISO 8601 형식)
+     * @return JSON 형식의 새 게시글 목록
+     */
+    @GetMapping("/api/new")
+    @ResponseBody
+    public List<Post> getNewPosts(@RequestParam String since) {
+        try {
+            LocalDateTime sinceTime = LocalDateTime.parse(since);
+            return postService.getNewPostsSince(sinceTime);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
 }

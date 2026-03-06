@@ -222,4 +222,11 @@ public class PostService {
 
         return postRepository.save(post); // CascadeType.ALL 설정 덕분에 이미지들도 함께 저장됩니다.
     }
+
+    // ============================================
+    // 실시간 업데이트: 특정 시간 이후 새 게시글 조회
+    // ============================================
+    public List<Post> getNewPostsSince(LocalDateTime since) {
+        return postRepository.findByCreatedAtAfterOrderByCreatedAtDesc(since);
+    }
 }

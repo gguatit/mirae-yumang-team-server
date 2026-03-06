@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -48,5 +49,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 인기 게시글 (추천순)
     Page<Post> findAllByOrderByLikeCountDescCreatedAtAsc(Pageable pageable);
+
+    // 8) 특정 시간 이후 생성된 게시글 조회 (실시간 업데이트용)
+    List<Post> findByCreatedAtAfterOrderByCreatedAtDesc(LocalDateTime after);
 
 }
