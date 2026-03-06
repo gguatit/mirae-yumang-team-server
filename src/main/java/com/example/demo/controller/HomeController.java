@@ -14,28 +14,14 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HomeController {
 
-    /**
-     * @Autowired: Spring이 자동으로 UserRepository 구현체를 주입
-     * 
-     * 학습 포인트:
-     * - Spring Boot는 JpaRepository를 상속받은 인터페이스를 자동으로 구현
-     * - 개발자가 구현 클래스를 만들지 않아도 CRUD 기능 사용 가능
-     * - 이것이 Spring Data JPA의 핵심 기능!
-     */
     @Autowired
     private UserRepository userRepository;
 
-    // ============================================
-    // 홈 페이지
-    // ============================================
 
-    /**
-     * 루트 경로("/") 접속 시 홈으로 리다이렉트
-     * 
-     * @param session 현재 사용자의 세션 (Spring이 자동 주입)
-     * @param model 뷰에 데이터를 전달하기 위한 객체
-     * @throws Exception 
-     */
+    @param session 현재 사용자의 세션 (Spring이 자동 주입)
+    @param model 뷰에 데이터를 전달하기 위한 객체
+    @throws Exception 
+
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
         return home(session, model);
