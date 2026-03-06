@@ -17,11 +17,17 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
+    // ============================================
+    // 홈 페이지
+    // ============================================
 
-    @param session 현재 사용자의 세션 (Spring이 자동 주입)
-    @param model 뷰에 데이터를 전달하기 위한 객체
-    @throws Exception 
-
+    /**
+     * 루트 경로("/") 접속 시 홈으로 리다이렉트
+     * 
+     * @param session 현재 사용자의 세션 (Spring이 자동 주입)
+     * @param model 뷰에 데이터를 전달하기 위한 객체
+     * @throws Exception 
+     */
     @GetMapping("/")
     public String index(HttpSession session, Model model) {
         return home(session, model);
