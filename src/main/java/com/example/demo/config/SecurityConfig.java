@@ -20,9 +20,13 @@ public class SecurityConfig {
                 // CSRF 보호 활성화 (H2 콘솔은 예외)
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**"))
-                // H2 콘솔의 iframe 표시를 위한 설정
+                // 보안 헤더 설정
                 .headers(headers -> headers
-                        .frameOptions(frame -> frame.sameOrigin()))
+                        // H2 콘솔의 iframe 표시를 위한 설정
+                        .frameOptions(frame -> frame.sameOrigin())
+                        // MIME 스니핑 방지
+                        .contentTypeOptions(contentType -> {})
+                )
                 // Spring Security 기본 로그인 페이지 비활성화 (수동 인증 사용)
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());

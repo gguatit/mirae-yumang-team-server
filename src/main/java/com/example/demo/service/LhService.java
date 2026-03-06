@@ -8,16 +8,15 @@ import com.example.demo.repository.LhRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,6 +36,7 @@ public class LhService {
                 if (type == RecommendationType.L) post.updateLikeCount(-1);
                 else post.updateHateCount(-1);
                 lhRepository.delete(existing);
+                log.info("추천/비추천 취소: postId={}, type={}", postId, type);
             } else {
                 // 다른 버튼 클릭 시: 변경 (한쪽 -1, 다른쪽 +1)
                 if (type == RecommendationType.L) {
@@ -47,22 +47,23 @@ public class LhService {
                     post.updateHateCount(1);
                 }
                 existing.changeType(type);
+                log.info("추천/비추천 변경: postId={}, type={}", postId, type);
             }
         } else {
             // 처음 클릭 시: 생성 (숫자 +1)
-            User user = userRepository.findById(userId).orElseThrow(); // 유저 정보 가져오기
+            User user = userRepository.findById(userId).orElseThrow();
 
             if (type == RecommendationType.L) post.updateLikeCount(1);
             else post.updateHateCount(1);
 
-            // 🔥 실제 DB에 기록을 남기는 코드가 반드시 있어야 합니다!
             Lh newLh = Lh.builder()
                     .user(user)
                     .post(post)
                     .type(type)
                     .build();
-            
-            lhRepository.save(newLh); 
+
+            lhRepository.save(newLh);
+            log.info("추천/비추천 생성: postId={}, type={}", postId, type);
         }
     }
 }

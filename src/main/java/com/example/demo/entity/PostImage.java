@@ -8,7 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class PostImage {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,18 +27,10 @@ public class PostImage {
     @JoinColumn(name = "post_id")
     private Post post; // 어느 게시글의 이미지인지 연결
 
-    // 기본 생성자
-    public PostImage() {}
-
     // 편의 생성자
     public PostImage(String fileName, String filePath, Post post) {
         this.fileName = fileName;
         this.filePath = filePath;
         this.post = post;
-    }
-
-    // -- Getter/Setter --
-    public String getFilePath() {
-        return filePath;
     }
 }

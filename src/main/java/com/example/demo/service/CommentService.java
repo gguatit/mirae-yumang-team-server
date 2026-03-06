@@ -8,11 +8,13 @@ import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -35,6 +37,7 @@ public class CommentService {
                 .build();
 
         commentRepository.save(comment);
+        log.info("댓글 작성 완료: postId={}, userId={}", postId, userId);
     }
 
     @Transactional
@@ -47,21 +50,21 @@ public class CommentService {
 
         Comment comment = new Comment(content, post, user);
 
-        // 💡 대댓글 로직: 부모가 있다면 연결해줌
+        // 대댓글 로직: 부모가 있다면 연결
         if (parentId != null) {
             Comment parent = commentRepository.findById(parentId).orElseThrow();
-            comment.setParent(parent); // 👈 여기서도 setParent가 필요합니다!
+            comment.setParent(parent);
         }
 
         Comment savedComment = commentRepository.save(comment);
+        log.info("댓글 저장: postId={}, username={}, parentId={}", postId, username, parentId);
 
-        // 컨트롤러에 전달할 DTO 반환
         return new CommentResponseDto(
                 savedComment.getId(),
                 savedComment.getContent(),
                 savedComment.getUser().getUsername(),
                 parentId,
-                "방금 전" // 혹은 포맷팅된 시간
+                "방금 전"
         );
     }
 }
