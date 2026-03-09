@@ -36,6 +36,14 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
+        if (content == null || content.trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글 내용을 입력해주세요.");
+        }
+
+        if (content.length() > 1000) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("댓글은 1,000자를 초과할 수 없습니다.");
+        }
+
         CommentResponseDto response = commentService.saveComment(postId, username, content, parentId);
         return ResponseEntity.ok(response);
     }

@@ -194,7 +194,7 @@ public class PostController {
                     String uuid = UUID.randomUUID().toString();
                     String fileName = uuid + "." + extension;
 
-                    file.transferTo(new File(uploadDir + fileName));
+                    file.transferTo(new File(folder, fileName));
 
                     fileNames.add(fileName);
                     filePaths.add("/upload/" + fileName);

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Setter
-@ToString
+@ToString(exclude = {"password"})
 public class User {
 
     @Id

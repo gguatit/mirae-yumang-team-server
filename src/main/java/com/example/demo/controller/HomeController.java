@@ -162,7 +162,7 @@ public class HomeController {
 
         String uuid = UUID.randomUUID().toString();
         String fileName = "profile_" + uuid + "." + extension;
-        profileImage.transferTo(new File(uploadDir + fileName));
+        profileImage.transferTo(new File(folder, fileName));
 
         userService.updateProfileImage(username, "/upload/" + fileName);
         redirectAttributes.addFlashAttribute("success", "프로필 이미지가 변경되었습니다.");

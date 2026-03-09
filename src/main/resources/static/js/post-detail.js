@@ -70,11 +70,7 @@ async function submitComment(event, form) {
         if (response.ok) {
             const newComment = await response.json();
             appendComment(newComment);
-            form.querySelector('textarea').value = '';
-
-            if (form.closest('[id^="reply-form-"]')) {
-                form.parentElement.style.display = 'none';
-            }
+            resetTextarea(form);
         }
     } catch (error) {
         console.error("Error:", error);
@@ -108,11 +104,11 @@ function appendComment(comment) {
                 <span style="font-size: 12px;">방금 전</span>
                 <p>${comment.content}</p>
                 <button type="button" onclick="toggleReplyForm(${comment.id})" 
-                        style="background:none; border:none; color:#C7D7F9; cursor:pointer; font-size:12px; padding:0;">[답글 달기]</button>
+                        class="btn-reply">[답글 달기]</button>
                 <div id="reply-form-${comment.id}" style="display: none; margin: 10px 0 10px 20px;">
                     <form action="/posts/${window.location.pathname.split('/').pop()}/comments" method="post" onsubmit="return submitComment(event, this)">
                         <input type="hidden" name="parentId" value="${comment.id}">
-                        <textarea name="content" style="width:80%; background:#1e1e1e; color:white; border:1px solid #333;" required></textarea>
+                        <textarea name="content" class="comment-textarea" placeholder="대댓글을 입력하세요" required></textarea>
                         <button type="submit">등록</button>
                     </form>
                 </div>
@@ -125,6 +121,26 @@ function appendComment(comment) {
     if (countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
 }
 
+// textarea 자동 높이 조절 (내용/줄바꿈 기준)
+function autoResize(el) {
+    el.style.height = 'auto';
+    const scrollH = el.scrollHeight;
+    const maxH = parseInt(getComputedStyle(el).maxHeight) || 300;
+    if (scrollH >= maxH) {
+        el.style.height = maxH + 'px';
+        el.classList.add('is-overflow');
+    } else {
+        el.style.height = scrollH + 'px';
+        el.classList.remove('is-overflow');
+    }
+}
+
+document.addEventListener('input', function (e) {
+    if (e.target.tagName === 'TEXTAREA' && e.target.name === 'content') {
+        autoResize(e.target);
+    }
+});
+
 // Enter / Ctrl+Enter → 전송, Shift+Enter → 줄바꿈
 document.addEventListener('keydown', function (e) {
     if (e.target.tagName === 'TEXTAREA' && e.target.name === 'content') {
@@ -135,3 +151,13 @@ document.addEventListener('keydown', function (e) {
         }
     }
 });
+
+// 전송 후 textarea 높이 초기화
+function resetTextarea(form) {
+    const ta = form.querySelector('textarea[name="content"]');
+    if (ta) {
+        ta.value = '';
+        ta.style.height = '';
+        ta.classList.remove('is-overflow');
+    }
+}

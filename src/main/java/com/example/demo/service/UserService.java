@@ -5,6 +5,8 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +69,9 @@ public class UserService {
     @org.springframework.transaction.annotation.Transactional
     public void updateBio(String username, String bio) {
         User user = getUserByUsername(username);
-        user.setBio(bio);
+        // XSS 방지: HTML 태그 제거
+        String safeBio = (bio != null) ? Jsoup.clean(bio, Safelist.none()) : "";
+        user.setBio(safeBio);
         userRepository.save(user);
         log.info("자기소개 수정: {}", username);
     }

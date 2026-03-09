@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +27,22 @@ public class SecurityConfig {
                         .frameOptions(frame -> frame.sameOrigin())
                         // MIME 스니핑 방지
                         .contentTypeOptions(contentType -> {})
+                        // HSTS (HTTPS 강제) - 1년 유지
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31536000))
+                        // Content-Security-Policy: 인라인 스크립트 및 외부 리소스 제한
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                        "script-src 'self' 'unsafe-inline'; " +
+                                        "style-src 'self' 'unsafe-inline'; " +
+                                        "img-src 'self' data: /upload/; " +
+                                        "font-src 'self'; " +
+                                        "frame-ancestors 'self'"))
+                        // Referrer-Policy: 외부 사이트로 URL 정보 누출 방지
+                        .referrerPolicy(referrer -> referrer
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
                 // Spring Security 기본 로그인 페이지 비활성화 (수동 인증 사용)
                 .formLogin(form -> form.disable())

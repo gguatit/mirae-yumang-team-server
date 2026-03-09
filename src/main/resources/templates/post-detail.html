@@ -95,15 +95,14 @@
                     <p th:text="${comment.content}">댓글 내용</p>
 
                     <button type="button" th:onclick="'toggleReplyForm(' + ${comment.id} + ')'"
-                        style="background:none; border:none; color:#C7D7F9; cursor:pointer; font-size:12px; padding:0;">[답글
-                        달기]</button>
+                        class="btn-reply">[답글 달기]</button>
 
                     <div th:id="'reply-form-' + ${comment.id}" style="display: none; margin: 10px 0 10px 20px;">
                         <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post"
                             onsubmit="return submitComment(event, this)">
                             <input type="hidden" name="parentId" th:value="${comment.id}">
-                            <textarea name="content"
-                                style="width:80%; background:#1e1e1e; color:white; border:1px solid #333;"
+                            <textarea name="content" class="comment-textarea"
+                                placeholder="대댓글을 입력하세요"
                                 required></textarea>
                             <button type="submit">등록</button>
                         </form>
@@ -124,7 +123,7 @@
         <div class="comment-form">
             <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post"
                 onsubmit="return submitComment(event, this)">
-                <textarea name="content" placeholder="댓글을 입력하세요" required></textarea>
+                <textarea name="content" class="comment-textarea" placeholder="댓글을 입력하세요" required></textarea>
                 <button type="submit">댓글 등록</button>
             </form>
         </div>

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Instant;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * 📌 인증(Authentication) 관련 컨트롤러
  *
@@ -28,6 +32,44 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AuthController {
 
     private final UserService userService;
+
+    // 브루트포스 방어: IP별 실패 횟수 및 잠금 시각 관리
+    private static final int MAX_ATTEMPTS = 5;
+    private static final long LOCK_DURATION_SECONDS = 15 * 60; // 15분
+
+    private final ConcurrentHashMap<String, AtomicInteger> loginAttempts = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Instant> lockUntil = new ConcurrentHashMap<>();
+
+    private String getClientKey(HttpServletRequest request, String username) {
+        String ip = request.getRemoteAddr();
+        return ip + ":" + username;
+    }
+
+    private boolean isLocked(String key) {
+        Instant until = lockUntil.get(key);
+        if (until == null) return false;
+        if (Instant.now().isAfter(until)) {
+            // 잠금 해제 — 카운터 초기화
+            lockUntil.remove(key);
+            loginAttempts.remove(key);
+            return false;
+        }
+        return true;
+    }
+
+    private void recordFailure(String key) {
+        AtomicInteger count = loginAttempts.computeIfAbsent(key, k -> new AtomicInteger(0));
+        int attempts = count.incrementAndGet();
+        if (attempts >= MAX_ATTEMPTS) {
+            lockUntil.put(key, Instant.now().plusSeconds(LOCK_DURATION_SECONDS));
+            log.warn("로그인 잠금 활성화: {} ({}회 실패)", key, attempts);
+        }
+    }
+
+    private void clearFailures(String key) {
+        loginAttempts.remove(key);
+        lockUntil.remove(key);
+    }
 
     // ============================================
     // 로그인 처리
@@ -49,14 +91,31 @@ public class AuthController {
             Model model) {
         log.info("로그인 시도: {}", username);
 
+        String clientKey = getClientKey(request, username);
+
+        // 브루트포스 잠금 여부 확인
+        if (isLocked(clientKey)) {
+            log.warn("로그인 잠금 상태: {}", clientKey);
+            model.addAttribute("error", "로그인 시도 횟수를 초과했습니다. 15분 후 다시 시도해주세요.");
+            return "login";
+        }
+
         User user = userService.authenticateUser(username, password);
 
         if (user == null) {
+            recordFailure(clientKey);
             model.addAttribute("error", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return "login";
         }
 
-        // 세션 고정 공격 방지: 기존 세션의 속성을 보존하면서 세션 ID만 변경
+        // 로그인 성공: 실패 횟수 초기화
+        clearFailures(clientKey);
+
+        // 세션 고정 공격 방지: 기존 세션 무효화 후 새 세션 발급
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
         HttpSession session = request.getSession(true);
         session.setAttribute("userId", user.getId());
         session.setAttribute("loginUser", username);
