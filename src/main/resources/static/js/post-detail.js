@@ -17,7 +17,11 @@ async function handleLikeHate(postId, type) {
         }
 
         if (response.ok) {
-            location.reload();
+            const data = await response.json();
+            const likeEl = document.getElementById('like-count');
+            const hateEl = document.getElementById('hate-count');
+            if (likeEl) likeEl.textContent = data.likeCount;
+            if (hateEl) hateEl.textContent = data.hateCount;
         } else {
             console.error("Response Status:", response.status);
             if (response.status === 404) {

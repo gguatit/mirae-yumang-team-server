@@ -260,7 +260,7 @@ public class PostController {
 
     @PostMapping("/api/{postId}/like-hate")
     @ResponseBody
-    public ResponseEntity<String> likeHate(@PathVariable Long postId,
+    public ResponseEntity<java.util.Map<String, Long>> likeHate(@PathVariable Long postId,
             @RequestParam RecommendationType type,
             HttpSession session) {
         Long userId = (Long) session.getAttribute("userId");
@@ -270,7 +270,10 @@ public class PostController {
         }
 
         lhService.toggleLikeHate(userId, postId, type);
-        return ResponseEntity.ok().build();
+
+        long likeCount = postService.getLikeCount(postId);
+        long hateCount = postService.getHateCount(postId);
+        return ResponseEntity.ok(java.util.Map.of("likeCount", likeCount, "hateCount", hateCount));
     }
 
     // ============================================
