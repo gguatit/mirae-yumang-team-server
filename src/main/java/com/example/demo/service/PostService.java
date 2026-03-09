@@ -110,6 +110,16 @@ public class PostService {
         return post;
     }
 
+    /**
+     * 조회수를 증가시키지 않고 게시글을 조회합니다.
+     * (세션에서 이미 조회한 게시글에 대한 재조회 시 사용)
+     */
+    @Transactional(readOnly = true)
+    public Post getPostByIdReadOnly(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("게시글", id));
+    }
+
     // ============================================
     // 내가 쓴 글 조회
     // ============================================

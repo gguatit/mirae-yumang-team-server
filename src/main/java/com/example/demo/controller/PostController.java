@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import com.example.demo.entity.RecommendationType;
 import com.example.demo.service.LhService;
 import com.example.demo.service.PostService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +63,10 @@ public class PostController {
 
     private final PostService postService;
     private final LhService lhService;
+
+    // /posts/api/new Rate Limit: IP별 마지막 요청 시각 추적 (2초에 1회)
+    private final ConcurrentHashMap<String, Long> newPostsRateMap = new ConcurrentHashMap<>();
+    private static final long NEW_POSTS_RATE_LIMIT_MS = 2_000;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -223,7 +230,21 @@ public class PostController {
             HttpSession session,
             Model model) {
         try {
-            Post post = postService.getPostById(id);
+            // 세션 기반 조회수 중복 방지: 같은 세션에서 한 번만 조회수 증가
+            @SuppressWarnings("unchecked")
+            Set<Long> viewedPosts = (Set<Long>) session.getAttribute("viewedPosts");
+            if (viewedPosts == null) {
+                viewedPosts = new HashSet<>();
+                session.setAttribute("viewedPosts", viewedPosts);
+            }
+
+            Post post;
+            if (!viewedPosts.contains(id)) {
+                post = postService.getPostById(id);  // 조회수 증가
+                viewedPosts.add(id);
+            } else {
+                post = postService.getPostByIdReadOnly(id);  // 조회수 증가 없음
+            }
             model.addAttribute("post", post);
 
             // 좋아요/싫어요 수 조회 (Service를 통해)
@@ -395,7 +416,15 @@ public class PostController {
 
     @GetMapping("/api/new")
     @ResponseBody
-    public List<Post> getNewPosts(@RequestParam String since) {
+    public List<Post> getNewPosts(@RequestParam String since, HttpServletRequest request) {
+        // Rate Limit: IP별 2초에 1번만 허용
+        String ip = request.getRemoteAddr();
+        long now = System.currentTimeMillis();
+        Long lastRequest = newPostsRateMap.get(ip);
+        if (lastRequest != null && (now - lastRequest) < NEW_POSTS_RATE_LIMIT_MS) {
+            return List.of();
+        }
+        newPostsRateMap.put(ip, now);
         try {
             LocalDateTime sinceTime = LocalDateTime.parse(since);
             return postService.getNewPostsSince(sinceTime);

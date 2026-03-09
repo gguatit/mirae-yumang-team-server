@@ -50,9 +50,12 @@ public class CommentService {
 
         Comment comment = new Comment(content, post, user);
 
-        // 대댓글 로직: 부모가 있다면 연결
+        // 대댓글 로직: 부모가 있다면 연결 (다른 게시글 댓글을 부모로 지정하는 오염 방지)
         if (parentId != null) {
             Comment parent = commentRepository.findById(parentId).orElseThrow();
+            if (!parent.getPost().getId().equals(postId)) {
+                throw new IllegalArgumentException("잘못된 부모 댓글입니다.");
+            }
             comment.setParent(parent);
         }
 

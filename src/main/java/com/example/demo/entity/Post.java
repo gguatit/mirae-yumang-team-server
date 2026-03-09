@@ -31,7 +31,7 @@ public class Post {
     // User와의 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"posts", "password", "createdAt", "updatedAt"})
+    @JsonIgnoreProperties({"posts", "password", "email", "bio", "profileImagePath", "createdAt", "updatedAt"})
     private User user;
 
     @Column(name = "created_at", nullable = false, updatable = false)

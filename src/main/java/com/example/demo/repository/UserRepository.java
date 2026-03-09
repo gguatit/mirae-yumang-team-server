@@ -26,4 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // username으로 사용자 조회 (로그인, 마이페이지 등에서 사용)
     // 반환 타입이 Optional이므로 호출부에서 안전하게 처리해야 함
     Optional<User> findByUsername(String username);
+
+    // email 중복 체크 (회원가입 시 사용)
+    boolean existsByEmail(String email);
 }

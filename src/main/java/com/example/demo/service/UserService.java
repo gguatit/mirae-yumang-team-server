@@ -21,6 +21,13 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     /**
+     * 이메일 중복 여부 확인 (Controller에서 별도 에러 메시지 분기용)
+     */
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    /**
      * 회원가입
      *
      * @return 성공 시 true, 중복 시 false
