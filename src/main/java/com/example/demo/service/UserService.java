@@ -60,4 +60,26 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("사용자", username));
     }
+
+    /**
+     * 자기소개 수정
+     */
+    @org.springframework.transaction.annotation.Transactional
+    public void updateBio(String username, String bio) {
+        User user = getUserByUsername(username);
+        user.setBio(bio);
+        userRepository.save(user);
+        log.info("자기소개 수정: {}", username);
+    }
+
+    /**
+     * 프로필 이미지 경로 수정
+     */
+    @org.springframework.transaction.annotation.Transactional
+    public void updateProfileImage(String username, String profileImagePath) {
+        User user = getUserByUsername(username);
+        user.setProfileImagePath(profileImagePath);
+        userRepository.save(user);
+        log.info("프로필 이미지 수정: {}", username);
+    }
 }

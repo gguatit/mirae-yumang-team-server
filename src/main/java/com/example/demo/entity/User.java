@@ -25,6 +25,12 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    @Column(name = "profile_image_path")
+    private String profileImagePath;
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;

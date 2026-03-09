@@ -15,12 +15,13 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    padding: 40px 16px;
 }
 
 /* 카드 */
 .profile-card {
-    width: 420px;
+    width: 460px;
     background: rgba(255, 255, 255, 0.06);
     border-radius: 16px;
     padding: 28px;
@@ -35,11 +36,42 @@ body {
     margin-bottom: 24px;
 }
 
-.profile-img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
+/* 프로필 이미지 래퍼 */
+.profile-img-wrap {
+    position: relative;
+    width: 72px;
+    height: 72px;
     margin-right: 16px;
+    flex-shrink: 0;
+}
+
+.profile-img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-img-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(127, 124, 255, 0.9);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .profile-name {
@@ -47,9 +79,14 @@ body {
     font-weight: 600;
 }
 
-.profile-zodiac {
+.profile-email {
     font-size: 13px;
-    opacity: 0.7;
+    opacity: 0.6;
+}
+
+.profile-joined {
+    font-size: 12px;
+    opacity: 0.5;
 }
 
 /* 섹션 */
@@ -58,44 +95,215 @@ body {
 }
 
 .section-title {
-    font-size: 14px;
-    margin-bottom: 8px;
-    opacity: 0.8;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.6;
+    margin-bottom: 10px;
 }
 
-/* 자기소개 */
-.profile-bio {
-    font-size: 14px;
-    line-height: 1.6;
-    opacity: 0.9;
-}
-
-/* 활동 */
+/* 활동 통계 */
 .profile-stats {
     display: flex;
-    justify-content: space-between;
+    gap: 24px;
     list-style: none;
 }
 
 .profile-stats li {
     text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 12px 20px;
 }
 
 .profile-stats strong {
     display: block;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 700;
+    color: #b983ff;
 }
 
 .profile-stats span {
     font-size: 12px;
     opacity: 0.7;
+    margin-top: 2px;
+    display: block;
 }
 
-/* 버튼 */
+/* 자기소개 표시 */
+.bio-display {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.profile-bio {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.85;
+    white-space: pre-wrap;
+}
+
+.btn-edit-bio {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    padding: 4px 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.btn-edit-bio:hover {
+    border-color: rgba(185, 131, 255, 0.6);
+    color: #b983ff;
+}
+
+/* 자기소개 편집 폼 */
+.bio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bio-form textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 10px 12px;
+    resize: vertical;
+    outline: none;
+}
+
+.bio-form textarea:focus {
+    border-color: rgba(127, 124, 255, 0.6);
+}
+
+.bio-form-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.bio-char-count {
+    font-size: 12px;
+    opacity: 0.5;
+    margin-right: auto;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #7f7cff, #b983ff);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+
+/* 내 게시글 목록 */
+.my-post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.my-post-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    gap: 12px;
+}
+
+.my-post-title {
+    color: #e0d8ff;
+    font-size: 14px;
+    text-decoration: none;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.my-post-title:hover {
+    color: #b983ff;
+}
+
+.my-post-date {
+    font-size: 12px;
+    opacity: 0.45;
+    flex-shrink: 0;
+}
+
+.no-posts {
+    font-size: 14px;
+    opacity: 0.5;
+    padding: 12px 0;
+}
+
+.more-posts {
+    margin-top: 8px;
+    text-align: right;
+}
+
+.more-posts a {
+    font-size: 13px;
+    color: #b983ff;
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+.more-posts a:hover {
+    opacity: 1;
+}
+
+/* 알림 메시지 */
+.alert {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.alert-success {
+    background: rgba(80, 200, 120, 0.15);
+    border: 1px solid rgba(80, 200, 120, 0.4);
+    color: #82e6a6;
+}
+
+.alert-error {
+    background: rgba(255, 80, 80, 0.12);
+    border: 1px solid rgba(255, 80, 80, 0.35);
+    color: #ff9898;
+}
+
+/* 버튼 영역 */
 .profile-actions {
     display: flex;
     gap: 12px;
+    margin-top: 8px;
 }
 
 .btn-primary {
@@ -120,11 +328,16 @@ body {
     cursor: pointer;
 }
 
+.btn-outline:hover {
+    border-color: rgba(185, 131, 255, 0.5);
+    color: #b983ff;
+}
+
 /* ===== 모바일 반응형 (768px 이하) ===== */
 @media screen and (max-width: 768px) {
     .profile-card {
-        width: 90%;
-        max-width: 420px;
+        width: 100%;
+        max-width: 460px;
         padding: 20px;
     }
 
@@ -132,9 +345,14 @@ body {
         font-size: 18px;
     }
 
+    .profile-img-wrap {
+        width: 56px;
+        height: 56px;
+    }
+
     .profile-img {
-        width: 50px;
-        height: 50px;
+        width: 56px;
+        height: 56px;
     }
 
     .profile-actions {

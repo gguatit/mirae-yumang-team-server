@@ -13,56 +13,97 @@
 
   <div class="profile-wrapper">
 
-    <!-- 프로필 카드 -->
     <div class="profile-card">
 
+      <!-- 프로필 헤더 -->
       <div class="profile-header">
-        <img src="/static/images/profile.png" alt="프로필 이미지" class="profile-img">
-        <div class="profile-text">
-          <h2 class="profile-name"><span th:text="${username}"></span></h2>
-          <span class="profile-zodiac">물병자리 · 01.20 ~ 02.18</span>
+        <div class="profile-img-wrap">
+          <img th:src="${profileImagePath} ?: '/static/images/profile.png'"
+               alt="프로필 이미지" class="profile-img" id="profileImgPreview">
+          <label for="profileImageInput" class="profile-img-edit" title="이미지 변경">
+            <span>✏️</span>
+          </label>
         </div>
+        <div class="profile-text">
+          <h2 class="profile-name" th:text="${username}"></h2>
+          <p class="profile-email" th:text="${email}"></p>
+          <p class="profile-joined">
+            가입일: <span th:text="${#temporals.format(createdAt, 'yyyy.MM.dd')}"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- 프로필 이미지 업로드 폼 (숨김) -->
+      <form id="profileImageForm" th:action="@{/mypage/profile-image}" method="post"
+            enctype="multipart/form-data" style="display:none;">
+        <input type="file" id="profileImageInput" name="profileImage"
+               accept="image/jpeg,image/png,image/gif,image/webp">
+      </form>
+
+      <!-- 알림 메시지 -->
+      <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+      <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+      <!-- 활동 통계 -->
+      <div class="profile-section">
+        <h3 class="section-title">활동 통계</h3>
+        <ul class="profile-stats">
+          <li>
+            <strong th:text="${postCount}">0</strong>
+            <span>게시글</span>
+          </li>
+        </ul>
       </div>
 
       <!-- 자기소개 -->
       <div class="profile-section">
         <h3 class="section-title">자기소개</h3>
-        <p class="profile-bio">
-          자기소개를 작성해 보세요
-        </p>
+        <div id="bioDisplay" class="bio-display">
+          <p class="profile-bio"
+             th:text="${bio != null and !#strings.isEmpty(bio)} ? ${bio} : '자기소개를 작성해 보세요'"></p>
+          <button type="button" class="btn-edit-bio" onclick="showBioEditor()">수정</button>
+        </div>
+        <form id="bioForm" th:action="@{/mypage/bio}" method="post" class="bio-form" style="display:none;">
+          <textarea name="bio" id="bioTextarea" maxlength="500" rows="4"
+                    th:text="${bio}"></textarea>
+          <div class="bio-form-actions">
+            <span class="bio-char-count"><span id="bioCharCount">0</span>/500</span>
+            <button type="button" class="btn-cancel" onclick="hideBioEditor()">취소</button>
+            <button type="submit" class="btn-save">저장</button>
+          </div>
+        </form>
       </div>
 
-      <!-- 활동 요약 -->
+      <!-- 내 게시글 -->
       <div class="profile-section">
-        <h3 class="section-title">활동</h3>
-
+        <h3 class="section-title">내 게시글</h3>
+        <div th:if="${myPosts == null or myPosts.isEmpty()}" class="no-posts">
+          아직 작성한 게시글이 없습니다.
+        </div>
+        <ul th:unless="${myPosts == null or myPosts.isEmpty()}" class="my-post-list">
+          <li th:each="post, iter : ${myPosts}" th:if="${iter.index < 5}" class="my-post-item">
+            <a th:href="@{/posts/{id}(id=${post.id})}" class="my-post-title"
+               th:text="${post.title}"></a>
+            <span class="my-post-date"
+                  th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd')}"></span>
+          </li>
+        </ul>
+        <div th:if="${postCount > 5}" class="more-posts">
+          <a th:href="@{/posts?author={u}(u=${username})}">전체 게시글 보기 →</a>
+        </div>
       </div>
 
       <!-- 버튼 -->
       <div class="profile-actions">
-        <button class="btn-primary"><a href="#">운세 기록 보기</a></button>
-        <button class="btn-outline"><a href="#">돌아가기</a></button>
+        <button class="btn-outline" onclick="history.back()">돌아가기</button>
       </div>
 
     </div>
 
   </div>
 
+  <script src="/static/js/mypage.js"></script>
+
 </body>
-<script>
-  const historyBtn = document.querySelector('.btn-primary');
-  const backBtn = document.querySelector('.btn-outline');
-
-  // 운세 기록 보기
-  historyBtn.addEventListener('click', () => {
-    // starTalkAI 페이지로 이동 + 기록 모드
-    location.href = 'starTalkAI.html?mode=history';
-  });
-
-  // 돌아가기
-  backBtn.addEventListener('click', () => {
-    history.back();
-  });
-</script>
 
 </html>
