@@ -1,6 +1,6 @@
-# 🔐 보안 가이드
+#  보안 가이드
 
-## ⚠️ 중요: Git에 절대 커밋하면 안 되는 파일들
+## ️ 중요: Git에 절대 커밋하면 안 되는 파일들
 
 다음 파일들은 **민감한 정보**가 포함되어 있어 Git에 커밋되지 않도록 `.gitignore`에 추가되어 있습니다:
 
@@ -34,7 +34,7 @@
 
 ---
 
-## 📋 안전한 설정 방법
+##  안전한 설정 방법
 
 ### 1단계: 템플릿 파일 복사
 
@@ -92,7 +92,7 @@ Environment="DB_PASSWORD=your_secure_password"
 
 ---
 
-## 🔍 커밋 전 확인사항
+##  커밋 전 확인사항
 
 Git에 커밋하기 전에 **반드시** 확인하세요:
 
@@ -110,7 +110,7 @@ git diff --cached --name-only
 
 ---
 
-## 🚨 실수로 커밋한 경우
+##  실수로 커밋한 경우
 
 ### 아직 push하지 않았다면:
 
@@ -129,7 +129,7 @@ git commit -m "Add sensitive file to .gitignore"
 
 ### 이미 push했다면:
 
-⚠️ **즉시 조치 필요!**
+️ **즉시 조치 필요!**
 
 1. **비밀번호 즉시 변경**: 노출된 DB 비밀번호, API 키 등을 즉시 변경
 2. **Git history에서 완전히 제거**:
@@ -149,7 +149,7 @@ git push origin --force --all
 
 ---
 
-## 📝 권장 사항
+##  권장 사항
 
 ### 1. 환경 변수 사용
 
@@ -187,7 +187,7 @@ git ls-files | grep -E "\.properties$|\.service$"
 
 ---
 
-## 🛡️ 추가 보안 조치
+##  추가 보안 조치
 
 ### 파일 권한 설정
 
@@ -213,7 +213,7 @@ sudo ufw enable
 
 ---
 
-## ✅ 안전한 협업 가이드
+##  안전한 협업 가이드
 
 팀원들과 협업할 때:
 
@@ -234,7 +234,7 @@ SENSITIVE_FILES="application-prod.properties application-dev.properties *.servic
 
 for pattern in $SENSITIVE_FILES; do
     if git diff --cached --name-only | grep -q "$pattern"; then
-        echo "❌ Error: 민감한 파일이 포함되어 있습니다: $pattern"
+        echo " Error: 민감한 파일이 포함되어 있습니다: $pattern"
         echo "   .gitignore를 확인하세요!"
         exit 1
     fi
@@ -249,4 +249,4 @@ chmod +x .git/hooks/pre-commit
 
 ---
 
-**🔒 보안은 한 번의 실수로 무너질 수 있습니다. 항상 주의하세요!**
+** 보안은 한 번의 실수로 무너질 수 있습니다. 항상 주의하세요!**

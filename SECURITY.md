@@ -1,76 +1,196 @@
 # SECURITY
 
-STARLOG 프로젝트의 보안 현황을 정리한 문서입니다.
+STARLOG 프로젝트의 보안 정책 및 취약점 보고 절차를 설명합니다.
 
 ---
 
-## 구현 완료된 보안 기능
+## 지원 버전
 
-### 1. 비밀번호 암호화
-
-- BCryptPasswordEncoder를 사용하여 비밀번호를 해싱 저장
-- 로그인 시 matches()로 안전한 비교 수행
-- 평문 비밀번호가 DB에 저장되지 않음
-
-### 2. CSRF (Cross-Site Request Forgery) 보호
-
-- Spring Security의 CSRF 토큰 기능 활성화
-- 모든 POST 폼에 th:action을 사용하여 CSRF 토큰 자동 삽입
-- AJAX 요청(좋아요/싫어요, 댓글)에 CSRF 토큰 헤더 포함
-- H2 콘솔은 개발 편의상 CSRF 예외 처리
-
-### 3. XSS (Cross-Site Scripting) 방지
-
-- Jsoup.clean()을 사용하여 게시글 제목/본문에서 HTML 태그 제거
-- 댓글 내용에도 동일한 필터링 적용
-- Safelist.none() 정책으로 모든 HTML 태그 차단
-
-### 4. 파일 업로드 보안
-
-- 허용된 이미지 확장자만 업로드 가능: jpg, jpeg, png, gif, webp
-- 화이트리스트 방식으로 검증하여 악성 파일 차단
-- UUID 기반 파일명 변환으로 원본 파일명 노출 방지
-
-### 5. 로그아웃 보안
-
-- GET 방식 로그아웃 제거, POST 방식만 허용
-- 로그아웃 시 세션 전체 무효화 (session.invalidate)
-- 모든 페이지의 로그아웃 버튼이 CSRF 토큰이 포함된 POST 폼으로 동작
-
-### 6. 세션 관리
-
-- 세션 타임아웃 30분 설정
-- HTTP-Only 쿠키 설정으로 JavaScript에서 세션 쿠키 접근 차단
-- 세션 기반 사용자 인증 및 권한 확인
-
-### 7. 입력값 검증
-
-- 회원가입 시 아이디 필수, 비밀번호 최소 4자 검증
-- 게시글 작성/수정 시 제목, 내용 빈 값 검증
-- 게시글 수정/삭제 시 작성자 본인 확인
+| 버전 | 지원 여부 |
+| --- | --- |
+| 1.0.x | 지원 |
+| < 1.0 | 미지원 |
 
 ---
 
-## 향후 구현 필요한 보안 기능
+## 보안 취약점 보고
 
-### 우선순위 높음
+보안 취약점을 발견하신 경우, 공개 이슈 트래커 대신 다음 방법으로 비공개로 보고해주세요:
 
-- **Spring Security 인증/인가 체계 도입**: 현재 수동 세션 관리를 Spring Security의 인증 체계로 전환
-- **비밀번호 정책 강화**: 최소 8자, 영문/숫자/특수문자 조합 요구
-- **이메일 검증**: 회원가입 시 이메일 인증 절차 추가
-- **파일 업로드 MIME 타입 검증**: 확장자 외에 실제 파일 내용 기반 타입 검증
+### 연락처
 
-### 우선순위 중간
+- **Email**: dev@kalpha.kr
+- **Repository**: [mirae-yumang-team](https://github.com/mirae-yumang-team-project/mirae-yumang-team)
 
-- **Rate Limiting**: 로그인 시도 횟수 제한 (무차별 대입 공격 방지)
-- **세션 고정 공격 방지**: 로그인 성공 시 세션 ID 재생성
-- **HTTPS 적용**: SSL/TLS 인증서 도입 및 Secure 쿠키 설정
-- **SameSite 쿠키 설정**: CSRF 추가 방어를 위한 쿠키 정책
+### 보고 시 포함할 정보
 
-### 우선순위 낮음
+1. 취약점 유형 (XSS, SQL Injection, CSRF 등)
+2. 영향받는 컴포넌트 또는 기능
+3. 재현 단계 (Step-by-step)
+4. 예상되는 영향 및 심각도
+5. 가능한 경우, 개념 증명(PoC) 코드
 
-- **H2 콘솔 비활성화**: 프로덕션 환경에서 반드시 비활성화
-- **프로덕션 DB 전환**: H2에서 MySQL/PostgreSQL로 전환
-- **보안 헤더 추가**: Content-Security-Policy, X-Content-Type-Options 등
-- **감사 로그**: 로그인/로그아웃/게시글 변경 이력 기록
-- **API 인증**: REST API 엔드포인트에 JWT 기반 인증 도입
+### 응답 시간
+
+- 24시간 내 보고 확인
+- 7일 내 초기 평가 및 대응 계획 제공
+- 심각도에 따라 패치 개발 및 배포
+
+---
+
+## 구현된 보안 기능
+
+### 인증 및 권한
+
+- **BCrypt 비밀번호 암호화**: BCryptPasswordEncoder 사용, 강도 10
+- **세션 기반 인증**: HttpSession을 통한 사용자 인증
+- **세션 타임아웃**: 운영 환경 60분, 개발 환경 30분
+- **로그아웃 보안**: POST 방식으로만 로그아웃 가능, 세션 완전 무효화
+
+### 입력 검증
+
+- **사용자명**: 3-20자, 영문/숫자/한글
+- **비밀번호**: 최소 8자 이상
+- **이메일**: 정규식 기반 형식 검증
+- **게시글 제목**: 최대 200자
+- **게시글 내용**: 최대 10,000자
+
+### XSS 방지
+
+- **Jsoup 1.18.3**: HTML 태그 완전 제거 (Safelist.none())
+- **게시글/댓글**: 사용자 입력 모든 HTML 필터링
+- **Thymeleaf**: 자동 HTML 이스케이핑
+
+### 파일 업로드 보안
+
+- **확장자 검증**: jpg, jpeg, png, gif, webp만 허용
+- **MIME 타입 검증**: Content-Type 헤더 확인
+- **파일 크기 제한**: 최대 10MB
+- **안전한 파일명**: UUID 기반 파일명 생성
+- **저장 경로 격리**: 웹 루트 외부에 저장
+
+### 데이터베이스 보안
+
+- **SQL Injection 방지**: JPA Prepared Statement 사용
+- **비밀번호 별도 관리**: 환경 변수로 DB 자격증명 관리
+- **연결 암호화**: MySQL SSL 연결 지원
+
+### 네트워크 보안
+
+- **HTTPS**: Cloudflare Tunnel을 통한 SSL/TLS 암호화
+- **Secure Cookie**: HTTPS에서 쿠키 전송
+- **SameSite Cookie**: Strict 정책으로 CSRF 추가 방어
+
+### 세션 보안
+
+- **HTTP-Only 쿠키**: JavaScript 접근 차단
+- **세션 고정 공격 방지**: 로그인 시 세션 ID 재생성
+- **동시 세션 제한**: 중복 로그인 방지
+
+---
+
+## 보안 설정
+
+### 운영 환경
+
+```properties
+# 쿠키 보안
+server.servlet.session.cookie.secure=true
+server.servlet.session.cookie.same-site=strict
+server.servlet.session.cookie.http-only=true
+
+# 세션 타임아웃
+server.servlet.session.timeout=60m
+
+# SQL 로그 비활성화
+spring.jpa.show-sql=false
+
+# H2 콘솔 비활성화
+spring.h2.console.enabled=false
+```
+
+### 환경 변수
+
+민감한 정보는 환경 변수로 관리:
+
+```bash
+export DB_USERNAME=starlog_user
+export DB_PASSWORD=secure_password
+```
+
+---
+
+## 보안 체크리스트
+
+### 배포 전 확인사항
+
+- [ ] 모든 비밀번호가 BCrypt로 암호화되는가?
+- [ ] 환경 변수로 DB 자격증명을 관리하는가?
+- [ ] H2 콘솔이 비활성화되었는가?
+- [ ] SQL 로그가 비활성화되었는가?
+- [ ] HTTPS가 적용되었는가?
+- [ ] Secure 쿠키 설정이 활성화되었는가?
+- [ ] 파일 업로드 크기 제한이 설정되었는가?
+- [ ] 민감한 파일이 .gitignore에 포함되었는가?
+
+### 정기 점검사항
+
+- [ ] 의존성 취약점 검사 (월 1회)
+- [ ] 데이터베이스 백업 확인 (주 1회)
+- [ ] 접근 로그 검토 (주 1회)
+- [ ] 세션 타임아웃 테스트
+- [ ] 파일 업로드 제한 테스트
+
+---
+
+## 알려진 제한사항
+
+### 현재 구현되지 않은 기능
+
+1. **Rate Limiting**: 로그인 시도 횟수 제한 없음
+2. **이메일 인증**: 회원가입 시 이메일 검증 없음
+3. **2FA**: 2단계 인증 미지원
+4. **감사 로그**: 사용자 활동 로그 기록 없음
+5. **API 인증**: REST API에 별도 인증 없음
+
+### 권장 사항
+
+- 프로덕션 환경에서는 방화벽 설정 필수
+- 정기적인 보안 패치 및 업데이트
+- 정기적인 데이터베이스 백업
+- 접근 로그 모니터링
+- 민감한 정보 노출 방지
+
+---
+
+## 보안 업데이트 이력
+
+### 2026-03-09
+
+- MySQL/MariaDB 마이그레이션 완료
+- 파일 업로드 MIME 타입 검증 추가
+- 입력 검증 강화 (사용자명, 비밀번호, 이메일)
+- Jsoup 1.18.3으로 업데이트
+- Cloudflare Tunnel HTTPS 적용
+- Secure 및 SameSite 쿠키 설정
+
+### 초기 버전
+
+- BCrypt 비밀번호 암호화
+- 세션 기반 인증
+- XSS 방지 기본 구현
+- 파일 업로드 확장자 검증
+
+---
+
+## 참고 자료
+
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [Spring Security Documentation](https://spring.io/projects/spring-security)
+- [SECURITY_GUIDE.md](SECURITY_GUIDE.md) - 상세 보안 가이드
+
+---
+
+## 책임 공개
+
+이 프로젝트는 교육 및 학습 목적으로 개발되었습니다. 프로덕션 환경에서 사용할 경우 추가적인 보안 검토가 필요합니다.

@@ -1,12 +1,12 @@
 # STARLOG 서비스 관리 가이드
 
-## ✅ 배포 완료 정보
+##  배포 완료 정보
 
-### 🌐 접속 URL
+###  접속 URL
 - **공개 도메인**: https://starlog.c01.kr
 - **로컬 접속**: http://localhost:8090
 
-### 🔧 systemd 서비스
+###  systemd 서비스
 두 개의 서비스가 자동으로 시작되며 영구 실행됩니다:
 
 1. **starlog.service** - Spring Boot 애플리케이션
@@ -14,7 +14,7 @@
 
 ---
 
-## 📋 서비스 관리 명령어
+##  서비스 관리 명령어
 
 ### 서비스 상태 확인
 ```bash
@@ -72,7 +72,7 @@ sudo systemctl is-enabled starlog.service cloudflared.service
 
 ---
 
-## 🗄️ 데이터베이스 관리
+## ️ 데이터베이스 관리
 
 ### MySQL/MariaDB 접속
 ```bash
@@ -104,7 +104,7 @@ sudo mysql starlog < ~/backup_20260309_013000.sql
 
 ---
 
-## 🔍 Cloudflare Tunnel 관리
+##  Cloudflare Tunnel 관리
 
 ### 터널 정보 확인
 ```bash
@@ -125,7 +125,7 @@ cloudflared tunnel route ip show
 
 ---
 
-## 📦 애플리케이션 업데이트
+##  애플리케이션 업데이트
 
 ### JAR 파일 다시 빌드
 ```bash
@@ -154,7 +154,7 @@ sudo systemctl restart starlog.service
 
 ---
 
-## 🚨 문제 해결
+##  문제 해결
 
 ### 서비스가 시작되지 않을 때
 ```bash
@@ -204,7 +204,7 @@ sudo kill -9 <PID>
 
 ---
 
-## 📊 모니터링
+##  모니터링
 
 ### 리소스 사용량 확인
 ```bash
@@ -232,14 +232,14 @@ sudo du -sh /var/lib/mysql/starlog
 
 ---
 
-## 🎯 서버 재부팅 후
+##  서버 재부팅 후
 
 서버를 재부팅해도 다음이 자동으로 시작됩니다:
-1. ✅ MariaDB 데이터베이스
-2. ✅ STARLOG Spring Boot 애플리케이션
-3. ✅ Cloudflare Tunnel
+1.  MariaDB 데이터베이스
+2.  STARLOG Spring Boot 애플리케이션
+3.  Cloudflare Tunnel
 
-**아무 작업도 필요 없습니다!** 🚀
+**아무 작업도 필요 없습니다!** 
 
 확인 방법:
 ```bash
@@ -249,7 +249,7 @@ sudo systemctl is-active mariadb starlog cloudflared
 
 ---
 
-## 📝 중요 파일 위치
+##  중요 파일 위치
 
 - **JAR 파일**: `/home/kalpha/mirae-yumang-team-server/target/demo-0.0.1-SNAPSHOT.jar`
 - **설정 파일**: `/home/kalpha/mirae-yumang-team-server/src/main/resources/application-prod.properties`
@@ -259,16 +259,16 @@ sudo systemctl is-active mariadb starlog cloudflared
 
 ---
 
-## 🔐 보안 정보
+##  보안 정보
 
 - **데이터베이스**: starlog
 - **DB 사용자**: starlog_user
-- **DB 비밀번호**: starlog123 (⚠️ 운영 환경에서는 더 강력한 비밀번호로 변경 권장)
+- **DB 비밀번호**: starlog123 (️ 운영 환경에서는 더 강력한 비밀번호로 변경 권장)
 - **서버 포트**: 8090 (localhost만 접근 가능)
 - **공개 접속**: Cloudflare Tunnel을 통해서만 가능 (https://starlog.c01.kr)
 
 ---
 
-**🎉 모든 설정이 완료되었습니다!**
+** 모든 설정이 완료되었습니다!**
 
 VSCode를 종료하거나 터미널을 닫아도 서비스는 계속 실행됩니다.

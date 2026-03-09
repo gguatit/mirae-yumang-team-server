@@ -1,12 +1,12 @@
 # MySQL 설정 가이드
 
-## 📋 개요
+##  개요
 
 이 프로젝트는 이제 **개발 환경에서는 H2**, **운영 환경에서는 MySQL**을 사용합니다.
 
 ---
 
-## 🚀 빠른 시작
+##  빠른 시작
 
 ### 방법 1: 로컬 MySQL 설치 (권장)
 
@@ -79,7 +79,7 @@ docker rm -f starlog-mysql
 
 ---
 
-## 🗄️ 데이터베이스 생성
+## ️ 데이터베이스 생성
 
 ### 1. MySQL 접속
 
@@ -118,7 +118,7 @@ mysql -u starlog_user -p starlog
 
 ---
 
-## ⚙️ 애플리케이션 설정
+##  애플리케이션 설정
 
 ### 옵션 1: 환경 변수 사용 (권장)
 
@@ -146,7 +146,7 @@ spring.datasource.password=starlog_password123
 
 ---
 
-## 🏃 애플리케이션 실행
+##  애플리케이션 실행
 
 ### 개발 모드 (H2 사용)
 
@@ -189,7 +189,7 @@ spring.jpa.hibernate.ddl-auto=validate  # 이후 실행
 
 ---
 
-## 🔍 연결 확인
+##  연결 확인
 
 ### 1. 애플리케이션 로그 확인
 
@@ -230,7 +230,7 @@ SELECT * FROM posts;
 
 ---
 
-## 🐛 문제 해결
+##  문제 해결
 
 ### 1. "Access denied for user" 오류
 
@@ -288,7 +288,7 @@ CREATE DATABASE starlog CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ---
 
-## 📊 MySQL 관리 도구
+##  MySQL 관리 도구
 
 ### 1. MySQL Workbench (GUI)
 - [다운로드](https://dev.mysql.com/downloads/workbench/)
@@ -311,7 +311,7 @@ docker run --name phpmyadmin \
 
 ---
 
-## 🔐 보안 권장사항
+##  보안 권장사항
 
 1. **강력한 비밀번호 사용**
    ```bash
@@ -335,7 +335,7 @@ docker run --name phpmyadmin \
 
 ---
 
-## 📈 성능 최적화
+##  성능 최적화
 
 ### 1. 연결 풀 설정
 
@@ -370,7 +370,7 @@ query_cache_size = 64M
 
 ---
 
-## 🔄 H2에서 MySQL로 데이터 마이그레이션
+##  H2에서 MySQL로 데이터 마이그레이션
 
 ### 1. H2 데이터 내보내기
 
@@ -394,7 +394,7 @@ mysql -u starlog_user -p starlog < data.sql
 
 ---
 
-## 📚 참고 자료
+##  참고 자료
 
 - [MySQL 공식 문서](https://dev.mysql.com/doc/)
 - [Spring Boot Data Access](https://spring.io/guides/gs/accessing-data-mysql/)
@@ -402,7 +402,7 @@ mysql -u starlog_user -p starlog < data.sql
 
 ---
 
-## ✅ 체크리스트
+##  체크리스트
 
 실행 전 확인:
 
