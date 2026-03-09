@@ -1,0 +1,46 @@
+# ==========================================
+# Cloudflare Tunnel systemd 서비스 템플릿
+# ==========================================
+# 이 파일은 템플릿입니다. 실제 사용시 수정하세요!
+# ⚠️ 이 템플릿 파일은 Git에 커밋하지 마세요: cloudflared.service
+
+[Unit]
+Description=Cloudflare Tunnel for STARLOG
+After=network.target starlog.service
+
+[Service]
+User=YOUR_USERNAME
+WorkingDirectory=/home/YOUR_USERNAME
+ExecStart=/usr/local/bin/cloudflared tunnel run YOUR_TUNNEL_NAME
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cloudflared
+
+[Install]
+WantedBy=multi-user.target
+
+# ==========================================
+# 사용 방법:
+# ==========================================
+# 1. Cloudflare Tunnel 인증: cloudflared tunnel login
+# 2. Named Tunnel 생성: cloudflared tunnel create YOUR_TUNNEL_NAME
+# 3. DNS 레코드 추가: cloudflared tunnel route dns YOUR_TUNNEL_NAME your.domain.com
+# 4. ~/.cloudflared/config.yml 파일 설정 (아래 예시 참고)
+# 5. 이 파일을 cloudflared.service로 복사하고 YOUR_USERNAME, YOUR_TUNNEL_NAME 변경
+# 6. sudo cp cloudflared.service /etc/systemd/system/
+# 7. sudo systemctl daemon-reload
+# 8. sudo systemctl enable cloudflared.service
+# 9. sudo systemctl start cloudflared.service
+
+# ==========================================
+# ~/.cloudflared/config.yml 예시:
+# ==========================================
+# tunnel: YOUR_TUNNEL_UUID
+# credentials-file: /home/YOUR_USERNAME/.cloudflared/YOUR_TUNNEL_UUID.json
+#
+# ingress:
+#   - hostname: your.domain.com
+#     service: http://localhost:8090
+#   - service: http_status:404

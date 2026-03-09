@@ -40,3 +40,32 @@ application-dev.properties
 ### Upload Files ###
 upload/
 /starlog/
+
+### Systemd Service Files ###
+*.service
+
+### Log Files ###
+*.log
+logs/
+/tmp/
+
+### Database Files ###
+*.sql
+*.sql.gz
+*.db
+
+### Backup Files ###
+backup_*.sql
+backup_*.sql.gz
+
+### JAR Files (exclude built artifacts from Git) ###
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+### Cloudflare ###
+.cloudflared/
+
+### Environment Variables ###
+.env
+.env.local
+.env.prod

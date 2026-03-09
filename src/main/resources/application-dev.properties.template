@@ -1,0 +1,41 @@
+# ==========================================
+# 개발 환경 설정 템플릿 (Development)
+# ==========================================
+# 파일명을 application-dev.properties로 변경하여 사용하세요
+# ⚠️ 이 파일은 Git에 커밋하지 마세요!
+
+# 데이터베이스 설정 (H2 - 개발용)
+spring.datasource.url=jdbc:h2:file:./data/starlog;MODE=MySQL
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+
+# JPA 설정 (H2)
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+# H2 Console (개발 전용)
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# 로그 레벨 (개발: DEBUG)
+logging.level.com.example.demo=DEBUG
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate.SQL=DEBUG
+
+# 파일 업로드 경로 (개발)
+file.upload-dir=~/starlog/upload/
+
+# 세션 타임아웃 (개발: 짧게)
+server.servlet.session.timeout=30m
+
+# 쿠키 보안 설정 (개발 환경)
+server.servlet.session.cookie.secure=false
+
+# Thymeleaf 캐시 비활성화 (개발 중 변경사항 즉시 반영)
+spring.thymeleaf.cache=false
+
+# 서버 포트
+server.port=8090
