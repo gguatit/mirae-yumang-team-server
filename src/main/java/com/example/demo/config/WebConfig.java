@@ -8,12 +8,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 브라우저 주소창에 /upload/** 로 들어오는 요청을
-        // 실제 내 컴퓨터의 C:/starlog/upload/ 폴더로 연결합니다.
+        // application.properties에 설정된 폴더로 연결합니다.
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:///C:/starlog/upload/"); 
-                // ⚠️ 마지막에 반드시 '/'가 있어야 합니다!
+                .addResourceLocations("file://" + uploadDir); 
+                // ⚠️ uploadDir는 반드시 '/'로 끝나야 합니다!
     }
 }

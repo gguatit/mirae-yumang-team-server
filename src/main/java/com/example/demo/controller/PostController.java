@@ -30,6 +30,7 @@ import com.example.demo.service.PostService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * 📌 게시글(Post) 관련 컨트롤러
@@ -60,6 +61,9 @@ public class PostController {
     private final PostService postService;
     private final LhService lhService;
 
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     // ============================================
     // 게시글 목록
     // ============================================
@@ -67,12 +71,22 @@ public class PostController {
     @GetMapping
     public String list(@RequestParam(required = false, defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "basic") String searchMode,
             HttpSession session, Model model) {
         String username = (String) session.getAttribute("loginUser");
         model.addAttribute("username", username);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("searchMode", searchMode);
 
-        Page<Post> postsPage = postService.getPagedPosts(keyword, page);
+        // searchMode: basic (기본), enhanced (향상된 검색 - 초성/자모/영타)
+        Page<Post> postsPage;
+        if ("enhanced".equals(searchMode) && keyword != null && !keyword.isEmpty()) {
+            postsPage = postService.getPagedPostsEnhanced(keyword, page);
+            log.info("향상된 검색 모드: '{}'", keyword);
+        } else {
+            postsPage = postService.getPagedPosts(keyword, page);
+        }
+        
         model.addAttribute("postsPage", postsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", postsPage.getTotalPages());
@@ -121,9 +135,19 @@ public class PostController {
             model.addAttribute("error", "제목을 입력해주세요.");
             return "post-write";
         }
+        
+        if (title.length() > 200) {
+            model.addAttribute("error", "제목은 200자를 초과할 수 없습니다.");
+            return "post-write";
+        }
 
         if (content == null || content.trim().isEmpty()) {
             model.addAttribute("error", "내용을 입력해주세요.");
+            return "post-write";
+        }
+        
+        if (content.length() > 10000) {
+            model.addAttribute("error", "내용은 10,000자를 초과할 수 없습니다.");
             return "post-write";
         }
 
@@ -131,13 +155,26 @@ public class PostController {
             List<String> fileNames = new ArrayList<>();
             List<String> filePaths = new ArrayList<>();
 
-            String uploadDir = "C:/starlog/upload/";
+            // uploadDir는 @Value로 주입받음
             File folder = new File(uploadDir);
             if (!folder.exists()) folder.mkdirs();
 
             for (MultipartFile file : imageFiles) {
                 if (file != null && !file.isEmpty()) {
                     String originalFilename = file.getOriginalFilename();
+                    
+                    // 파일명 null 체크 및 기본 검증
+                    if (originalFilename == null || originalFilename.trim().isEmpty() || !originalFilename.contains(".")) {
+                        model.addAttribute("error", "유효하지 않은 파일명입니다.");
+                        return "post-write";
+                    }
+                    
+                    // 파일 크기 추가 검증 (10MB)
+                    if (file.getSize() > 10 * 1024 * 1024) {
+                        model.addAttribute("error", "파일 크기는 10MB를 초과할 수 없습니다.");
+                        return "post-write";
+                    }
+                    
                     String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
 
                     // 파일 확장자 검증
@@ -146,11 +183,12 @@ public class PostController {
                         return "post-write";
                     }
 
-                    // MIME 타입 검증
-                    String mimeType = Files.probeContentType(file.getResource().getFile().toPath());
+                    // MIME 타입 검증 (강화)
+                    String mimeType = file.getContentType();
                     if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
-                        // probeContentType이 null일 수 있으므로, 확장자 검증으로 대체 허용
-                        log.warn("MIME 타입 검증 불가: {} (확장자: {})", mimeType, extension);
+                        log.error("유효하지 않은 MIME 타입: {} (파일: {})", mimeType, originalFilename);
+                        model.addAttribute("error", "유효하지 않은 파일 형식입니다. 실제 이미지 파일만 업로드 가능합니다.");
+                        return "post-write";
                     }
 
                     String uuid = UUID.randomUUID().toString();

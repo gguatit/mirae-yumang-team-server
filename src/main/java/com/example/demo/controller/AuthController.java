@@ -92,9 +92,34 @@ public class AuthController {
             model.addAttribute("error", "아이디를 입력해주세요.");
             return "register";
         }
+        
+        if (username.length() < 3 || username.length() > 20) {
+            model.addAttribute("error", "아이디는 3~20자로 입력해주세요.");
+            return "register";
+        }
+        
+        if (!username.matches("^[a-zA-Z0-9_]+$")) {
+            model.addAttribute("error", "아이디는 영문, 숫자, 언더스코어만 사용 가능합니다.");
+            return "register";
+        }
 
-        if (password == null || password.length() < 4) {
-            model.addAttribute("error", "비밀번호는 4자 이상이어야 합니다.");
+        if (password == null || password.length() < 8) {
+            model.addAttribute("error", "비밀번호는 8자 이상이어야 합니다.");
+            return "register";
+        }
+        
+        if (password.length() > 100) {
+            model.addAttribute("error", "비밀번호는 100자를 초과할 수 없습니다.");
+            return "register";
+        }
+        
+        if (email == null || email.trim().isEmpty()) {
+            model.addAttribute("error", "이메일을 입력해주세요.");
+            return "register";
+        }
+        
+        if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            model.addAttribute("error", "올바른 이메일 형식이 아닙니다.");
             return "register";
         }
 

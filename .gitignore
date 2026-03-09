@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Application Properties ###
+application-local.properties
+application-prod.properties
+application-dev.properties
+
+### Upload Files ###
+upload/
+/starlog/

@@ -24,6 +24,7 @@ import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.LhRepository;
 import com.example.demo.repository.PostRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.util.HangulUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,10 +131,63 @@ public class PostService {
     public Page<Post> getPagedPosts(String keyword, int page) {
         Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
         if (keyword != null && !keyword.isEmpty()) {
+            // 기본 검색 (DB 수준)
             return postRepository.findByTitleContainingOrContentContainingOrderByCreatedAtDesc(
                     keyword, keyword, pageable);
         }
         return postRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
+
+    /**
+     * 향상된 한글 검색 (초성, 자모 분리, 영타 지원)
+     * 모든 게시글을 가져와서 필터링하므로, 데이터가 많으면 성능 저하 가능
+     * 게시글이 적을 때 사용 권장
+     */
+    @Transactional(readOnly = true)
+    public Page<Post> getPagedPostsEnhanced(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+        
+        if (keyword == null || keyword.isEmpty()) {
+            return postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        }
+
+        // 메모리에서 검색 (초성, 자모, 영타 등 고급 검색)
+        List<Post> allPosts = postRepository.findAllByOrderByCreatedAtDesc();
+        List<Post> filteredPosts = allPosts.stream()
+                .filter(post -> 
+                    HangulUtils.enhancedMatch(post.getTitle(), keyword) ||
+                    HangulUtils.enhancedMatch(post.getContent(), keyword) ||
+                    HangulUtils.enhancedMatch(post.getUser().getUsername(), keyword)
+                )
+                .sorted((p1, p2) -> {
+                    // 검색 점수로 정렬 (높을수록 먼저)
+                    int score1 = Math.max(
+                        HangulUtils.calculateSearchScore(p1.getTitle(), keyword),
+                        HangulUtils.calculateSearchScore(p1.getContent(), keyword)
+                    );
+                    int score2 = Math.max(
+                        HangulUtils.calculateSearchScore(p2.getTitle(), keyword),
+                        HangulUtils.calculateSearchScore(p2.getContent(), keyword)
+                    );
+                    if (score1 != score2) {
+                        return Integer.compare(score2, score1);
+                    }
+                    // 점수가 같으면 최신순
+                    return p2.getCreatedAt().compareTo(p1.getCreatedAt());
+                })
+                .toList();
+
+        // 페이지네이션 적용
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), filteredPosts.size());
+        
+        List<Post> pageContent = filteredPosts.subList(start, end);
+        
+        log.info("향상된 검색: '{}' -> {} 건 찾음", keyword, filteredPosts.size());
+        
+        return new org.springframework.data.domain.PageImpl<>(
+            pageContent, pageable, filteredPosts.size()
+        );
     }
 
     // ============================================
@@ -196,6 +250,45 @@ public class PostService {
     @Transactional(readOnly = true)
     public List<Post> searchPosts(String keyword) {
         return postRepository.findByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword);
+    }
+
+    /**
+     * 향상된 검색 (초성 검색, 자모 분리, 영타 변환 지원)
+     * 예제:
+     * - "안녕" 검색 시: 일반 텍스트 모든 게시글
+     * - "ㄴㄴ" 검색 시: 초성이 ㄴㄴ인 모든 게시글 (예: 안녕, 아나운서, 알림 등)
+     * - "안" 검색 시: 자모가 분리된 텍스트 포함
+     * - "dkssud" 검색 시: 영타를 한글로 변환하여 검색 ("안녕" 찾음)
+     */
+    @Transactional(readOnly = true)
+    public List<Post> searchPostsEnhanced(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return List.of();
+        }
+
+        List<Post> allPosts = postRepository.findAllByOrderByCreatedAtDesc();
+        
+        return allPosts.stream()
+                .filter(post -> 
+                    HangulUtils.enhancedMatch(post.getTitle(), keyword) ||
+                    HangulUtils.enhancedMatch(post.getContent(), keyword) ||
+                    HangulUtils.enhancedMatch(post.getUser().getUsername(), keyword)
+                )
+                .sorted((p1, p2) -> {
+                    int score1 = Math.max(
+                        HangulUtils.calculateSearchScore(p1.getTitle(), keyword),
+                        HangulUtils.calculateSearchScore(p1.getContent(), keyword)
+                    );
+                    int score2 = Math.max(
+                        HangulUtils.calculateSearchScore(p2.getTitle(), keyword),
+                        HangulUtils.calculateSearchScore(p2.getContent(), keyword)
+                    );
+                    if (score1 != score2) {
+                        return Integer.compare(score2, score1);
+                    }
+                    return p2.getCreatedAt().compareTo(p1.getCreatedAt());
+                })
+                .toList();
     }
 
     // ============================================
