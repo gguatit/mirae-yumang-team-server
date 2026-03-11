@@ -113,7 +113,7 @@ class PostServiceTest {
         when(postRepository.save(any(Post.class))).thenReturn(testPost);
 
         // when
-        boolean result = postService.updatePost(1L, "수정된 제목", "수정된 내용", "testuser");
+        boolean result = postService.updatePost(1L, "수정된 제목", "수정된 내용", "testuser", null, null, null);
 
         // then
         assertThat(result).isTrue();
@@ -128,7 +128,7 @@ class PostServiceTest {
         when(postRepository.findById(1L)).thenReturn(Optional.of(testPost));
 
         // when
-        boolean result = postService.updatePost(1L, "수정", "내용", "otheruser");
+        boolean result = postService.updatePost(1L, "수정", "내용", "otheruser", null, null, null);
 
         // then
         assertThat(result).isFalse();

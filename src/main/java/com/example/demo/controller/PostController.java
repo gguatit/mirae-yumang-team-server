@@ -341,6 +341,8 @@ public class PostController {
             @PathVariable("id") Long id,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
+            @RequestParam(required = false, value = "imageFile") List<MultipartFile> imageFiles,
+            @RequestParam(required = false, value = "deleteImageId") List<Long> deleteImageIds,
             HttpSession session,
             Model model) {
         String username = (String) session.getAttribute("loginUser");
@@ -371,22 +373,77 @@ public class PostController {
             }
         }
 
-        boolean success = postService.updatePost(id, title, content, username);
+        try {
+            List<String> newFileNames = new ArrayList<>();
+            List<String> newFilePaths = new ArrayList<>();
 
-        if (!success) {
-            log.warn("게시글 수정 실패: 권한 없음 또는 존재하지 않는 게시글");
-            model.addAttribute("error", "게시글 수정에 실패했습니다.");
-            try {
+            File folder = new File(uploadDir);
+            if (!folder.exists()) folder.mkdirs();
+
+            if (imageFiles != null) {
+                for (MultipartFile file : imageFiles) {
+                    if (file != null && !file.isEmpty()) {
+                        String originalFilename = file.getOriginalFilename();
+                        if (originalFilename == null || originalFilename.trim().isEmpty() || !originalFilename.contains(".")) {
+                            model.addAttribute("error", "유효하지 않은 파일명입니다.");
+                            Post post = postService.getPostById(id);
+                            model.addAttribute("post", post);
+                            return "post-edit";
+                        }
+                        if (file.getSize() > 10 * 1024 * 1024) {
+                            model.addAttribute("error", "파일 크기는 10MB를 초과할 수 없습니다.");
+                            Post post = postService.getPostById(id);
+                            model.addAttribute("post", post);
+                            return "post-edit";
+                        }
+                        String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+                        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+                            model.addAttribute("error", "허용되지 않는 파일 형식입니다. (jpg, png, gif, webp만 가능)");
+                            Post post = postService.getPostById(id);
+                            model.addAttribute("post", post);
+                            return "post-edit";
+                        }
+                        String mimeType = file.getContentType();
+                        if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
+                            model.addAttribute("error", "유효하지 않은 파일 형식입니다.");
+                            Post post = postService.getPostById(id);
+                            model.addAttribute("post", post);
+                            return "post-edit";
+                        }
+                        String uuid = UUID.randomUUID().toString();
+                        String fileName = uuid + "." + extension;
+                        file.transferTo(new File(folder, fileName));
+                        newFileNames.add(fileName);
+                        newFilePaths.add("/upload/" + fileName);
+                        log.info("수정 시 파일 저장: {}", fileName);
+                    }
+                }
+            }
+
+            boolean success = postService.updatePost(id, title, content, username, deleteImageIds, newFileNames, newFilePaths);
+
+            if (!success) {
+                log.warn("게시글 수정 실패: 권한 없음 또는 존재하지 않는 게시글");
+                model.addAttribute("error", "게시글 수정에 실패했습니다.");
                 Post post = postService.getPostById(id);
                 model.addAttribute("post", post);
                 return "post-edit";
-            } catch (Exception e) {
+            }
+
+            log.info("게시글 수정 완료: {}", id);
+            return "redirect:/posts/" + id;
+
+        } catch (Exception e) {
+            log.error("게시글 수정 중 오류 발생", e);
+            model.addAttribute("error", "오류가 발생했습니다.");
+            try {
+                Post post = postService.getPostById(id);
+                model.addAttribute("post", post);
+            } catch (Exception ex) {
                 return "redirect:/posts";
             }
+            return "post-edit";
         }
-
-        log.info("게시글 수정 완료: {}", id);
-        return "redirect:/posts/" + id;
     }
 
     // ============================================

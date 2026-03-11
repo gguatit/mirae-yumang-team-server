@@ -204,7 +204,8 @@ public class PostService {
     // 게시글 수정
     // ============================================
 
-    public boolean updatePost(Long id, String title, String content, String username) {
+    public boolean updatePost(Long id, String title, String content, String username,
+                             List<Long> deleteImageIds, List<String> newFileNames, List<String> newFilePaths) {
         Optional<Post> postOptional = postRepository.findById(id);
         if (postOptional.isEmpty()) {
             log.warn("게시글이 존재하지 않습니다. (ID: {})", id);
@@ -224,6 +225,20 @@ public class PostService {
 
         post.setTitle(title);
         post.setContent(content);
+
+        // 삭제 요청된 이미지 제거 (orphanRemoval=true 가 DB 삭제 처리)
+        if (deleteImageIds != null && !deleteImageIds.isEmpty()) {
+            post.getImages().removeIf(img -> deleteImageIds.contains(img.getId()));
+        }
+
+        // 새 이미지 추가
+        if (newFilePaths != null && !newFilePaths.isEmpty()) {
+            for (int i = 0; i < newFilePaths.size(); i++) {
+                PostImage image = new PostImage(newFileNames.get(i), newFilePaths.get(i), post);
+                post.getImages().add(image);
+            }
+        }
+
         postRepository.save(post);
 
         log.info("게시글 수정 완료: {}", post.getTitle());
