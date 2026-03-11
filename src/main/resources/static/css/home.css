@@ -6,6 +6,10 @@
     color: #C7D7F9
 }
 
+html {
+    overflow-x: hidden;
+}
+
 body {
     height: 100vh;
     background: #161838;
