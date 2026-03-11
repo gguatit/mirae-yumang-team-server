@@ -15,4 +15,7 @@ public interface LhRepository extends JpaRepository<Lh, Long> {
 
     // 특정 유저가 특정 게시물에 남긴 기록 조회 (토글용)
     Optional<Lh> findByUserIdAndPostId(Long userId, Long postId);
+
+    // 회원 탈퇴 시 해당 유저의 모든 좋아요/싫어요 기록 삭제
+    void deleteByUser(com.example.demo.entity.User user);
 }

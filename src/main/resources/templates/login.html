@@ -61,6 +61,11 @@
           <span th:text="${message}"></span>
         </div>
 
+        <!-- 회원 탈퇴 완료 메시지 -->
+        <div th:if="${param.deleted}" class="success-message">
+          <span>회원 탈퇴가 완료되었습니다. 이용해 주셔서 감사합니다.</span>
+        </div>
+
         <!--로그인 폼-->
         <div class="main-login">
           <form th:action="@{/auth/login}" method="post">

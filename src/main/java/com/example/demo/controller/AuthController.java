@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 /**
  * 📌 인증(Authentication) 관련 컨트롤러
  *
@@ -179,5 +178,61 @@ public class AuthController {
         log.info("세션 삭제 완료");
 
         return "redirect:/auth/login";
+    }
+
+    // ============================================
+    // 회원 탈퇴 처리
+    // ============================================
+
+    @GetMapping("/delete-account")
+    public String showDeleteAccountForm(HttpSession session) {
+        if (session.getAttribute("loginUser") == null) {
+            return "redirect:/auth/login";
+        }
+        return "delete-account";
+    }
+
+    @PostMapping("/delete-account")
+    public String deleteAccount(
+            @RequestParam("password") String password,
+            HttpServletRequest request,
+            HttpSession session,
+            Model model) {
+
+        String username = (String) session.getAttribute("loginUser");
+        if (username == null) {
+            return "redirect:/auth/login";
+        }
+
+        // DoS 방지: 비밀번호 길이 제한 (BCrypt는 72바이트 초과 입력 시 부하 유발)
+        if (password == null || password.length() > 100) {
+            model.addAttribute("error", "비밀번호가 올바르지 않습니다.");
+            return "delete-account";
+        }
+
+        // 브루트포스 방지: 로그인과 동일한 시도 횟수 제한 적용
+        String clientKey = getClientKey(request, username);
+        if (loginAttemptService.isLocked(clientKey)) {
+            log.warn("회원 탈퇴 - 잠금 상태: {}", clientKey);
+            model.addAttribute("error", "시도 횟수를 초과했습니다. 15분 후 다시 시도해주세요.");
+            return "delete-account";
+        }
+
+        log.info("회원 탈퇴 시도: {}", username);
+
+        boolean success = userService.deleteUser(username, password);
+
+        if (!success) {
+            loginAttemptService.recordFailure(clientKey);
+            model.addAttribute("error", "비밀번호가 올바르지 않습니다.");
+            return "delete-account";
+        }
+
+        // 탈퇴 완료 → 실패 기록 초기화 및 세션 무효화
+        loginAttemptService.clearFailures(clientKey);
+        session.invalidate();
+        log.info("회원 탈퇴 완료 및 세션 삭제: {}", username);
+
+        return "redirect:/auth/login?deleted=true";
     }
 }
