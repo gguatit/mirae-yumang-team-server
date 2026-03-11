@@ -285,16 +285,66 @@
     .comment-item {
         padding: 15px 0;
         color: #C7D7F9;
+        border-bottom: 1px solid rgba(199, 215, 249, 0.1);
+    }
+
+    /* 댓글 헤더 (아바타 + 닉네임 + 시간) */
+    .comment-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+    }
+
+    /* 프로필 이미지 아바타 */
+    .comment-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid rgba(199, 215, 249, 0.3);
+        /* GIF 포함 모든 이미지 형식 자연스럽게 재생 */
+        image-rendering: auto;
+    }
+
+    .comment-avatar--sm {
+        width: 28px;
+        height: 28px;
+    }
+
+    .comment-meta {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
     }
 
     .comment-item strong {
         color: #9DB2F5;
-        margin-right: 10px;
     }
 
-    .comment-item p {
-        margin-top: 8px;
+    .comment-body {
+        margin-top: 4px;
+        margin-left: 46px;   /* 아바타(36px) + gap(10px) */
         color: #C4BBAB;
+    }
+
+    /* 대댓글 */
+    .reply-item {
+        margin-left: 30px;
+        margin-top: 10px;
+        border-left: 2px solid #444;
+        padding-left: 15px;
+    }
+
+    .reply-arrow {
+        color: #888;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .reply-body {
+        margin-left: 56px;   /* reply-arrow(14px) + gap + 아바타(28px) + gap */
     }
 
     .btn-reply {

@@ -91,9 +91,17 @@
                 <h3>댓글 (<span th:text="${comments.size()}">0</span>)</h3>
 
                 <div th:each="comment : ${comments}" th:if="${comment.parent == null}" class="comment-item">
-                    <strong th:text="${comment.user.username}">작성자</strong>
-                    <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">시간</span>
-                    <p th:text="${comment.content}">댓글 내용</p>
+                    <div class="comment-header">
+                        <img class="comment-avatar"
+                             th:src="${comment.user.profileImagePath} ?: '/static/images/profile.png'"
+                             th:alt="${comment.user.username}"
+                             onerror="this.src='/static/images/profile.png'">
+                        <div class="comment-meta">
+                            <strong th:text="${comment.user.username}">작성자</strong>
+                            <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">시간</span>
+                        </div>
+                    </div>
+                    <p class="comment-body" th:text="${comment.content}">댓글 내용</p>
 
                     <button type="button" th:onclick="'toggleReplyForm(' + ${comment.id} + ')'"
                         class="btn-reply">[답글 달기]</button>
@@ -109,13 +117,20 @@
                         </form>
                     </div>
 
-                    <div th:each="child : ${comment.children}" class="reply-item"
-                        style="margin-left: 30px; margin-top: 10px; border-left: 2px solid #444; padding-left: 15px;">
-                        <span style="color: #888;">ㄴ</span>
-                        <strong th:text="${child.user.username}">작성자</strong>
-                        <span th:text="${#temporals.format(child.createdAt, 'yyyy-MM-dd HH:mm')}"
-                            style="font-size: 12px;">시간</span>
-                        <p th:text="${child.content}">대댓글 내용</p>
+                    <div th:each="child : ${comment.children}" class="reply-item">
+                        <div class="comment-header">
+                            <span class="reply-arrow">ㄴ</span>
+                            <img class="comment-avatar comment-avatar--sm"
+                                 th:src="${child.user.profileImagePath} ?: '/static/images/profile.png'"
+                                 th:alt="${child.user.username}"
+                                 onerror="this.src='/static/images/profile.png'">
+                            <div class="comment-meta">
+                                <strong th:text="${child.user.username}">작성자</strong>
+                                <span th:text="${#temporals.format(child.createdAt, 'yyyy-MM-dd HH:mm')}"
+                                    style="font-size: 12px;">시간</span>
+                            </div>
+                        </div>
+                        <p class="comment-body reply-body" th:text="${child.content}">대댓글 내용</p>
                     </div>
 
                 </div>
