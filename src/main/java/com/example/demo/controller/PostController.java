@@ -403,4 +403,23 @@ public class PostController {
             return new ArrayList<>();
         }
     }
+
+    // ============================================
+    // 실시간 업데이트: 인기 게시글 조회 API
+    // ============================================
+
+    @GetMapping("/api/best")
+    @ResponseBody
+    public List<java.util.Map<String, Object>> getBestPosts() {
+        return postService.getPopularPosts(0).getContent().stream()
+                .map(post -> {
+                    java.util.Map<String, Object> map = new java.util.LinkedHashMap<>();
+                    map.put("id", post.getId());
+                    map.put("title", post.getTitle());
+                    map.put("username", post.getUser().getUsername());
+                    map.put("likeCount", post.getLikeCount());
+                    return map;
+                })
+                .toList();
+    }
 }

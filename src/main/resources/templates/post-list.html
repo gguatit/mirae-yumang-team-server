@@ -106,7 +106,7 @@
                             <h3 class="best-title">인기 게시글 </h3>
                             <span class="title-sub">(추천수)</span>
                         </div>
-                        <ul class="best-list">
+                        <ul class="best-list" id="best-list">
                             <li class="best-item" th:each="post : ${bestPosts}">
                                 <a th:href="@{/posts/{id}(id=${post.id})}" class="best-link">
                                     <div class="best-text">
@@ -125,7 +125,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <!-- 서버사이드 페이지네이션 -->
     <div class="pagination">

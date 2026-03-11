@@ -148,18 +148,14 @@ gsap.from('.best-item', {
 });
 
 // ============================================
-// 8. 페이지네이션 - 부드러운 페이드업
+// 8. 페이지네이션 - 부드러운 페이드업 (ScrollTrigger 없이 항상 표시)
 // ============================================
 gsap.from('.pagination', {
     duration: 0.6,
     opacity: 0,
     y: 10,
     ease: 'power2.out',
-    scrollTrigger: {
-        trigger: '.pagination',
-        start: 'top 95%',
-        toggleActions: 'play none none none'
-    }
+    delay: 0.4
 });
 
 // ============================================
@@ -208,3 +204,25 @@ function animateNewRow(row) {
     });
 }
 window.animateNewRow = animateNewRow;
+
+// ============================================
+// 12. 인기 게시글 실시간 갱신 시 애니메이션 (post-list.js에서 호출)
+// ============================================
+function animateBestItems(items) {
+    gsap.from(items, {
+        opacity: 0,
+        x: 20,
+        duration: 0.4,
+        stagger: 0.07,
+        ease: 'power2.out'
+    });
+    items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            gsap.to(item, { x: 4, duration: 0.2, ease: 'power1.out' });
+        });
+        item.addEventListener('mouseleave', () => {
+            gsap.to(item, { x: 0, duration: 0.2, ease: 'power1.out' });
+        });
+    });
+}
+window.animateBestItems = animateBestItems;

@@ -36,7 +36,8 @@ if (searchInput) {
 // PAGE_CONFIG는 post-list.html에서 window 전역으로 주입
 // ─────────────────────────────────────────────
 const { currentPage, hasKeyword } = window.PAGE_CONFIG || {};
-let lastCheckTime = new Date().toISOString();
+// LocalDateTime.parse() 호환 형식: "2026-03-11T12:00:00" (Z, 밀리초 제거)
+let lastCheckTime = new Date().toISOString().slice(0, 19);
 
 if (currentPage === 0 && !hasKeyword) {
     setInterval(async () => {
@@ -83,7 +84,7 @@ if (currentPage === 0 && !hasKeyword) {
                     showNotification(`새 게시글 ${newPosts.length}개가 추가되었습니다.`);
                 }
 
-                lastCheckTime = new Date().toISOString();
+                lastCheckTime = new Date().toISOString().slice(0, 19);
             }
         } catch (error) {
             console.error('새 게시글 확인 실패:', error);
@@ -132,3 +133,59 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ─────────────────────────────────────────────
+// 인기 게시글 실시간 갱신 (30초마다 폴링)
+// ─────────────────────────────────────────────
+let lastBestSnapshot = '';
+
+async function refreshBestPosts() {
+    try {
+        const res = await fetch('/posts/api/best');
+        const posts = await res.json();
+
+        // 변경 여부 확인 (JSON 문자열 비교)
+        const snapshot = JSON.stringify(posts);
+        if (snapshot === lastBestSnapshot) return;
+        lastBestSnapshot = snapshot;
+
+        const bestList = document.getElementById('best-list');
+        if (!bestList) return;
+
+        if (posts.length === 0) {
+            bestList.innerHTML = '<li class="best-item"><p class="best-content" style="text-align:center;color:#9DB2F5;">인기 게시글이 없습니다.</p></li>';
+            return;
+        }
+
+        // 기존 목록과 비교해 달라지면 교체
+        const newHtml = posts.map(post => `
+            <li class="best-item">
+                <a href="/posts/${post.id}" class="best-link">
+                    <div class="best-text">
+                        <span class="best-nickname">${escapeHtml(post.username)}</span>
+                        <p class="best-content">${escapeHtml(post.title)}</p>
+                    </div>
+                    <span class="best-likes">${post.likeCount}</span>
+                </a>
+            </li>
+        `).join('');
+
+        bestList.innerHTML = newHtml;
+
+        // GSAP 애니메이션 적용 (로드 완료 후 사용 가능한 경우)
+        window.animateBestItems?.(bestList.querySelectorAll('.best-item'));
+
+    } catch (e) {
+        console.error('인기 게시글 갱신 실패:', e);
+    }
+}
+
+// 페이지 로드 직후 스냅샷 저장 (초기 렌더링 상태)
+(async () => {
+    try {
+        const res = await fetch('/posts/api/best');
+        lastBestSnapshot = JSON.stringify(await res.json());
+    } catch (_) {}
+})();
+
+setInterval(refreshBestPosts, 30000);
