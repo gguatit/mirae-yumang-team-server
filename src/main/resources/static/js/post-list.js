@@ -72,6 +72,9 @@ if (currentPage === 0 && !hasKeyword) {
 
                         tbody.insertBefore(row, tbody.firstChild);
 
+                        // GSAP 애니메이션 적용 (post-list-animation.js에서 노출한 함수)
+                        window.animateNewRow?.(row);
+
                         setTimeout(() => {
                             row.style.backgroundColor = '';
                         }, 3000);
