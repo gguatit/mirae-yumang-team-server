@@ -1,7 +1,9 @@
 > 오늘의 운세 관련 코드와 각종 정보들은 [Today-s-horoscope](https://github.com/gguatit/Today-s-horoscope) 레포지토리에서 확인할 수 있습니다.
 
 # STARLOG
-<<<./mvnw clean package -DskipTests && sudo systemctl restart starlog (서버 재시작)>>>
+```
+./mvnw clean package -DskipTests && sudo systemctl restart starlog (서버 재시작)
+```
 > 학교 커뮤니티 기반 웹 애플리케이션
 
 미래유망팀의 Spring Boot 기반 통합 커뮤니티 플랫폼입니다. 게시판, 한글 검색, AI 챗봇 등 다양한 기능을 제공합니다.
