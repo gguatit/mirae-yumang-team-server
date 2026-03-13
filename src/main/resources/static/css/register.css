@@ -1,5 +1,5 @@
 * {
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   list-style: none;
   font-family: "맑은 고딕";
@@ -7,7 +7,8 @@
 }
 
 body {
-  height: 100vh;
+  display: block;
+  min-height: 100vh;
   background-color: #161838;
   font-size: 20px;
 }
@@ -29,8 +30,10 @@ a {
 
 .wrap {
   position: relative;
-  width: 1440px;
-  height: 100vh;
+  width: 100%;
+  max-width: 1440px;
+  min-height: 100vh;
+  margin: 0 auto;
 }
 
 .centerbox {
@@ -38,7 +41,7 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1104px;
+  width: min(1104px, calc(100vw - 32px));
   height: 650px;
   display: flex;
 }

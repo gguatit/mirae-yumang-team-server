@@ -11,7 +11,7 @@
 }
 
 * {
-	margin: 0 auto;
+	margin: 0;
 	padding: 0;
 	list-style: none;
 	font-family: "맑은 고딕";
@@ -19,7 +19,7 @@
 }
 
 body {
-	height: 100vh;
+	min-height: 100vh;
 	background-color: #161838;
 	font-size: 20px;
 }
@@ -41,7 +41,7 @@ a {
 .wrap {
 	position: relative;
 	width: 1440px;
-	height: 100vh;
+	min-height: 100vh;
 }
 
 .centerbox {

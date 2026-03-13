@@ -73,9 +73,6 @@ if (currentPage === 0 && !hasKeyword) {
 
                         tbody.insertBefore(row, tbody.firstChild);
 
-                        // GSAP 애니메이션 적용 (post-list-animation.js에서 노출한 함수)
-                        window.animateNewRow?.(row);
-
                         setTimeout(() => {
                             row.style.backgroundColor = '';
                         }, 3000);
@@ -112,27 +109,12 @@ function showNotification(message) {
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         z-index: 10000;
         font-size: 14px;
-        animation: slideIn 0.3s ease-out;
     `;
     document.body.appendChild(notification);
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-out';
-        setTimeout(() => notification.remove(), 300);
+        notification.remove();
     }, 3000);
 }
-
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(400px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(400px); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
 
 // ─────────────────────────────────────────────
 // 인기 게시글 실시간 갱신 (30초마다 폴링)
@@ -171,9 +153,6 @@ async function refreshBestPosts() {
         `).join('');
 
         bestList.innerHTML = newHtml;
-
-        // GSAP 애니메이션 적용 (로드 완료 후 사용 가능한 경우)
-        window.animateBestItems?.(bestList.querySelectorAll('.best-item'));
 
     } catch (e) {
         console.error('인기 게시글 갱신 실패:', e);

@@ -20,13 +20,22 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-    /* 스크롤바 숨기기 (스크롤은 유지) */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE, Edge */
+    overflow-y: auto;
+    scrollbar-width: auto;
+    -ms-overflow-style: auto;
 }
 
 body::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: rgba(199, 215, 249, 0.55);
+    border-radius: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: rgba(22, 24, 56, 0.8);
 }
 
 a {
