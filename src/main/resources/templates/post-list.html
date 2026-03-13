@@ -152,9 +152,27 @@
     };
 </script>
 <script type="module" src="/static/js/post-list.js"></script>
-    <!-- GSAP 애니메이션 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="/static/js/post-list-animation.js"></script>
+    <!-- GSAP 애니메이션 - PC(비터치스크린) 전용
+         모바일이면 스크립트 자체를 로드하지 않아 opacity:0 인라인 스타일 설정을 원천 차단 -->
+    <script>
+    (function() {
+        var isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        if (!isMobile) {
+            var s1 = document.createElement('script');
+            s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+            s1.onload = function() {
+                var s2 = document.createElement('script');
+                s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+                s2.onload = function() {
+                    var s3 = document.createElement('script');
+                    s3.src = '/static/js/post-list-animation.js';
+                    document.body.appendChild(s3);
+                };
+                document.body.appendChild(s2);
+            };
+            document.body.appendChild(s1);
+        }
+    })();
+    </script>
 
 </html>

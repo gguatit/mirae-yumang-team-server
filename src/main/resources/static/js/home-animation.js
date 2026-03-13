@@ -1,24 +1,26 @@
 // ============================================
 // GSAP Elegant Animations - STARLOG
-// 부드럽고 우아한 애니메이션
+// PC(비터치스크린) 전용 - 모바일에서는 전체 미실행
 // ============================================
-gsap.registerPlugin(ScrollTrigger);
 
-// 커스텀 ease 함수
+// 모바일 감지: 두 조건 중 하나라도 해당하면 GSAP 전체 건너뜀
+// gsap.from()은 호출 즉시 opacity:0 인라인 스타일을 설정하므로
+// 모바일에서 실행되면 ScrollTrigger 미발동 시 요소가 영구 비표시됨
+const isMobile = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+if (!isMobile) {
+
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const customEase = "power3.out";
 const smoothEase = "power2.out";
 
-// ============================================
-// 페이지 로드 애니메이션
-// ============================================
+window.addEventListener('load', () => {
+    ScrollTrigger.refresh();
+});
+
 window.addEventListener('DOMContentLoaded', () => {
-    
-    // 페이지 로딩 페이드인
-    gsap.from('body', {
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power2.out'
-    });
 
     // ============================================
     // 1. MainTitle - 부드러운 페이드인 & 스케일
@@ -43,6 +45,11 @@ window.addEventListener('DOMContentLoaded', () => {
         ease: 'power2.out',
         delay: 0.5
     });
+
+    // ============================================
+    // 3~7. 스크롤 트리거 애니메이션
+    // ============================================
+    {  // ScrollTrigger 애니메이션 블록
 
     // ============================================
     // 3. intro0 섹션 - 심플한 페이드인
@@ -250,6 +257,8 @@ window.addEventListener('DOMContentLoaded', () => {
         ease: customEase
     });
 
+    }  // end ScrollTrigger 블록
+
     // ============================================
     // 8. 부드러운 버튼 호버 효과
     // ============================================
@@ -318,5 +327,8 @@ window.addEventListener('DOMContentLoaded', () => {
         progressBar.style.width = scrolled + '%';
     });
 
-    console.log('✨ Elegant GSAP Animations Loaded Successfully!');
-});
+    console.log('✨ Elegant GSAP Animations Loaded (Desktop Only)');
+
+}); // end DOMContentLoaded
+
+} // end if (!isMobile)
