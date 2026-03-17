@@ -9,7 +9,8 @@
 html {
     /* overflow-x: hidden 은 암묵적으로 overflow-y:auto 를 유발해
        html 이 스크롤 컨테이너가 될 수 있음 → clip 사용 */
-    overflow-x: clip;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body {

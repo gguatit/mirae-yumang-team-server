@@ -1,3 +1,8 @@
+    html {
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
     * {
         margin: 0;
         padding: 0;
@@ -11,6 +16,8 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #161838;
         min-height: 100vh;
+        display: block;
+        overflow-y: auto;
     }
 
     .navbar {
