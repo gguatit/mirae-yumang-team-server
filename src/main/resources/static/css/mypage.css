@@ -8,6 +8,9 @@
 body {
     background: #0e0f1a;
     color: #fff;
+    display: block;
+    min-height: 100vh;
+    overflow-y: auto;
 }
 
 /* 전체 중앙 정렬 */

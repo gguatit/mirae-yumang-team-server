@@ -7,10 +7,7 @@
 }
 
 html {
-    /* overflow-x: hidden 은 암묵적으로 overflow-y:auto 를 유발해
-       html 이 스크롤 컨테이너가 될 수 있음 → clip 사용 */
     overflow-x: hidden;
-    overflow-y: auto;
 }
 
 body {
@@ -22,21 +19,7 @@ body {
     margin: 0;
     padding: 0;
     overflow-y: auto;
-    scrollbar-width: auto;
-    -ms-overflow-style: auto;
-}
-
-body::-webkit-scrollbar {
-    width: 10px;
-}
-
-body::-webkit-scrollbar-thumb {
-    background: rgba(199, 215, 249, 0.55);
-    border-radius: 8px;
-}
-
-body::-webkit-scrollbar-track {
-    background: rgba(22, 24, 56, 0.8);
+    -webkit-overflow-scrolling: touch;
 }
 
 a {

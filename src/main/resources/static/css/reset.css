@@ -29,8 +29,8 @@
         background-size: cover;
         background-position-y: 38%;
         min-height: 100vh;
-        display: flex;
-        flex-direction: column;
+        display: block;
+        overflow-y: auto;
     }
     .header {
         position: relative;
