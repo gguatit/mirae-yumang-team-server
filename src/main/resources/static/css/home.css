@@ -48,13 +48,24 @@ section {
     position: relative;
 }
 
-.hero-bg {
+spline-viewer {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
     z-index: -1;
+    overflow: hidden;
+}
+
+.spline-logo-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #161838;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .MainTitle {
@@ -468,19 +479,11 @@ header a:hover {
         z-index: 10;
     }
 
-    .hero-bg {
+    spline-viewer {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        /* 부모인 .hero의 높이(1000px)를 따라갑니다 */
-
-        /* 핵심 코드 */
-        object-fit: cover;
-        /* 이미지가 비율을 유지하며 요소의 빈 공간을 가득 채웁니다 */
-        object-position: center;
-        /* 이미지의 중앙을 기준으로 배치합니다 */
-
         z-index: -1;
     }
 
@@ -550,7 +553,7 @@ header a:hover {
         height: auto !important;
     }
 
-    img:not(.hero-bg) {
+    img:not(spline-viewer) {
         max-width: 100% !important;
         height: auto !important;
     }

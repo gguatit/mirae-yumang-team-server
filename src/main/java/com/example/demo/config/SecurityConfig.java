@@ -35,11 +35,11 @@ public class SecurityConfig {
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives(
                                         "default-src 'self'; " +
-                                        "script-src 'self' 'unsafe-inline' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh; " +
+                                        "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh unpkg.com; " +
                                         "style-src 'self' 'unsafe-inline'; " +
-                                        "img-src 'self' data:; " +
+                                        "img-src 'self' data: blob: app.spline.design prod.spline.design; " +
                                         "font-src 'self' cdn.jsdelivr.net; " +
-                                        "connect-src 'self' cloudflareinsights.com esm.sh; " +
+                                        "connect-src 'self' cloudflareinsights.com esm.sh prod.spline.design app.spline.design; " +
                                         "frame-ancestors 'self'"))
                         // Referrer-Policy: 외부 사이트로 URL 정보 누출 방지
                         .referrerPolicy(referrer -> referrer
