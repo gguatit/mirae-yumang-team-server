@@ -16,10 +16,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // CSS, JS, 이미지 등 정적 리소스 - 30일 캐시
+        // CSS, JS, 이미지 등 정적 리소스
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
-                .setCacheControl(CacheControl.maxAge(30, TimeUnit.DAYS).cachePublic());
+                .setCacheControl(CacheControl.noCache().mustRevalidate());
 
         // 사용자 업로드 파일 (UUID 기반 파일명) - 30일 캐시
         registry.addResourceHandler("/upload/**")

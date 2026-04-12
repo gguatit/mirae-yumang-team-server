@@ -30,7 +30,6 @@
         background-position-y: 38%;
         min-height: 100vh;
         display: block;
-        overflow-y: auto;
     }
     .header {
         position: relative;

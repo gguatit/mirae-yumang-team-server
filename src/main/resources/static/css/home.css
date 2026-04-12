@@ -7,19 +7,17 @@
 }
 
 html {
-    overflow-x: hidden;
+    overflow: hidden auto;
 }
 
 body {
-    display: block; /* reset.css 의 display:flex 를 override - flex 가 자식 높이 계산에 영향 줄 수 있음 */
+    display: block;
     min-height: 100vh;
     background: #161838;
     font-size: 20px;
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 a {
