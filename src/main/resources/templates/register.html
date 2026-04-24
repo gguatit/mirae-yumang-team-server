@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="/static/images/logo-rounded.png">
+  <link rel="preconnect" href="https://challenges.cloudflare.com" />
   <title>회원가입</title>
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/register.css?v=20260313-1">
@@ -48,6 +49,10 @@
               <input type="email" id="email" name="email" placeholder="example@email.com" required>
             </div>
 
+            <div class="cf-turnstile"
+                 th:data-sitekey="${turnstileSiteKey}"
+                 data-theme="light"
+                 data-size="normal"></div>
 
             <button type="submit">회원가입</button>
           </form>
@@ -59,6 +64,7 @@
       </div>
     </div>
   </div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

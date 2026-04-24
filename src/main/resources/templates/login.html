@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인</title>
   <link rel="icon" type="image/png" href="/static/images/logo-rounded.png">
+  <link rel="preconnect" href="https://challenges.cloudflare.com" />
   <link rel="stylesheet" href="/static/css/reset.css">
   <link rel="stylesheet" href="/static/css/login.css">
 </head>
@@ -77,11 +78,11 @@
             <div class="form-group">
               <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
             </div>
-            <!-- <div class="savename">
-        <input type="checkbox" id="savename" name="savename">
-        아이디 저장
-    </div> -->
 
+            <div class="cf-turnstile"
+                 th:data-sitekey="${turnstileSiteKey}"
+                 data-theme="light"
+                 data-size="normal"></div>
 
             <button type="submit">로그인</button>
           </form>
@@ -91,6 +92,7 @@
         </div>
       </div>
     </div>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 
 </html>

@@ -16,6 +16,7 @@ ExecStart=/usr/bin/java -jar /path/to/your/project/target/demo-0.0.1-SNAPSHOT.ja
 # 환경 변수 (실제 값으로 변경하세요!)
 Environment="DB_USERNAME=YOUR_DB_USERNAME"
 Environment="DB_PASSWORD=YOUR_DB_PASSWORD"
+Environment="TURNSTILE_SECRET_KEY=YOUR_TURNSTILE_SECRET_KEY"
 Environment="JAVA_OPTS=-Xms512m -Xmx1024m"
 
 SuccessExitStatus=143

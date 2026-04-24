@@ -2,11 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.User;
 import com.example.demo.service.LoginAttemptService;
+import com.example.demo.service.TurnstileService;
 import com.example.demo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +31,25 @@ public class AuthController {
 
     private final UserService userService;
     private final LoginAttemptService loginAttemptService;
+    private final TurnstileService turnstileService;
+
+    @Value("${turnstile.site.key}")
+    private String turnstileSiteKey;
 
     private String getClientKey(HttpServletRequest request, String username) {
-        String ip = request.getRemoteAddr();
+        String ip = getClientIp(request);
         return ip + ":" + username;
+    }
+
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("CF-Connecting-IP");
+        if (ip == null || ip.isBlank()) {
+            ip = request.getHeader("X-Forwarded-For");
+        }
+        if (ip == null || ip.isBlank()) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
     // ============================================
@@ -40,10 +57,11 @@ public class AuthController {
     // ============================================
 
     @GetMapping("/login")
-    public String showLoginForm(HttpSession session) {
+    public String showLoginForm(HttpSession session, Model model) {
         if (session.getAttribute("loginUser") != null) {
             return "redirect:/home";
         }
+        model.addAttribute("turnstileSiteKey", turnstileSiteKey);
         return "login";
     }
 
@@ -51,9 +69,17 @@ public class AuthController {
     public String login(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
+            @RequestParam(value = "cf-turnstile-response", required = false) String turnstileToken,
             HttpServletRequest request,
             Model model) {
         log.info("로그인 시도: {}", username);
+
+        // Turnstile 검증
+        String clientIp = getClientIp(request);
+        if (!turnstileService.validateToken(turnstileToken, clientIp)) {
+            model.addAttribute("error", "보안 인증에 실패했습니다. 다시 시도해주세요.");
+            return "login";
+        }
 
         String clientKey = getClientKey(request, username);
 
@@ -95,10 +121,11 @@ public class AuthController {
     // ============================================
 
     @GetMapping("/register")
-    public String showRegisterForm(HttpSession session) {
+    public String showRegisterForm(HttpSession session, Model model) {
         if (session.getAttribute("loginUser") != null) {
             return "redirect:/home";
         }
+        model.addAttribute("turnstileSiteKey", turnstileSiteKey);
         return "register";
     }
 
@@ -107,8 +134,17 @@ public class AuthController {
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             @RequestParam("email") String email,
+            @RequestParam(value = "cf-turnstile-response", required = false) String turnstileToken,
+            HttpServletRequest request,
             Model model) {
         log.info("회원가입 시도: {}", username);
+
+        // Turnstile 검증
+        String clientIp = getClientIp(request);
+        if (!turnstileService.validateToken(turnstileToken, clientIp)) {
+            model.addAttribute("error", "보안 인증에 실패했습니다. 다시 시도해주세요.");
+            return "register";
+        }
 
         // 입력값 검증
         if (username == null || username.trim().isEmpty()) {
