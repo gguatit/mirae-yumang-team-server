@@ -69,3 +69,5 @@ backup_*.sql.gz
 .env
 .env.local
 .env.prod
+comcigan-parser-local/node_modules/
+comcigan-parser-local/package-lock.json

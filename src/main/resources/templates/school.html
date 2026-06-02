@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>학교 - STARLOG</title>
+    <link rel="icon" type="image/png" href="/static/images/logo-rounded.png">
+    <link rel="stylesheet" href="/static/css/reset.css?v=2">
+    <link rel="stylesheet" href="/static/css/school.css?v=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header class="school-header">
+        <div class="wrap">
+            <div class="header-top">
+                <a href="/home" class="header-logo">STARLOG</a>
+                <nav class="header-nav">
+                    <a href="/posts">학교 커뮤니티</a>
+                    <a href="https://kalpha.c01.kr">오늘의 운세</a>
+                    <a href="/school" class="active">학교</a>
+                </nav>
+                <div class="header-menu">
+                    <div th:if="${username}">
+                        <a href="/mypage" th:text="${username} + '님'"></a>
+                        <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                            <button type="submit" class="logout-btn">로그아웃</button>
+                        </form>
+                    </div>
+                    <div th:unless="${username}">
+                        <a href="/auth/login">로그인</a>
+                        <a href="/auth/register">회원가입</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="school-main">
+        <div class="wrap">
+            <h1 class="page-title">★ 오늘의 학교</h1>
+            <p class="page-date" th:text="${today}"></p>
+
+            <div class="school-grid">
+                <div class="school-left">
+                    <div class="selector-card">
+                        <h2>학년 / 반 선택</h2>
+                        <form method="get" action="/school" class="selector-form">
+                            <div class="selector-row">
+                                <label>학년</label>
+                                <select name="grade">
+                                    <option th:each="g : ${#numbers.sequence(1, 3)}"
+                                            th:value="${g}"
+                                            th:text="${g} + '학년'"
+                                            th:selected="${g == currentGrade}"></option>
+                                </select>
+                            </div>
+                            <div class="selector-row">
+                                <label>반</label>
+                                <select name="classNum">
+                                    <option th:each="c : ${#numbers.sequence(1, maxClass)}"
+                                            th:value="${c}"
+                                            th:text="${c} + '반'"
+                                            th:selected="${c == currentClass}"></option>
+                                </select>
+                            </div>
+                            <button type="submit" class="selector-btn">조회</button>
+                        </form>
+                    </div>
+
+                    <div class="meal-card">
+                        <h2>🍽 오늘의 급식</h2>
+                        <div th:if="${!#lists.isEmpty(meals)}">
+                            <div th:each="meal : ${meals}" class="meal-item">
+                                <span class="meal-type" th:text="${meal.mealName}"></span>
+                                <div class="meal-dishes">
+                                    <span th:each="dish : ${#strings.arraySplit(meal.dishNames, '<br/>')}"
+                                          th:text="${dish}"
+                                          class="dish"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${!#lists.isEmpty(meals)}" class="no-data">
+                            오늘의 급식 정보가 없습니다.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="school-right">
+                    <div class="timetable-card">
+                        <h2>
+                            📘 <span th:text="${currentGrade} + '학년 ' + ${currentClass} + '반'"></span> 시간표
+                        </h2>
+                        <div th:if="${!#lists.isEmpty(timetableRows)}">
+                            <div class="timetable-wrap">
+                                <table class="timetable">
+                                    <thead>
+                                        <tr>
+                                            <th>교시</th>
+                                            <th th:each="day : ${weekdays}" th:text="${day}"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="row : ${timetableRows}">
+                                            <td class="period-cell">
+                                                <span th:text="${row.period}"></span>
+                                                <small th:if="${periodTimes != null && periodTimes.size() >= rowStat.count}"
+                                                       th:text="${periodTimes[rowStat.count - 1]}"></small>
+                                            </td>
+                                            <td th:each="day : ${weekdays}">
+                                                <div th:if="${row.getSubject(day) != null && !row.getSubject(day).isEmpty()}">
+                                                    <span class="subject-name" th:text="${row.getSubject(day)}"></span>
+                                                    <span class="teacher-name" th:text="${row.getTeacher(day)}"></span>
+                                                </div>
+                                                <span th:unless="${row.getSubject(day) != null && !row.getSubject(day).isEmpty()}"
+                                                      class="empty-cell">-</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div th:unless="${!#lists.isEmpty(timetableRows)}" class="no-data">
+                            시간표 정보를 불러올 수 없습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="schedule-card">
+                <h2>📅 이번 달 학사일정</h2>
+                <div th:if="${!#lists.isEmpty(schedules)}">
+                    <div th:each="s : ${schedules}" class="schedule-item">
+                        <span class="schedule-date"
+                              th:text="${#strings.substring(s.eventDate, 4, 6)} + '/' + ${#strings.substring(s.eventDate, 6, 8)}"></span>
+                        <span class="schedule-name" th:text="${s.eventName}"></span>
+                    </div>
+                </div>
+                <div th:unless="${!#lists.isEmpty(schedules)}" class="no-data">
+                    등록된 학사일정이 없습니다.
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
