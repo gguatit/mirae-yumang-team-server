@@ -42,8 +42,10 @@ a {
 
 .wrap {
 	position: relative;
-	width: 1440px;
+	width: 100%;
+	max-width: 1440px;
 	min-height: 100vh;
+	margin: 0 auto;
 }
 
 .centerbox {

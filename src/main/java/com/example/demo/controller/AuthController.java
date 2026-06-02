@@ -33,7 +33,7 @@ public class AuthController {
     private final LoginAttemptService loginAttemptService;
     private final TurnstileService turnstileService;
 
-    @Value("${turnstile.site.key}")
+    @Value("${turnstile.site.key:0x4AAAAAADCFFGwuusxdawOs}")
     private String turnstileSiteKey;
 
     private String getClientKey(HttpServletRequest request, String username) {
