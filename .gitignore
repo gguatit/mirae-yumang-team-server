@@ -71,3 +71,6 @@ backup_*.sql.gz
 .env.prod
 comcigan-parser-local/node_modules/
 comcigan-parser-local/package-lock.json
+
+### OpenCode Skills ###
+.agents/
