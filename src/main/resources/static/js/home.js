@@ -5,24 +5,27 @@ function initAnimations() {
 
     mm.add("(prefers-reduced-motion: no-preference)", function () {
 
+        // --- Dramatic hero entry (scale 0.4 → 1) ---
         var heroTL = gsap.timeline({ defaults: { ease: "power4.out" } });
         heroTL
             .from("header a", {
-                rotationX: -15, y: -25, z: -40, opacity: 0,
-                stagger: 0.06, duration: 0.7,
+                rotationX: -20, y: -30, z: -60, opacity: 0,
+                stagger: 0.06, duration: 0.8,
             })
             .from(".MainTitle", {
-                scale: 0.7, rotationX: 12, z: -80, opacity: 0,
-                duration: 1.4, ease: "power3.out",
-            }, "-=0.2")
+                scale: 0.4, rotationX: 15, z: -120, opacity: 0,
+                duration: 1.8, ease: "power3.out",
+            }, "-=0.3")
             .from(".header-menu > div > *", {
-                rotationX: -12, y: 15, z: -30, opacity: 0,
-                stagger: 0.08, duration: 0.6,
-            }, "-=0.5");
+                rotationX: -15, y: 20, z: -40, opacity: 0,
+                stagger: 0.08, duration: 0.7,
+            }, "-=0.6");
+        // Idle floating
         heroTL.to(".MainTitle", {
-            y: -10, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1,
+            y: -12, duration: 3.5, ease: "sine.inOut", yoyo: true, repeat: -1,
         }, "+=0.5");
 
+        // --- Three.js camera scroll control (no GSAP ticker, Three.js loop handles lerp) ---
         if (window.starField) {
             gsap.to(window.starField.cameraTarget, {
                 z: -400,
@@ -35,13 +38,22 @@ function initAnimations() {
                 },
             });
 
-            gsap.ticker.add(function () {
-                if (window.starField) {
-                    window.starField.updateCamera();
-                }
+            // Scroll velocity → star field energy
+            var lastScroll = window.scrollY;
+            ScrollTrigger.create({
+                trigger: "body",
+                start: "top top",
+                end: "bottom bottom",
+                onUpdate: function (self) {
+                    var vel = self.getVelocity() / 1000;
+                    if (window.starField) {
+                        window.starField.setScrollVel(vel);
+                    }
+                },
             });
         }
 
+        // --- SplitText for intro0 quote ---
         var introP = document.querySelector(".intro0 p");
         if (introP) {
             var split = SplitText.create(introP, { type: "words" });
@@ -70,6 +82,7 @@ function initAnimations() {
             delay: 0.3,
         });
 
+        // --- Section cinematic reveals ---
         function cinematicSection(sel) {
             gsap.from(sel + " .wrap", {
                 rotationX: 8, scale: 0.95, z: -50, opacity: 0,
@@ -88,6 +101,7 @@ function initAnimations() {
         cinematicSection(".intro2");
         cinematicSection(".community");
 
+        // --- Parallax layers ---
         document.querySelectorAll(".intro1ImgBox img, .intro2 .intro1ImgBox img").forEach(function (img) {
             gsap.from(img, {
                 yPercent: -15,
@@ -131,6 +145,7 @@ function initAnimations() {
             ease: "none",
         });
 
+        // --- Fortune lists (distribute-based, scoped) ---
         gsap.from(".today .fortune-list > li", {
             rotation: -2, scale: 0.97, opacity: 0,
             scrollTrigger: {
@@ -177,4 +192,14 @@ function initAnimations() {
     });
 }
 
-document.fonts.ready.then(initAnimations);
+// Font-ready with 2s timeout fallback (prevents stuck animations if fonts fail)
+var fontReady = false;
+Promise.race([
+    document.fonts.ready,
+    new Promise(function (resolve) { setTimeout(resolve, 2000); }),
+]).then(function () {
+    if (!fontReady) {
+        fontReady = true;
+        initAnimations();
+    }
+});

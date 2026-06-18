@@ -53,6 +53,19 @@ section {
     z-index: -1;
 }
 
+/* Hero → intro0 gradient blend */
+.hero::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to bottom, transparent, rgba(22, 24, 56, 0.7));
+    pointer-events: none;
+    z-index: 0;
+}
+
 #star-canvas {
     position: fixed;
     inset: 0;
@@ -130,8 +143,7 @@ section {
     height: 450px;
     display: flex;
     align-items: center;
-    background: rgba(22, 24, 56, 0.85);
-    background-color: var(--mid);
+    background: rgba(22, 24, 56, 0.6);
 }
 
 .intro0>div {
@@ -154,7 +166,7 @@ section {
 
 .intro1 {
     height: 1059px;
-    background: rgba(92, 104, 178, 0.88);
+    background: rgba(92, 104, 178, 0.65);
 }
 
 .intro1>.wrap>p {
@@ -180,7 +192,7 @@ section {
 
 .today {
     height: 1027px;
-    background: rgba(32, 35, 83, 0.88);
+    background: rgba(32, 35, 83, 0.6);
 }
 
 .today>.wrap>div {
@@ -307,7 +319,7 @@ li a:hover {
 /* 서비스 설명 */
 .intro2 {
     height: 1059px;
-    background: rgba(157, 178, 245, 0.85);
+    background: rgba(157, 178, 245, 0.6);
 }
 
 .intro2>.wrap>p {
@@ -330,7 +342,7 @@ li a:hover {
 
 .community {
     height: 1027px;
-    background: rgba(92, 104, 178, 0.88);
+    background: rgba(92, 104, 178, 0.65);
 }
 
 .community>.wrap {

@@ -1,12 +1,17 @@
-var lenis = new Lenis({
-    duration: 1.2,
-    easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
-    smoothWheel: true,
-});
+// Lenis with reduced-motion respect
+var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-lenis.on('scroll', ScrollTrigger.update);
+if (!reduceMotion) {
+    var lenis = new Lenis({
+        duration: 1.2,
+        easing: function (t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); },
+        smoothWheel: true,
+    });
 
-gsap.ticker.add(function (time) {
-    lenis.raf(time * 1000);
-});
-gsap.ticker.lagSmoothing(0);
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add(function (time) {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+}

@@ -1,11 +1,17 @@
 gsap.registerPlugin(MorphSVGPlugin, DrawSVGPlugin);
 
+// Real constellation-like paths: disconnected line segments (stars + connections)
 var constellationPaths = [
-    "M720,100 L820,300 L700,500 L620,300 Z M400,200 L520,350 M900,150 L1050,280",
-    "M300,400 L500,350 L700,420 L900,380 L1100,450 M200,600 L450,550 L650,580 L850,520 L1100,600",
-    "M400,700 Q550,400 700,500 T1000,600 M300,450 Q600,200 900,500",
-    "M200,300 Q400,600 700,400 T1200,300 M500,200 Q700,500 1000,400",
-    "M300,200 C400,400 600,100 700,300 C800,500 1000,200 1140,400 M500,600 C600,400 800,700 900,500 M720,450 L720,100 M720,450 L400,600 M720,450 L1040,600",
+    // Hero: Compass star — radiating lines + diamond
+    "M720,180 L720,720 M520,450 L920,450 M580,290 L860,610 M860,290 L580,610 M620,320 L720,200 L820,320 Z",
+    // intro0: Wandering path — scattered connected dots
+    "M300,320 L520,380 L720,300 L920,420 L1120,340 M380,620 L600,560 L820,660 L1040,580 M720,220 L720,680",
+    // intro1: Cassiopeia W — 5-star zigzag
+    "M380,400 L560,560 L740,380 L920,560 L1100,400 M380,400 L380,380 M1100,400 L1100,380",
+    // today: Cup/Vessel — U-shape with rim
+    "M480,280 L480,620 Q480,760 720,760 Q960,760 960,620 L960,280 M480,280 L960,280 M600,280 L600,200 M840,280 L840,200",
+    // community: Network nodes — interconnected hexagon + diagonals
+    "M400,300 L720,200 L1040,300 L1040,600 L720,700 L400,600 Z M400,300 L1040,600 M1040,300 L400,600 M720,200 L720,700",
 ];
 
 var pathEl = document.getElementById('constellation-path');
@@ -32,9 +38,10 @@ applyMorph(2, ".intro1", "top bottom", "bottom top");
 applyMorph(3, ".today", "top bottom", "bottom top");
 applyMorph(4, ".intro2", "top bottom", "bottom top");
 
+// Draw-in on load
 gsap.from(pathEl, {
     drawSVG: "0%",
-    duration: 1.5,
+    duration: 2,
     ease: "power2.out",
-    delay: 0.5,
+    delay: 0.8,
 });
