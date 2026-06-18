@@ -41,6 +41,16 @@ section {
     position: relative;
     background: transparent;
     perspective: 1000px;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(8, 10, 28, 0.5) 100%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 #star-canvas {

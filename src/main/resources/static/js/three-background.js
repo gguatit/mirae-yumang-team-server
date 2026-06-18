@@ -86,13 +86,166 @@ var material = new THREE.ShaderMaterial({
 var stars = new THREE.Points(geometry, material);
 scene.add(stars);
 
-function animate() {
+// --- Shooting stars ---
+var METEOR_COUNT = 3;
+var TRAIL_LEN = 20;
+var meteorCanv = document.createElement('canvas');
+meteorCanv.width = 64;
+meteorCanv.height = 64;
+var mctx = meteorCanv.getContext('2d');
+var grd = mctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+grd.addColorStop(0, 'rgba(255,255,255,1)');
+grd.addColorStop(0.2, 'rgba(255,255,255,0.6)');
+grd.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+grd.addColorStop(1, 'rgba(255,255,255,0)');
+mctx.fillStyle = grd;
+mctx.fillRect(0, 0, 64, 64);
+var glowTex = new THREE.CanvasTexture(meteorCanv);
+
+var trailPositions = new Float32Array(METEOR_COUNT * TRAIL_LEN * 3);
+var trailSizes = new Float32Array(METEOR_COUNT * TRAIL_LEN);
+for (var ti = 0; ti < METEOR_COUNT * TRAIL_LEN; ti++) {
+    trailSizes[ti] = 0;
+    trailPositions[ti * 3] = 0;
+    trailPositions[ti * 3 + 1] = 0;
+    trailPositions[ti * 3 + 2] = 0;
+}
+var trailGeo = new THREE.BufferGeometry();
+trailGeo.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+trailGeo.setAttribute('size', new THREE.BufferAttribute(trailSizes, 1));
+
+var trailMat = new THREE.PointsMaterial({
+    color: 0xbbddff,
+    size: 3,
+    map: glowTex,
+    transparent: true,
+    opacity: 0.6,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    sizeAttenuation: true,
+});
+var trailPoints = new THREE.Points(trailGeo, trailMat);
+trailPoints.visible = false;
+scene.add(trailPoints);
+
+var meteors = [];
+for (var mi = 0; mi < METEOR_COUNT; mi++) {
+    var spr = new THREE.Sprite(new THREE.SpriteMaterial({
+        map: glowTex,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+    }));
+    spr.scale.set(0, 0, 1);
+    scene.add(spr);
+    meteors.push({
+        sprite: spr,
+        active: false,
+        life: 0,
+        maxLife: 0.6 + Math.random() * 0.4,
+        x: 0, y: 0, z: 0,
+        vx: 0, vy: 0, vz: 0,
+        trail: [],
+        trailOffset: mi * TRAIL_LEN,
+    });
+}
+
+var mt = 0;
+
+function spawnMeteor() {
+    for (var i = 0; i < meteors.length; i++) {
+        if (!meteors[i].active) {
+            var m = meteors[i];
+            m.active = true;
+            m.life = 0;
+            m.x = (Math.random() - 0.5) * 400;
+            m.y = 120 + Math.random() * 120;
+            m.z = 30 + Math.random() * 120;
+            var ang = Math.PI * (0.15 + Math.random() * 0.35);
+            var sp = 200 + Math.random() * 150;
+            var ang2 = Math.random() * 0.4 - 0.2;
+            m.vx = Math.cos(ang) * sp;
+            m.vy = -Math.sin(ang) * sp;
+            m.vz = ang2 * sp;
+            m.trail = [];
+            m.sprite.visible = true;
+            m.sprite.material.opacity = 0;
+            return;
+        }
+    }
+}
+
+function updateMeteors(delta) {
+    mt += delta;
+    if (mt > 1.5 + Math.random() * 2.5) {
+        spawnMeteor();
+        mt = 0;
+    }
+
+    var anyActive = false;
+    for (var i = 0; i < meteors.length; i++) {
+        var m = meteors[i];
+        if (!m.active) continue;
+        anyActive = true;
+        m.life += delta;
+
+        var progress = m.life / m.maxLife;
+        var fadeIn = Math.min(1, progress * 5);
+        var fadeOut = Math.max(0, 1 - (progress - 0.7) / 0.3);
+        var opacity = fadeIn * fadeOut;
+
+        m.x += m.vx * delta;
+        m.y += m.vy * delta;
+        m.z += m.vz * delta;
+
+        m.sprite.position.set(m.x, m.y, m.z);
+        var size = 4 + 8 * fadeIn * fadeOut;
+        m.sprite.scale.set(size, size, 1);
+        m.sprite.material.opacity = opacity;
+
+        m.trail.unshift({ x: m.x, y: m.y, z: m.z });
+        if (m.trail.length > TRAIL_LEN) m.trail.pop();
+
+        var off = m.trailOffset;
+        for (var j = 0; j < TRAIL_LEN; j++) {
+            var idx = (off + j) * 3;
+            if (j < m.trail.length) {
+                var t = m.trail[j];
+                trailPositions[idx] = t.x;
+                trailPositions[idx + 1] = t.y;
+                trailPositions[idx + 2] = t.z;
+                trailSizes[off + j] = (1 - j / TRAIL_LEN) * 3 * opacity;
+            } else {
+                trailPositions[idx] = 0;
+                trailPositions[idx + 1] = 0;
+                trailPositions[idx + 2] = 0;
+                trailSizes[off + j] = 0;
+            }
+        }
+
+        if (m.life >= m.maxLife) {
+            m.active = false;
+            m.sprite.visible = false;
+        }
+    }
+    trailGeo.attributes.position.needsUpdate = true;
+    trailGeo.attributes.size.needsUpdate = true;
+    trailPoints.visible = anyActive;
+}
+
+function animate(time) {
+    var delta = Math.min(0.05, (time - (animate._lastTime || time)) / 1000);
+    animate._lastTime = time;
     requestAnimationFrame(animate);
     material.uniforms.uTime.value += 0.01;
+    updateMeteors(delta);
     renderer.render(scene, camera);
 }
 
-animate();
+animate._lastTime = 0;
+animate(0);
 
 var cameraTarget = { z: 200 };
 var mouse = { x: 0, y: 0 };

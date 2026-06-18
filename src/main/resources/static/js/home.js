@@ -8,17 +8,20 @@ function initAnimations() {
         var heroTL = gsap.timeline({ defaults: { ease: "power4.out" } });
         heroTL
             .from("header a", {
-                rotationX: -15, y: -20, z: -30, opacity: 0,
-                stagger: 0.06, duration: 0.6,
+                rotationX: -15, y: -25, z: -40, opacity: 0,
+                stagger: 0.06, duration: 0.7,
             })
             .from(".MainTitle", {
-                scale: 0.85, rotationX: 8, z: -50, opacity: 0,
-                duration: 1.2,
+                scale: 0.7, rotationX: 12, z: -80, opacity: 0,
+                duration: 1.4, ease: "power3.out",
             }, "-=0.2")
             .from(".header-menu > div > *", {
-                rotationX: -10, y: 10, z: -20, opacity: 0,
-                stagger: 0.08, duration: 0.5,
-            }, "-=0.4");
+                rotationX: -12, y: 15, z: -30, opacity: 0,
+                stagger: 0.08, duration: 0.6,
+            }, "-=0.5");
+        heroTL.to(".MainTitle", {
+            y: -10, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1,
+        }, "+=0.5");
 
         if (window.starField) {
             gsap.to(window.starField.cameraTarget, {
@@ -128,7 +131,7 @@ function initAnimations() {
             ease: "none",
         });
 
-        gsap.from(".fortune-list > li", {
+        gsap.from(".today .fortune-list > li", {
             rotation: -2, scale: 0.97, opacity: 0,
             scrollTrigger: {
                 trigger: ".today", start: "top 75%", once: true,
@@ -148,7 +151,7 @@ function initAnimations() {
             stagger: { from: "center", each: 0.08 },
         });
 
-        gsap.from(".card-bottom", {
+        gsap.from(".today .card-bottom", {
             rotationX: 5, z: -20, opacity: 0,
             duration: 0.6,
             ease: "power3.out",
