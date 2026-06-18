@@ -37,29 +37,45 @@ section {
 }
 
 .hero {
-    /* border: 1px solid #9d00ff; */
     height: 1000px;
     position: relative;
+    background: transparent;
+    perspective: 1000px;
 }
 
-spline-viewer {
-    position: absolute;
+#star-canvas {
+    position: fixed;
     inset: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: -1;
-    overflow: hidden;
+    pointer-events: none;
 }
 
-.spline-logo-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: var(--deep);
+#constellation-svg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 0;
     pointer-events: none;
+}
+
+.card {
+    transform-style: preserve-3d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #star-canvas,
+    #constellation-svg {
+        display: none;
+    }
+    .hero {
+        background: var(--deep);
+    }
+    .card {
+        transform-style: flat;
+    }
 }
 
 .MainTitle {
@@ -104,6 +120,7 @@ spline-viewer {
     height: 450px;
     display: flex;
     align-items: center;
+    background: rgba(22, 24, 56, 0.85);
     background-color: var(--mid);
 }
 
@@ -127,7 +144,7 @@ spline-viewer {
 
 .intro1 {
     height: 1059px;
-    background: var(--dark);
+    background: rgba(92, 104, 178, 0.88);
 }
 
 .intro1>.wrap>p {
@@ -153,6 +170,7 @@ spline-viewer {
 
 .today {
     height: 1027px;
+    background: rgba(32, 35, 83, 0.88);
 }
 
 .today>.wrap>div {
@@ -279,7 +297,7 @@ li a:hover {
 /* 서비스 설명 */
 .intro2 {
     height: 1059px;
-    background: var(--dark);
+    background: rgba(157, 178, 245, 0.85);
 }
 
 .intro2>.wrap>p {
@@ -301,8 +319,8 @@ li a:hover {
 }
 
 .community {
-    /* border: 1px solid #9d00ff; */
     height: 1027px;
+    background: rgba(92, 104, 178, 0.88);
 }
 
 .community>.wrap {
@@ -443,12 +461,8 @@ header a:hover {
         z-index: 10;
     }
 
-    spline-viewer {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
+    #star-canvas {
+        position: fixed;
     }
 
     .MainTitle {
@@ -517,7 +531,7 @@ header a:hover {
         height: auto;
     }
 
-    img:not(spline-viewer) {
+    img {
         max-width: 100%;
         height: auto;
     }
