@@ -161,6 +161,7 @@ spline-viewer {
 
 .today>.wrap {
     display: flex;
+    height: 100%;
 }
 
 /* today 왼쪽 박스 버튼x */
@@ -307,6 +308,7 @@ li a:hover {
 
 .community>.wrap {
     display: flex;
+    height: 100%;
 }
 
 .community>.wrap>div {
