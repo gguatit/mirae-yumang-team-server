@@ -7,22 +7,35 @@
     <link rel="icon" type="image/png" href="/static/images/logo-rounded.png">
     <title>게시판</title>
     <link rel="stylesheet" href="/static/css/reset.css">
+    <link rel="stylesheet" href="/static/css/school.css">
     <link rel="stylesheet" href="/static/css/post-list.css">
 </head>
 
 <body>
-    <div class="navbar">
-        <a href="/home" class="navbar-brand">STARLOG</a>
-        <div class="navbar-menu">
-            <a href="/posts">게시판</a>
-            <a th:if="${username}" href="/mypage" th:text="${username} + '님'"></a>
-            <form th:if="${username}" th:action="@{/auth/logout}" method="post" style="display:inline;">
-                <button type="submit"
-                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">로그아웃</button>
-            </form>
-            <a th:unless="${username}" href="/auth/login">로그인</a>
+    <header class="school-header">
+        <div class="wrap">
+            <div class="header-top">
+                <a href="/home" class="header-logo">STARLOG</a>
+                <nav class="header-nav">
+                    <a href="/posts" class="active">학교 커뮤니티</a>
+                    <a href="https://kalpha.c01.kr">오늘의 운세</a>
+                    <a href="/school">오늘의 학교</a>
+                </nav>
+                <div class="header-menu">
+                    <div th:if="${username}">
+                        <a href="/mypage" th:text="${username} + '님'"></a>
+                        <form th:action="@{/auth/logout}" method="post" style="display:inline;">
+                            <button type="submit" class="logout-btn">로그아웃</button>
+                        </form>
+                    </div>
+                    <div th:unless="${username}">
+                        <a href="/auth/login">로그인</a>
+                        <a href="/auth/register">회원가입</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
 
     <div class="container">
 
