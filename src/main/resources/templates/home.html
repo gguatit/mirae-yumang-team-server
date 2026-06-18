@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,8 @@
                         <!-- 로그인 여부에 따라 다른 메뉴 표시 -->
                         <div th:if="${username}">
                             <a href="/mypage" th:text="${username} + '님'"></a>
-                            <form th:action="@{/auth/logout}" method="post" style="display:inline;">
-                                <button type="submit"
-                                    style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">로그아웃</button>
+                            <form th:action="@{/auth/logout}" method="post" class="logout-form">
+                                <button type="submit">로그아웃</button>
                             </form>
                         </div>
                         <div th:unless="${username}">
@@ -63,7 +62,7 @@
             <div class="wrap">
                 <!-- 서비스 설명 -->
                 <div class="intro1ImgBox">
-                    <img src="/static/images/STARLOG (3).png" alt="">
+                    <img src="/static/images/STARLOG (3).png" alt="STARLOG 서비스 소개 이미지">
                 </div>
                 <p>낮에 지나친 장면들은 밤에 남습니다. <br>
                     아무렇지 않게 넘겼던 학교의 순간들이 지금 이곳에서 다시 떠오릅니다</p>
@@ -82,7 +81,7 @@
                         </div>
                     </div>
                     <div class="imgbox">
-                        <img src="/static/images/제목 옆 이미지.png" alt="">
+                        <img src="/static/images/제목 옆 이미지.png" alt="오늘의 운세 일러스트레이션">
                     </div>
                 </div>
                 <div class="today-box2">
@@ -99,10 +98,10 @@
                                 <li>오늘 주의할 포인트</li>
                             </ul>
                         </li>
-                        <li class="card-buttom">
+                        <li class="card-bottom">
                             <p>궁금한 게 있다면, 지금</p>
                             <!-- 오늘의 운세 클릭 버튼 -->
-                            <a href="https://kalpha.c01.kr" class="community-buttom">오늘의운세 대화하기</a>
+                            <a href="https://kalpha.c01.kr" class="community-button">오늘의운세 대화하기</a>
                         </li>
                     </ul>
                 </div>
@@ -112,7 +111,7 @@
             <div class="wrap">
                 <!-- 서비스 설명 -->
                 <div class="intro1ImgBox">
-                    <img src="/static/images/커뮤니티 이미지.png" alt="">
+                    <img src="/static/images/커뮤니티 이미지.png" alt="커뮤니티 소개 이미지">
                 </div>
                 <p>별자리는 말이 없지만, 당신의 질문에는 답이 필요하니까요.<br>
                     오늘의 흐름을 이해하는 대화가 여기서 시작됩니다. </p>
@@ -134,10 +133,10 @@
                                 <li>뒤늦게 떠오른 생각들</li>
                             </ul>
                         </li>
-                        <li class="card-buttom">
+                        <li class="card-bottom">
                             <p>같은 하루를 보낸 사람들의 기록</p>
                             <!-- 오늘의 운세 클릭 버튼 -->
-                            <a href="/posts" class="community-buttom">학교 커뮤니티 이동하기</a>
+                            <a href="/posts" class="community-button">학교 커뮤니티 이동하기</a>
                         </li>
                     </ul>
                 </div>
@@ -150,7 +149,7 @@
                         </div>
                     </div>
                     <div class="imgbox">
-                        <img src="/static/images/학교 커뮤니티 옆 이미지.png" alt="">
+                        <img src="/static/images/학교 커뮤니티 옆 이미지.png" alt="학교 커뮤니티 일러스트레이션">
                     </div>
                 </div>
             </div>

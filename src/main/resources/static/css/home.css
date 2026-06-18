@@ -1,11 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-family: 'Cafe24ClassicType', sans-serif;
-    color: #C7D7F9
-}
-
 html {
     overflow: hidden auto;
 }
@@ -13,8 +5,10 @@ html {
 body {
     display: block;
     min-height: 100vh;
-    background: #161838;
+    background: var(--deep);
     font-size: 20px;
+    font-family: 'Cafe24ClassicType', sans-serif;
+    color: var(--text);
     width: 100%;
     margin: 0;
     padding: 0;
@@ -63,7 +57,7 @@ spline-viewer {
     left: 0;
     width: 100%;
     height: 60px;
-    background: #161838;
+    background: var(--deep);
     z-index: 0;
     pointer-events: none;
 }
@@ -84,12 +78,25 @@ spline-viewer {
     z-index: 10;
 }
 
-.header-menu>div>a {
+.header-menu>div>a,
+.logout-form button {
     font-size: 16px;
-    color: #FAE8D3;
+    color: var(--accent);
     padding: 8px;
     border-radius: 8px;
     margin: 4px;
+}
+
+.logout-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.logout-form button:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .intro0 {
@@ -97,7 +104,7 @@ spline-viewer {
     height: 450px;
     display: flex;
     align-items: center;
-    background-color: #5C68B2;
+    background-color: var(--mid);
 }
 
 .intro0>div {
@@ -120,7 +127,7 @@ spline-viewer {
 
 .intro1 {
     height: 1059px;
-    background: #202353;
+    background: var(--dark);
 }
 
 .intro1>.wrap>p {
@@ -159,7 +166,7 @@ spline-viewer {
 
 /* today 왼쪽 박스 버튼x */
 .today-box1 {
-    background: #5C68B2;
+    background: var(--mid);
 }
 
 .today-box1>.titlebox {
@@ -197,7 +204,7 @@ spline-viewer {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #9DB2F5;
+    background: var(--light);
 }
 
 .today-box2>.card {
@@ -211,7 +218,7 @@ spline-viewer {
     font-size: 24px;
     width: 100%;
     height: 450px;
-    background: #5C68B2;
+    background: var(--mid);
     border-radius: 16px 16px 0 0;
 }
 
@@ -232,17 +239,17 @@ spline-viewer {
 }
 
 /* 카드 하단 */
-.card-buttom {
+.card-bottom {
     border-radius: 0 0 16px 16px;
     width: 100%;
     height: 250px;
-    background: #202353;
+    background: var(--dark);
     position: relative;
 }
 
-.card-buttom>p {
+.card-bottom>p {
     font-weight: 100;
-    color: #FAE8D3;
+    color: var(--accent);
     font-size: 12px;
     text-align: center;
     padding-top: 80px;
@@ -256,7 +263,7 @@ spline-viewer {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 16px;
-    color: #FAE8D3;
+    color: var(--accent);
     border: 1px solid #FAE8D3;
     padding: 8px;
     border-radius: 50px;
@@ -273,7 +280,7 @@ li a:hover {
 /* 서비스 설명 */
 .intro2 {
     height: 1059px;
-    background: #202353;
+    background: var(--dark);
 }
 
 .intro2>.wrap>p {
@@ -313,7 +320,7 @@ li a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #9DB2F5;
+    background: var(--light);
 }
 
 /* 카드 */
@@ -324,56 +331,15 @@ li a:hover {
     cursor: pointer;
 }
 
-.community-box2>.card-top {
-    font-size: 24px;
-    width: 100%;
-    height: 450px;
-    background: #5C68B2;
-    border-radius: 16px 16px 0 0;
-}
-
-.community-box2 .fortune-title {
-    font-size: 28px;
-    line-height: 40px;
-    padding: 40px 0 10px;
-    padding-left: 20px;
-}
-
-.community-box2>.fortune-list {
-    margin-top: 30px;
-    padding-left: 20px;
-}
-
-.fortune-list>li {
-    padding: 16px 0;
-}
-
-/* 카드 하단 */
-.community-box2>.card-buttom {
-    border-radius: 0 0 16px 16px;
-    width: 100%;
-    height: 250px;
-    background: #202353;
-    position: relative;
-}
-
-.community-box2>.card-buttom>p {
-    font-weight: 100;
-    color: #FAE8D3;
-    font-size: 12px;
-    text-align: center;
-    padding-top: 80px;
-}
-
 /* 커뮤니티 버튼 */
-.community-buttom {
+.community-button {
     font-size: 20px;
     position: absolute;
     top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 16px;
-    color: #FAE8D3;
+    color: var(--accent);
     border: 1px solid #FAE8D3;
     padding: 8px;
     border-radius: 50px;
@@ -382,7 +348,7 @@ li a:hover {
 }
 
 .community-box1 {
-    background: #5C68B2;
+    background: var(--mid);
 }
 
 .community-box1>.titlebox {
@@ -434,7 +400,7 @@ header div {
 
 header a {
     font-size: 16px;
-    color: #FAE8D3;
+    color: var(--accent);
     padding: 8px;
     border-radius: 8px;
     margin: 4px;
@@ -505,10 +471,10 @@ header a:hover {
     .intro0>div,
     .intro1ImgBox,
     .intro2ImgBox {
-        width: 90% !important;
+        width: 90%;
         /* 화면의 90%만 차지하도록 유연하게 변경 */
-        max-width: none !important;
-        height: auto !important;
+        max-width: none;
+        height: auto;
     }
 
     /* 2. 섹션 높이 고정 해제 (내용이 넘치는 것 방지) */
@@ -518,30 +484,30 @@ header a:hover {
     .today,
     .intro2,
     .community {
-        height: auto !important;
+        height: auto;
         min-height: 100vh;
         padding: 5px 0;
     }
 
     .hero {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /* 3. 좌우 배치를 세로 배치로 전환 (Today, Community 섹션) */
     .today>.wrap,
     .community>.wrap {
-        display: flex !important;
-        flex-direction: column !important;
+        display: flex;
+        flex-direction: column;
         /* 세로 정렬 */
-        align-items: center !important;
+        align-items: center;
     }
 
     /* 4. 세로로 바뀐 박스들의 너비를 100%로 확장 */
     .today>.wrap>div,
     .community>.wrap>div {
-        width: 100% !important;
+        width: 100%;
         max-width: 500px;
         /* 너무 퍼지지 않게 적당히 제한 */
     }
@@ -550,17 +516,17 @@ header a:hover {
     .imgbox,
     .intro1ImgBox,
     .intro2ImgBox {
-        height: auto !important;
+        height: auto;
     }
 
     img:not(spline-viewer) {
-        max-width: 100% !important;
-        height: auto !important;
+        max-width: 100%;
+        height: auto;
     }
 
     /* 6. 고정되어 화면을 가리는 요소들 해제 */
     /* .header-logo, .header-menu {
-        position: static !important; /* fixed 해제 */
+        position: static; /* fixed 해제 */
     /* text-align: center;
         padding: 10px 0; */
     /* } */
@@ -574,49 +540,49 @@ header a:hover {
 
     /* 히어로 섹션 */
     .hero {
-        height: auto !important;
+        height: auto;
         min-height: 100vh;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .hero-content {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     .MainTitle {
-        position: static !important;
-        transform: none !important;
-        width: 90% !important;
-        max-width: 400px !important;
-        height: auto !important;
-        margin: 0 auto !important;
-        display: block !important;
-        left: auto !important;
-        top: auto !important;
-        object-fit: contain !important;
-        object-position: center center !important;
+        position: static;
+        transform: none;
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+        left: auto;
+        top: auto;
+        object-fit: contain;
+        object-position: center center;
     }
 
     /* 헤더 - 모바일에서 잘림 방지 */
     .header-bg {
-        display: block !important;
+        display: block;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
-        height: 42px !important;
+        height: 42px;
         background: rgba(16, 18, 38, 0.92);
         z-index: 100;
     }
 
     .header-logo {
-        position: fixed !important;
+        position: fixed;
         top: 10px;
         left: 10px;
         z-index: 200;
@@ -627,15 +593,15 @@ header a:hover {
     }
 
     .header-menu {
-        position: fixed !important;
+        position: fixed;
         top: 8px;
         right: 8px;
-        left: auto !important;
+        left: auto;
         z-index: 200;
     }
 
     .header-menu>div {
-        display: flex !important;
+        display: flex;
         gap: 2px;
         align-items: center;
         justify-content: flex-end;
@@ -643,21 +609,21 @@ header a:hover {
 
     .header-menu>div>a,
     .header-menu>div>form button {
-        font-size: 11px !important;
-        padding: 4px 5px !important;
+        font-size: 11px;
+        padding: 4px 5px;
         white-space: nowrap;
     }
 
     /* 인트로 섹션 */
     .intro0 {
-        height: auto !important;
+        height: auto;
         min-height: auto;
         padding: 40px 15px;
     }
 
     .intro0>div {
-        width: 100% !important;
-        line-height: 30px !important;
+        width: 100%;
+        line-height: 30px;
     }
 
     .intro0>div>p {
@@ -672,15 +638,15 @@ header a:hover {
     /* 서비스 설명 섹션들 */
     .intro1,
     .intro2 {
-        height: auto !important;
+        height: auto;
         min-height: auto;
         padding: 30px 0;
     }
 
     .intro1ImgBox {
-        width: 95% !important;
-        height: auto !important;
-        padding: 30px 0 !important;
+        width: 95%;
+        height: auto;
+        padding: 30px 0;
     }
 
     .intro1>.wrap>p,
@@ -693,26 +659,26 @@ header a:hover {
     /* Today / Community 섹션 */
     .today,
     .community {
-        height: auto !important;
+        height: auto;
         min-height: auto;
     }
 
     .today>.wrap,
     .community>.wrap {
-        flex-direction: column !important;
+        flex-direction: column;
     }
 
     .today>.wrap>div,
     .community>.wrap>div {
-        width: 100% !important;
-        max-width: none !important;
+        width: 100%;
+        max-width: none;
     }
 
     /* 제목 박스 */
     .titlebox>div {
-        width: 100% !important;
-        margin: 30px auto !important;
-        padding: 20px !important;
+        width: 100%;
+        margin: 30px auto;
+        padding: 20px;
     }
 
     .titlebox>div>p {
@@ -728,35 +694,35 @@ header a:hover {
     /* 이미지 박스 */
     .today-box1>.imgbox,
     .community-box1>.imgbox {
-        height: auto !important;
+        height: auto;
     }
 
     /* 카드 */
     .today-box2>.card,
     .community-box2>.card {
-        width: 90% !important;
-        height: auto !important;
+        width: 90%;
+        height: auto;
     }
 
     .card-top {
-        height: auto !important;
+        height: auto;
         padding-bottom: 30px;
     }
 
-    .card-buttom {
-        height: auto !important;
+    .card-bottom {
+        height: auto;
         padding: 30px 0;
     }
 
-    .card-buttom>p {
+    .card-bottom>p {
         padding-top: 0;
         margin-bottom: 15px;
     }
 
-    .community-buttom,
+    .community-button,
     .today-buttom {
-        position: static !important;
-        transform: none !important;
+        position: static;
+        transform: none;
         display: block;
         text-align: center;
         margin: 0 auto;
@@ -774,6 +740,6 @@ header a:hover {
 
     /* 푸터 */
     footer {
-        width: 100% !important;
+        width: 100%;
     }
 }
