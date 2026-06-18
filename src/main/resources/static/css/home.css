@@ -157,7 +157,6 @@ spline-viewer {
 
 .today>.wrap>div {
     width: 50%;
-    height: 100%;
 }
 
 .today>.wrap {
@@ -312,7 +311,6 @@ li a:hover {
 
 .community>.wrap>div {
     width: 50%;
-    height: 100%;
 }
 
 /* 커무니티 카드 */
