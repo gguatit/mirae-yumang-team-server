@@ -1,0 +1,92 @@
+// dbdiagram.io ERD for STARLOG
+// https://dbdiagram.io 에서 Import > Create From > DBML 로 불러오기
+
+Enum RecommendationType {
+  L [note: 'Like']
+  H [note: 'Hate']
+}
+
+Table users {
+  id bigint [pk, increment, note: 'PK']
+  username varchar(50) [not null, unique, note: '로그인 ID']
+  password varchar(255) [not null, note: 'BCrypt 해시']
+  email varchar(100) [not null]
+  bio text [note: '자기소개']
+  profile_image_path varchar(255) [note: '프로필 이미지 경로']
+  created_at timestamp [not null, note: '가입일']
+}
+
+Table posts {
+  id bigint [pk, increment, note: 'PK']
+  title varchar(200) [not null]
+  content text [not null]
+  user_id bigint [not null, note: 'FK → users.id']
+  created_at timestamp [not null]
+  updated_at timestamp
+  view_count int [default: 0]
+  like_count int [default: 0]
+  hate_count int [default: 0]
+  file_name varchar(255) [note: '첨부파일명']
+
+  indexes {
+    (user_id) [name: 'idx_post_user']
+    (created_at) [name: 'idx_post_created']
+    (like_count) [name: 'idx_post_like']
+  }
+}
+
+Table post_images {
+  id bigint [pk, increment, note: 'PK']
+  file_name varchar(255) [note: '저장된 파일명']
+  file_path varchar(255) [note: '브라우저 접근 경로']
+  post_id bigint [note: 'FK → posts.id']
+
+  indexes {
+    (post_id) [name: 'idx_image_post']
+  }
+}
+
+Table comments {
+  id bigint [pk, increment, note: 'PK']
+  content text [not null]
+  post_id bigint [not null, note: 'FK → posts.id']
+  user_id bigint [not null, note: 'FK → users.id']
+  parent_id bigint [note: 'FK → comments.id (대댓글)']
+  created_at timestamp [not null]
+
+  indexes {
+    (post_id) [name: 'idx_comment_post']
+    (user_id) [name: 'idx_comment_user']
+    (parent_id) [name: 'idx_comment_parent']
+  }
+}
+
+Table lh {
+  id bigint [pk, increment, note: 'PK']
+  user_id bigint [note: 'FK → users.id']
+  post_id bigint [note: 'FK → posts.id']
+  type RecommendationType [not null, note: 'L=Like, H=Hate']
+  created_at timestamp
+
+  indexes {
+    (user_id, post_id) [unique, name: 'uq_lh_user_post']
+    (post_id, type) [name: 'idx_lh_post_type']
+  }
+}
+
+Table login_attempts {
+  id bigint [pk, increment, note: 'PK']
+  client_key varchar(255) [not null, unique, note: 'IP + User-Agent']
+  attempts int [not null, default: 0]
+  lock_until timestamp [note: '잠금 해제 시각']
+  last_attempt_at timestamp [not null]
+}
+
+// 참조 관계 (FK)
+Ref: posts.user_id > users.id
+Ref: post_images.post_id > posts.id
+Ref: comments.post_id > posts.id
+Ref: comments.user_id > users.id
+Ref: comments.parent_id > comments.id  // 대댓글 (셀프 참조)
+Ref: lh.user_id > users.id
+Ref: lh.post_id > posts.id
