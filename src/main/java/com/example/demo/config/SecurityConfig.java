@@ -38,12 +38,14 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/school"),
                                 // 게시글 목록/상세 (조회)
                                 new AntPathRequestMatcher("/posts"),
-                                new AntPathRequestMatcher("/posts/{id:[\\d]+}"),
-                                new AntPathRequestMatcher("/posts/api/new"),
-                                new AntPathRequestMatcher("/posts/api/best"),
+                                new AntPathRequestMatcher("/posts/**"),
+                                new AntPathRequestMatcher("/comments/**"),
+                                new AntPathRequestMatcher("/mypage"),
+                                new AntPathRequestMatcher("/mypage/**"),
+                                new AntPathRequestMatcher("/auth/**"),
                                 new AntPathRequestMatcher("/h2-console/**")
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 // 인증되지 않은 사용자가 보호 라우트 접근 시 /auth/login으로 리다이렉트
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -65,14 +67,14 @@ public class SecurityConfig {
                                 .maxAgeInSeconds(31536000))
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives(
-                                        "default-src 'self'; " +
-                                        "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh unpkg.com challenges.cloudflare.com; " +
-                                        "style-src 'self' 'unsafe-inline'; " +
-                                        "img-src 'self' data: blob: app.spline.design prod.spline.design; " +
-                                        "font-src 'self' cdn.jsdelivr.net; " +
-                                        "connect-src 'self' cloudflareinsights.com esm.sh prod.spline.design app.spline.design challenges.cloudflare.com; " +
-                                        "frame-src 'self' challenges.cloudflare.com; " +
-                                        "frame-ancestors 'self'"))
+                                "default-src 'self'; " +
+                                "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh unpkg.com challenges.cloudflare.com; " +
+                                "style-src 'self' 'unsafe-inline' cdn.jsdelivr.net; " +
+                                "img-src 'self' data: blob: app.spline.design prod.spline.design https://starlog.c01.kr; " +
+                                "font-src 'self' cdn.jsdelivr.net https://cdn.jsdelivr.net; " +
+                                "connect-src 'self' https://starlog.c01.kr http://starlog.c01.kr cloudflareinsights.com esm.sh prod.spline.design app.spline.design challenges.cloudflare.com; " +
+                                "frame-src 'self' challenges.cloudflare.com; " +
+                                "frame-ancestors 'self'"))
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
