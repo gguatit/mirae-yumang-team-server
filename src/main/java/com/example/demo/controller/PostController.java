@@ -160,9 +160,9 @@ public class PostController {
                         return "post-write";
                     }
                     
-                    // 파일 크기 추가 검증 (250MB)
-                    if (file.getSize() > 250 * 1024 * 1024) {
-                        model.addAttribute("error", "파일 크기는 250MB를 초과할 수 없습니다.");
+                    // 파일 크기 추가 검증 (100MB — Cloudflare Free 한계)
+                    if (file.getSize() > 100 * 1024 * 1024) {
+                        model.addAttribute("error", "파일 크기는 100MB를 초과할 수 없습니다.");
                         return "post-write";
                     }
                     
@@ -371,8 +371,8 @@ public class PostController {
                             model.addAttribute("post", post);
                             return "post-edit";
                         }
-                        if (file.getSize() > 250 * 1024 * 1024) {
-                            model.addAttribute("error", "파일 크기는 250MB를 초과할 수 없습니다.");
+                        if (file.getSize() > 100 * 1024 * 1024) {
+                            model.addAttribute("error", "파일 크기는 100MB를 초과할 수 없습니다.");
                             Post post = postService.getPostById(id);
                             model.addAttribute("post", post);
                             return "post-edit";
