@@ -71,8 +71,16 @@
                     style="text-align: center; margin-bottom: 20px;">
 
                     <div th:each="img : ${post.images}" style="margin-bottom: 15px;">
-                        <img th:src="${img.filePath}" alt="게시글 이미지"
+                        <img th:if="${#strings.contains(img.fileName, '.jpg') or #strings.contains(img.fileName, '.jpeg') or #strings.contains(img.fileName, '.png') or #strings.contains(img.fileName, '.gif') or #strings.contains(img.fileName, '.webp') or #strings.contains(img.fileName, '.bmp') or #strings.contains(img.fileName, '.svg')}"
+                            th:src="${img.filePath}" alt="게시글 이미지"
                             style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                        <a th:unless="${#strings.contains(img.fileName, '.jpg') or #strings.contains(img.fileName, '.jpeg') or #strings.contains(img.fileName, '.png') or #strings.contains(img.fileName, '.gif') or #strings.contains(img.fileName, '.webp') or #strings.contains(img.fileName, '.bmp') or #strings.contains(img.fileName, '.svg')}"
+                            th:href="${img.filePath}" th:download="${img.fileName}"
+                            style="display: inline-flex; align-items: center; gap: 10px; padding: 12px 20px; background: rgba(157, 178, 245, 0.15); border: 1px solid rgba(157, 178, 245, 0.3); border-radius: 10px; color: #C7D7F9; text-decoration: none; font-size: 16px;">
+                            <span style="font-size: 24px;">📎</span>
+                            <span th:text="${img.fileName}">filename.ext</span>
+                            <span style="font-size: 13px; color: #9DB2F5;">다운로드</span>
+                        </a>
                     </div>
                 </div>
             </div>
