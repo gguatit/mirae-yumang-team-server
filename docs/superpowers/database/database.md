@@ -13,6 +13,10 @@
 
 ## Entity Relationship Diagram
 
+![STARLOG ERD](./starlog-erd.png)
+
+### ASCII Diagram
+
 ```
 ┌──────────────────────────┐
 │         users            │
