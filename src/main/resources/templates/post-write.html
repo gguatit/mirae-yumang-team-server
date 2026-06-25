@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <link rel="icon" type="image/png" href="/static/images/logo-rounded.png">
   <title>글쓰기</title>
   <link rel="stylesheet" href="/static/css/reset.css">
@@ -56,12 +58,20 @@
 
         <div class="tmp">
           <div class="form-group">
-            <label style="color: #C7D7F9; display: block; margin-bottom: 10px;">이미지 첨부</label>
-            <input type="file" name="imageFile" accept="image/*" multiple style="color: #C7D7F9;">
+            <label style="color: #C7D7F9; display: block; margin-bottom: 10px;">파일 첨부 (최대 250MB)</label>
+            <input type="file" name="imageFile" multiple style="color: #C7D7F9;">
+          </div>
+
+          <div class="upload-progress" id="uploadProgress" hidden>
+            <div class="upload-track">
+              <div class="upload-fill" id="uploadFill"></div>
+            </div>
+            <span class="upload-pct" id="uploadPct">0%</span>
+            <span class="upload-status" id="uploadStatus">업로드 준비 중...</span>
           </div>
 
           <div class="button-group">
-            <button type="submit">작성완료</button>
+            <button type="submit" id="submitBtn">작성완료</button>
             <a href="/posts" class="btn-cancel">취소</a>
           </div>
         </div>
@@ -71,6 +81,12 @@
   </div>
 
   </div>
+  <script src="/static/js/upload-progress.js"></script>
+  <script>
+    if (typeof attachUploadProgress === 'function') {
+      attachUploadProgress('form[action$="/posts/write"]', 'uploadProgress', 'submitBtn');
+    }
+  </script>
 </body>
 
 </html>

@@ -777,3 +777,38 @@ header a:hover {
         width: 100%;
     }
 }
+
+/* 업로드 진행률 바 */
+.upload-progress {
+    margin-top: 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text);
+    font-size: 14px;
+}
+.upload-track {
+    flex: 1;
+    height: 10px;
+    background: var(--darker);
+    border: 1px solid var(--mid);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.upload-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--mid), var(--light));
+    transition: width 0.15s linear;
+    box-shadow: 0 0 12px rgba(157, 178, 245, 0.4);
+}
+.upload-pct {
+    min-width: 42px;
+    text-align: right;
+    color: var(--text);
+    font-weight: 600;
+}
+.upload-status {
+    color: var(--sky);
+    min-width: 100px;
+}

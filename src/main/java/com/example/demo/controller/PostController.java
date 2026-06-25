@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -49,14 +48,6 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
-
-    // 허용된 이미지 확장자 (보안)
-    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(
-            "jpg", "jpeg", "png", "gif", "webp");
-
-    // 허용된 MIME 타입 (보안 강화)
-    private static final Set<String> ALLOWED_MIME_TYPES = Set.of(
-            "image/jpeg", "image/png", "image/gif", "image/webp");
 
     private final PostService postService;
     private final LhService lhService;
@@ -169,30 +160,20 @@ public class PostController {
                         return "post-write";
                     }
                     
-                    // 파일 크기 추가 검증 (10MB)
-                    if (file.getSize() > 10 * 1024 * 1024) {
-                        model.addAttribute("error", "파일 크기는 10MB를 초과할 수 없습니다.");
+                    // 파일 크기 추가 검증 (250MB)
+                    if (file.getSize() > 250 * 1024 * 1024) {
+                        model.addAttribute("error", "파일 크기는 250MB를 초과할 수 없습니다.");
                         return "post-write";
                     }
                     
-                    String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
-
-                    // 파일 확장자 검증
-                    if (!ALLOWED_EXTENSIONS.contains(extension)) {
-                        model.addAttribute("error", "허용되지 않는 파일 형식입니다. (jpg, png, gif, webp만 가능)");
-                        return "post-write";
-                    }
-
-                    // MIME 타입 검증 (강화)
-                    String mimeType = file.getContentType();
-                    if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
-                        log.error("유효하지 않은 MIME 타입: {} (파일: {})", mimeType, originalFilename);
-                        model.addAttribute("error", "유효하지 않은 파일 형식입니다. 실제 이미지 파일만 업로드 가능합니다.");
-                        return "post-write";
+                    String extension = "";
+                    int dotIdx = originalFilename.lastIndexOf(".");
+                    if (dotIdx >= 0) {
+                        extension = originalFilename.substring(dotIdx + 1).toLowerCase();
                     }
 
                     String uuid = UUID.randomUUID().toString();
-                    String fileName = uuid + "." + extension;
+                    String fileName = extension.isEmpty() ? uuid : uuid + "." + extension;
 
                     file.transferTo(new File(folder, fileName));
 
@@ -384,34 +365,25 @@ public class PostController {
                 for (MultipartFile file : imageFiles) {
                     if (file != null && !file.isEmpty()) {
                         String originalFilename = file.getOriginalFilename();
-                        if (originalFilename == null || originalFilename.trim().isEmpty() || !originalFilename.contains(".")) {
+                        if (originalFilename == null || originalFilename.trim().isEmpty()) {
                             model.addAttribute("error", "유효하지 않은 파일명입니다.");
                             Post post = postService.getPostById(id);
                             model.addAttribute("post", post);
                             return "post-edit";
                         }
-                        if (file.getSize() > 10 * 1024 * 1024) {
-                            model.addAttribute("error", "파일 크기는 10MB를 초과할 수 없습니다.");
+                        if (file.getSize() > 250 * 1024 * 1024) {
+                            model.addAttribute("error", "파일 크기는 250MB를 초과할 수 없습니다.");
                             Post post = postService.getPostById(id);
                             model.addAttribute("post", post);
                             return "post-edit";
                         }
-                        String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
-                        if (!ALLOWED_EXTENSIONS.contains(extension)) {
-                            model.addAttribute("error", "허용되지 않는 파일 형식입니다. (jpg, png, gif, webp만 가능)");
-                            Post post = postService.getPostById(id);
-                            model.addAttribute("post", post);
-                            return "post-edit";
-                        }
-                        String mimeType = file.getContentType();
-                        if (mimeType == null || !ALLOWED_MIME_TYPES.contains(mimeType)) {
-                            model.addAttribute("error", "유효하지 않은 파일 형식입니다.");
-                            Post post = postService.getPostById(id);
-                            model.addAttribute("post", post);
-                            return "post-edit";
+                        String extension = "";
+                        int dotIdx = originalFilename.lastIndexOf(".");
+                        if (dotIdx >= 0) {
+                            extension = originalFilename.substring(dotIdx + 1).toLowerCase();
                         }
                         String uuid = UUID.randomUUID().toString();
-                        String fileName = uuid + "." + extension;
+                        String fileName = extension.isEmpty() ? uuid : uuid + "." + extension;
                         file.transferTo(new File(folder, fileName));
                         newFileNames.add(fileName);
                         newFilePaths.add("/upload/" + fileName);
