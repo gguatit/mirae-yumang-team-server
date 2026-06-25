@@ -42,6 +42,7 @@ async function handleLikeHate(postId, type) {
 
 function toggleReplyForm(commentId) {
     const form = document.getElementById('reply-form-' + commentId);
+    if (!form) return;
     form.style.display = form.style.display === 'none' ? 'block' : 'none';
 }
 
@@ -79,6 +80,77 @@ async function submitComment(event, form) {
     return false;
 }
 
+function escapeHtml(text) {
+    if (text == null) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function getPostId() {
+    const body = document.body;
+    const fromAttr = body.dataset.postId;
+    if (fromAttr) return parseInt(fromAttr, 10);
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const idx = parts.indexOf('posts');
+    if (idx >= 0 && parts.length > idx + 1) {
+        const parsed = parseInt(parts[idx + 1], 10);
+        if (!isNaN(parsed)) return parsed;
+    }
+    return null;
+}
+
+function buildReplyFormHtml(commentId) {
+    const postId = getPostId();
+    return `
+        <div id="reply-form-${commentId}" style="display: none; margin: 10px 0 10px 20px;">
+            <form action="/posts/${postId}/comments" method="post" onsubmit="return submitComment(event, this)">
+                <input type="hidden" name="parentId" value="${commentId}">
+                <textarea name="content" class="comment-textarea" placeholder="대댓글을 입력하세요" required></textarea>
+                <button type="submit">등록</button>
+            </form>
+        </div>
+    `;
+}
+
+function buildCommentNode(comment) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'comment-item';
+    wrapper.dataset.commentId = comment.id;
+
+    const strong = document.createElement('strong');
+    strong.textContent = comment.username;
+
+    const timeSpan = document.createElement('span');
+    timeSpan.style.fontSize = '12px';
+    timeSpan.textContent = '방금 전';
+
+    const contentP = document.createElement('p');
+    contentP.textContent = comment.content;
+
+    const replyButton = document.createElement('button');
+    replyButton.type = 'button';
+    replyButton.className = 'btn-reply';
+    replyButton.textContent = '[답글 달기]';
+    replyButton.addEventListener('click', () => toggleReplyForm(comment.id));
+
+    wrapper.appendChild(strong);
+    wrapper.appendChild(timeSpan);
+    wrapper.appendChild(contentP);
+    wrapper.appendChild(replyButton);
+
+    const replyFormHost = document.createElement('div');
+    replyFormHost.innerHTML = buildReplyFormHtml(comment.id);
+    while (replyFormHost.firstChild) {
+        wrapper.appendChild(replyFormHost.firstChild);
+    }
+
+    return wrapper;
+}
+
 function appendComment(comment) {
     const commentList = document.querySelector('.comment-list');
 
@@ -89,36 +161,56 @@ function appendComment(comment) {
 
     if (comment.parentId) {
         const parentForm = document.getElementById('reply-form-' + comment.parentId);
-        parentForm.closest('.comment-item').insertAdjacentHTML('beforeend', `
-            <div class="reply-item" style="margin-left: 30px; margin-top: 10px; border-left: 2px solid #444; padding-left: 15px;">
-                <span style="color: #888;">ㄴ</span>
-                <strong>${comment.username}</strong>
-                <span style="font-size: 12px;">방금 전</span>
-                <p>${comment.content}</p>
-            </div>
-        `);
+        if (!parentForm) {
+            console.error('대댓글 부모 폼을 찾을 수 없습니다:', comment.parentId);
+            return;
+        }
+        const parentItem = parentForm.closest('.comment-item');
+        if (!parentItem) {
+            console.error('대댓글 부모 항목을 찾을 수 없습니다:', comment.parentId);
+            return;
+        }
+
+        const replyItem = document.createElement('div');
+        replyItem.className = 'reply-item';
+        replyItem.style.marginLeft = '30px';
+        replyItem.style.marginTop = '10px';
+        replyItem.style.borderLeft = '2px solid #444';
+        replyItem.style.paddingLeft = '15px';
+
+        const arrow = document.createElement('span');
+        arrow.style.color = '#888';
+        arrow.textContent = 'ㄴ';
+
+        const strong = document.createElement('strong');
+        strong.textContent = comment.username;
+
+        const timeSpan = document.createElement('span');
+        timeSpan.style.fontSize = '12px';
+        timeSpan.textContent = '방금 전';
+
+        const contentP = document.createElement('p');
+        contentP.textContent = comment.content;
+
+        replyItem.appendChild(arrow);
+        replyItem.appendChild(document.createTextNode(' '));
+        replyItem.appendChild(strong);
+        replyItem.appendChild(timeSpan);
+        replyItem.appendChild(contentP);
+
+        parentItem.appendChild(replyItem);
     } else {
-        const commentHtml = `
-            <div class="comment-item">
-                <strong>${comment.username}</strong>
-                <span style="font-size: 12px;">방금 전</span>
-                <p>${comment.content}</p>
-                <button type="button" onclick="toggleReplyForm(${comment.id})" 
-                        class="btn-reply">[답글 달기]</button>
-                <div id="reply-form-${comment.id}" style="display: none; margin: 10px 0 10px 20px;">
-                    <form action="/posts/${window.location.pathname.split('/').pop()}/comments" method="post" onsubmit="return submitComment(event, this)">
-                        <input type="hidden" name="parentId" value="${comment.id}">
-                        <textarea name="content" class="comment-textarea" placeholder="대댓글을 입력하세요" required></textarea>
-                        <button type="submit">등록</button>
-                    </form>
-                </div>
-            </div>
-        `;
-        commentList.insertAdjacentHTML('beforeend', commentHtml);
+        const commentNode = buildCommentNode(comment);
+        commentList.appendChild(commentNode);
     }
 
     const countSpan = document.querySelector('.comment-list h3 span');
-    if (countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
+    if (countSpan) {
+        const current = parseInt(countSpan.textContent, 10);
+        if (!isNaN(current)) {
+            countSpan.textContent = current + 1;
+        }
+    }
 }
 
 // textarea 자동 높이 조절 (내용/줄바꿈 기준)

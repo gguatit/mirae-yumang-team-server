@@ -20,6 +20,16 @@ function matchesQuery(text, query) {
 const allRows = Array.from(document.querySelectorAll('.post-table tbody tr'));
 const searchInput = document.getElementById('searchInput');
 
+// 행 클릭 → 상세 페이지 (서버 렌더링된 기존 행)
+allRows.forEach(row => {
+    const postId = row.dataset.postId;
+    if (postId) {
+        row.addEventListener('click', () => {
+            window.location.href = '/posts/' + postId;
+        });
+    }
+});
+
 if (searchInput) {
     searchInput.addEventListener('input', () => {
         const query = searchInput.value.trim();
@@ -49,12 +59,15 @@ if (currentPage === 0 && !hasKeyword) {
                 const tbody = document.querySelector('.post-table tbody');
                 if (tbody) {
                     newPosts.reverse().forEach(post => {
-                        const existingRow = document.querySelector(`tr[onclick*="id=${post.id}"]`);
+                        const existingRow = document.querySelector(`tr[data-post-id="${post.id}"]`);
                         if (existingRow) return;
 
                         const row = document.createElement('tr');
                         row.style.cursor = 'pointer';
-                        row.setAttribute('onclick', `location.href='/posts/${post.id}'`);
+                        row.dataset.postId = post.id;
+                        row.addEventListener('click', () => {
+                            window.location.href = '/posts/' + post.id;
+                        });
                         row.style.backgroundColor = '#f0f8ff';
 
                         const createdAt = new Date(post.createdAt);

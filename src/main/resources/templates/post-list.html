@@ -88,7 +88,7 @@
                         </thead>
                         <tbody>
                             <tr th:each="post, iterStat : ${postsPage.content}"
-                                th:onclick="|location.href='@{/posts/{id}(id=${post.id})}'|" style="cursor:pointer;">
+                                th:attr="data-post-id=${post.id}" style="cursor:pointer;">
                                 <td class="col-id" th:text="${currentPage * 10 + iterStat.count}"></td>
                                 <td class="col-title">
                                     <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}"

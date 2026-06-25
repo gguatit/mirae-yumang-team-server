@@ -14,7 +14,7 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 
-<body>
+<body th:attr="data-post-id=${post.id}">
     <header class="school-header">
         <div class="wrap">
             <div class="header-top">
