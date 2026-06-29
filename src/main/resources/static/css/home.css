@@ -576,9 +576,10 @@ header a:hover {
         display: none;
     }
 
-    /* perspective/overflow가 있으면 자식의 position: fixed가 부모에 갇힘 → 해제 */
+    /* perspective/transform/overflow가 있으면 자식의 position: fixed가 부모에 갇힘 → 해제 */
     .hero {
         perspective: none;
+        transform: none;
         overflow: visible;
     }
 
@@ -586,6 +587,7 @@ header a:hover {
         position: fixed;
         top: 0;
         left: 0;
+        right: 0;
         width: 100%;
         background: rgba(16, 18, 38, 0.92);
         padding: 10px 0;
