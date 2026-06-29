@@ -536,6 +536,37 @@ header a:hover {
         height: auto;
         margin: 0 auto;
     }
+
+    /* 별/별자리 배경: 미디어쿼리 안에서 stacking context 변동 보정 */
+    #star-canvas,
+    #constellation-svg {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+    }
+
+    #star-canvas {
+        z-index: -1;
+    }
+
+    #constellation-svg {
+        z-index: 0;
+    }
+
+    .hero::after {
+        z-index: -1;
+    }
+
+    .hero::before {
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
 }
 
 /* ===== 태블릿 세로 (≤ 1023px) ===== */
