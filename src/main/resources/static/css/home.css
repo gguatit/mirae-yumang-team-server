@@ -567,10 +567,38 @@ header a:hover {
         padding: 6px 8px;
     }
 
-    /* nav(z:150) 위에 logo/menu가 떠야 클릭 가능 */
+    /* nav(z:150) 위에 logo/menu가 떠야 클릭 가능 + 같은 row에 수직 정렬 */
     .header-logo,
     .header-menu {
         z-index: 200;
+        top: 10px;
+    }
+
+    .header-logo {
+        left: 12px;
+    }
+
+    .header-menu {
+        right: 10px;
+    }
+
+    .header-logo a {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+
+    .header-menu>div {
+        display: flex;
+        gap: 2px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .header-menu>div>a,
+    .header-menu>div>form button {
+        font-size: 13px;
+        padding: 6px 8px;
+        white-space: nowrap;
     }
 
     .header-bg {
