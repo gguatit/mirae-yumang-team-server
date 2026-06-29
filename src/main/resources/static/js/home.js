@@ -3,7 +3,46 @@ gsap.registerPlugin(ScrollTrigger, SplitText);
 function initAnimations() {
     var mm = gsap.matchMedia();
 
-    mm.add("(prefers-reduced-motion: no-preference)", function () {
+    // 모바일/태블릿: 영웅 진입 + 가벼운 페이드인만, 스크롤 패럴럭스 제거
+    mm.add("(max-width: 1023px) and (prefers-reduced-motion: no-preference)", function () {
+        var heroTL = gsap.timeline({ defaults: { ease: "power4.out" } });
+        heroTL
+            .from("header a", {
+                y: -20, opacity: 0,
+                stagger: 0.06, duration: 0.7,
+            })
+            .from(".MainTitle", {
+                scale: 0.6, opacity: 0,
+                duration: 1.2, ease: "power3.out",
+            }, "-=0.3")
+            .from(".header-menu > div > *", {
+                y: 16, opacity: 0,
+                stagger: 0.06, duration: 0.5,
+            }, "-=0.5");
+
+        var introP = document.querySelector(".intro0 p");
+        if (introP) {
+            var split = SplitText.create(introP, { type: "words" });
+            gsap.from(split.words, {
+                y: 20, opacity: 0,
+                stagger: 0.03,
+                duration: 0.5,
+                ease: "power2.out",
+                scrollTrigger: {
+                    trigger: ".intro0",
+                    start: "top 85%",
+                    once: true,
+                },
+            });
+        }
+
+        return function () {
+            mm.revert();
+        };
+    });
+
+    // 데스크탑: 풀 애니메이션
+    mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", function () {
 
         // --- Dramatic hero entry (scale 0.4 → 1) ---
         var heroTL = gsap.timeline({ defaults: { ease: "power4.out" } });

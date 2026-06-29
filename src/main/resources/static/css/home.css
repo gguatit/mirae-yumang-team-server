@@ -419,8 +419,10 @@ li a:hover {
 }
 
 footer {
-    width: 1440px;
+    width: 100%;
+    max-width: 1440px;
     height: 120px;
+    margin: 0 auto;
     background: #484848;
 }
 
@@ -472,46 +474,18 @@ header a:hover {
     display: none;
 }
 
-@media screen and (max-width: 1200px) {
+/* ===== 태블릿 가로 / 작은 노트북 (≤ 1279px) ===== */
+@media screen and (max-width: 1279px) {
 
-    header {
-        position: fixed;
-        bottom: 0%;
-        left: 0%;
-        background: rgba(16, 18, 38, 0.8);
-        padding: 10px 0 10px 0;
-        z-index: 10;
-    }
-
-    #star-canvas {
-        position: fixed;
-    }
-
-    .MainTitle {
-        position: static;
-        transform: none;
-        width: 60%;
-        max-width: 600px;
-        height: auto;
-        margin: 0 auto;
-    }
-
-    .header-bg {
-        display: block;
-    }
-
-    /* 1. 전체 레이아웃의 고정 너비 해제 */
     .wrap,
     .intro0>div,
     .intro1ImgBox,
     .intro2ImgBox {
         width: 90%;
-        /* 화면의 90%만 차지하도록 유연하게 변경 */
         max-width: none;
         height: auto;
     }
 
-    /* 2. 섹션 높이 고정 해제 (내용이 넘치는 것 방지) */
     section,
     .hero,
     .intro1,
@@ -529,24 +503,20 @@ header a:hover {
         justify-content: center;
     }
 
-    /* 3. 좌우 배치를 세로 배치로 전환 (Today, Community 섹션) */
     .today>.wrap,
     .community>.wrap {
         display: flex;
         flex-direction: column;
-        /* 세로 정렬 */
         align-items: center;
+        gap: 24px;
     }
 
-    /* 4. 세로로 바뀐 박스들의 너비를 100%로 확장 */
     .today>.wrap>div,
     .community>.wrap>div {
         width: 100%;
-        max-width: 500px;
-        /* 너무 퍼지지 않게 적당히 제한 */
+        max-width: 640px;
     }
 
-    /* 5. 이미지 크기 자동 조절 */
     .imgbox,
     .intro1ImgBox,
     .intro2ImgBox {
@@ -558,18 +528,43 @@ header a:hover {
         height: auto;
     }
 
-    /* 6. 고정되어 화면을 가리는 요소들 해제 */
-    /* .header-logo, .header-menu {
-        position: static; /* fixed 해제 */
-    /* text-align: center;
-        padding: 10px 0; */
-    /* } */
+    .MainTitle {
+        position: static;
+        transform: none;
+        width: 60%;
+        max-width: 600px;
+        height: auto;
+        margin: 0 auto;
+    }
 }
 
-/* ===== 모바일 반응형 (768px 이하) ===== */
-@media screen and (max-width: 768px) {
+/* ===== 태블릿 세로 (≤ 1023px) ===== */
+@media screen and (max-width: 1023px) {
+
+    .header-bg {
+        display: block;
+    }
+
+    header {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background: rgba(16, 18, 38, 0.92);
+        padding: 10px 0;
+        z-index: 50;
+    }
+
+    .MainTitle {
+        width: 70%;
+        max-width: 460px;
+    }
+}
+
+/* ===== 모바일 (≤ 767px) ===== */
+@media screen and (max-width: 767px) {
     body {
         font-size: 16px;
+        line-height: 1.6;
     }
 
     /* 히어로 섹션 */
@@ -592,8 +587,8 @@ header a:hover {
     .MainTitle {
         position: static;
         transform: none;
-        width: 90%;
-        max-width: 400px;
+        width: 85%;
+        max-width: 360px;
         height: auto;
         margin: 0 auto;
         display: block;
@@ -674,7 +669,7 @@ header a:hover {
     .intro2 {
         height: auto;
         min-height: auto;
-        padding: 30px 0;
+        padding: 40px 0;
     }
 
     .intro1ImgBox {
@@ -700,6 +695,7 @@ header a:hover {
     .today>.wrap,
     .community>.wrap {
         flex-direction: column;
+        gap: 16px;
     }
 
     .today>.wrap>div,
@@ -734,7 +730,7 @@ header a:hover {
     /* 카드 */
     .today-box2>.card,
     .community-box2>.card {
-        width: 90%;
+        width: 92%;
         height: auto;
     }
 
@@ -771,10 +767,16 @@ header a:hover {
         font-size: 13px;
         padding: 6px;
     }
+}
 
-    /* 푸터 */
-    footer {
-        width: 100%;
+/* ===== 터치 디바이스 hover 비활성화 ===== */
+@media (hover: none) {
+    .header-menu>div>a:hover,
+    .header-menu>div>form button:hover,
+    header a:hover,
+    li a:hover {
+        color: inherit;
+        background: transparent;
     }
 }
 
