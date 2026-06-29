@@ -1,7 +1,4 @@
 import * as THREE from 'three';
-import { Line2 } from 'three/addons/lines/Line2.js';
-import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
-import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
@@ -108,7 +105,7 @@ var material = new THREE.ShaderMaterial({
 var stars = new THREE.Points(geometry, material);
 scene.add(stars);
 
-// --- Shooting stars with Line2 trails (thick glowing streaks, not dots) ---
+// --- Shooting stars: glowing head sprite + dotted trail (THREE.Points) ---
 var METEOR_COUNT = 4;
 var TRAIL_LEN = 32;
 var meteorCanv = document.createElement('canvas');
@@ -124,7 +121,6 @@ mctx.fillStyle = grd;
 mctx.fillRect(0, 0, 64, 64);
 var glowTex = new THREE.CanvasTexture(meteorCanv);
 
-var trailMaterials = [];
 var meteors = [];
 
 for (var mi = 0; mi < METEOR_COUNT; mi++) {
@@ -140,32 +136,59 @@ for (var mi = 0; mi < METEOR_COUNT; mi++) {
     spr.scale.set(0, 0, 1);
     scene.add(spr);
 
-    // Trail line (Line2 = thick line with per-vertex color fade)
-    var lineGeo = new LineGeometry();
-    lineGeo.setPositions(new Float32Array(TRAIL_LEN * 3));
-    lineGeo.setColors(new Float32Array(TRAIL_LEN * 3));
+    // Trail dots (THREE.Points) — 32개 도트가 머리(크고 밝음)에서 꼬리(작고 어두움)로 페이드
+    var trailGeo = new THREE.BufferGeometry();
+    var tPos = new Float32Array(TRAIL_LEN * 3);
+    var tCol = new Float32Array(TRAIL_LEN * 3);
+    var tSize = new Float32Array(TRAIL_LEN);
+    trailGeo.setAttribute('position', new THREE.BufferAttribute(tPos, 3));
+    trailGeo.setAttribute('aColor', new THREE.BufferAttribute(tCol, 3));
+    trailGeo.setAttribute('aSize', new THREE.BufferAttribute(tSize, 1));
 
-    var lineMat = new LineMaterial({
-        color: 0xffffff,
-        vertexColors: true,
-        linewidth: 5,
+    // Per-vertex color/size driven by ShaderMaterial (rounded glow point)
+    var trailMat = new THREE.ShaderMaterial({
+        uniforms: {
+            uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        },
+        vertexShader: [
+            'attribute vec3 aColor;',
+            'attribute float aSize;',
+            'uniform float uPixelRatio;',
+            'varying vec3 vColor;',
+            'void main() {',
+            '    vColor = aColor;',
+            '    vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+            '    gl_Position = projectionMatrix * mv;',
+            '    gl_PointSize = aSize * uPixelRatio * (300.0 / -mv.z);',
+            '}',
+        ].join('\n'),
+        fragmentShader: [
+            'varying vec3 vColor;',
+            'void main() {',
+            '    float d = distance(gl_PointCoord, vec2(0.5));',
+            '    if (d > 0.5) discard;',
+            '    float a = 1.0 - smoothstep(0.0, 0.5, d);',
+            '    a = pow(a, 1.8);',
+            '    gl_FragColor = vec4(vColor, a);',
+            '}',
+        ].join('\n'),
         transparent: true,
-        opacity: 0.9,
-        blending: THREE.AdditiveBlending,
         depthWrite: false,
-        resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
+        blending: THREE.AdditiveBlending,
     });
 
-    var line = new Line2(lineGeo, lineMat);
-    line.visible = false;
-    scene.add(line);
-
-    trailMaterials.push(lineMat);
+    var trailPoints = new THREE.Points(trailGeo, trailMat);
+    trailPoints.visible = false;
+    trailPoints.frustumCulled = false;
+    scene.add(trailPoints);
 
     meteors.push({
         sprite: spr,
-        line: line,
-        lineGeo: lineGeo,
+        trailPoints: trailPoints,
+        trailGeo: trailGeo,
+        tPos: tPos,
+        tCol: tCol,
+        tSize: tSize,
         active: false,
         life: 0,
         maxLife: 0.9 + Math.random() * 0.6,
@@ -195,6 +218,7 @@ function spawnMeteor() {
             m.trail = [];
             m.sprite.visible = true;
             m.sprite.material.opacity = 0;
+            m.trailPoints.visible = false;
             return;
         }
     }
@@ -210,7 +234,8 @@ function updateMeteors(delta) {
     for (var i = 0; i < meteors.length; i++) {
         var m = meteors[i];
         if (!m.active) {
-            m.line.visible = false;
+            m.trailPoints.visible = false;
+            m.sprite.visible = false;
             continue;
         }
 
@@ -230,44 +255,41 @@ function updateMeteors(delta) {
         m.sprite.scale.set(size, size, 1);
         m.sprite.material.opacity = opacity;
 
-        // Trail
+        // Trail dots: 머리에서 꼬리로 갈수록 작고 어둡게
         m.trail.unshift({ x: m.x, y: m.y, z: m.z });
         if (m.trail.length > TRAIL_LEN) m.trail.pop();
 
-        if (m.trail.length > 1) {
-            var posArr = new Float32Array(TRAIL_LEN * 3);
-            var colArr = new Float32Array(TRAIL_LEN * 3);
-            for (var j = 0; j < TRAIL_LEN; j++) {
-                if (j < m.trail.length) {
-                    var t = m.trail[j];
-                    posArr[j * 3] = t.x;
-                    posArr[j * 3 + 1] = t.y;
-                    posArr[j * 3 + 2] = t.z;
-                    // Fade from white (head) to black (tail) for additive blending
-                    var fade = (1 - j / TRAIL_LEN) * opacity;
-                    colArr[j * 3] = fade;
-                    colArr[j * 3 + 1] = fade;
-                    colArr[j * 3 + 2] = fade;
-                } else {
-                    // Fill remaining with last trail point (invisible due to black color)
-                    var last = m.trail[m.trail.length - 1];
-                    posArr[j * 3] = last.x;
-                    posArr[j * 3 + 1] = last.y;
-                    posArr[j * 3 + 2] = last.z;
-                    colArr[j * 3] = 0;
-                    colArr[j * 3 + 1] = 0;
-                    colArr[j * 3 + 2] = 0;
-                }
+        for (var j = 0; j < TRAIL_LEN; j++) {
+            if (j < m.trail.length) {
+                var t = m.trail[j];
+                m.tPos[j * 3] = t.x;
+                m.tPos[j * 3 + 1] = t.y;
+                m.tPos[j * 3 + 2] = t.z;
+                var fade = (1 - j / TRAIL_LEN) * opacity;
+                m.tCol[j * 3] = fade;
+                m.tCol[j * 3 + 1] = fade;
+                m.tCol[j * 3 + 2] = fade;
+                m.tSize[j] = 0.6 * (1 - j / TRAIL_LEN) + 0.15;  // 머리~0.75, 꼬리~0.15
+            } else {
+                // 비활성 도트는 머리 위치에 뭉치고 size 0 → 안 보임
+                m.tPos[j * 3] = m.x;
+                m.tPos[j * 3 + 1] = m.y;
+                m.tPos[j * 3 + 2] = m.z;
+                m.tCol[j * 3] = 0;
+                m.tCol[j * 3 + 1] = 0;
+                m.tCol[j * 3 + 2] = 0;
+                m.tSize[j] = 0;
             }
-            m.lineGeo.setPositions(posArr);
-            m.lineGeo.setColors(colArr);
-            m.line.visible = true;
         }
+        m.trailGeo.attributes.position.needsUpdate = true;
+        m.trailGeo.attributes.aColor.needsUpdate = true;
+        m.trailGeo.attributes.aSize.needsUpdate = true;
+        m.trailPoints.visible = true;
 
         if (m.life >= m.maxLife) {
             m.active = false;
             m.sprite.visible = false;
-            m.line.visible = false;
+            m.trailPoints.visible = false;
         }
     }
 }
@@ -294,8 +316,9 @@ function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    for (var i = 0; i < trailMaterials.length; i++) {
-        trailMaterials[i].resolution.set(window.innerWidth, window.innerHeight);
+    for (var i = 0; i < meteors.length; i++) {
+        meteors[i].trailPoints.material.uniforms.uPixelRatio.value =
+            Math.min(window.devicePixelRatio, 2);
     }
 }
 window.addEventListener('resize', onResize);
