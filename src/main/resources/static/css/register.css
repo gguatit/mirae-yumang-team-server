@@ -145,6 +145,87 @@ button:hover {
   color: #9DB2F5;
 }
 
+/* ===== 태블릿 반응형 (1023px 이하, 769px 이상) ===== */
+@media screen and (max-width: 1023px) {
+  header a {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    font-size: 15px;
+    padding: 9px 16px;
+    z-index: 100;
+    background: rgba(16, 18, 38, 0.6);
+    border-color: transparent;
+  }
+
+  .wrap {
+    min-height: 100vh;
+    padding-top: 60px;
+    box-sizing: border-box;
+  }
+
+  .centerbox {
+    position: static;
+    transform: none;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+    flex-direction: column;
+    margin: 0 auto;
+    left: auto;
+    top: auto;
+  }
+
+  .leftbox {
+    display: none;
+  }
+
+  .rightbox {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+
+  .starlog {
+    padding: 30px 0 24px;
+    font-size: 26px;
+  }
+
+  .register-container {
+    width: 100%;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group input,
+  .form-group input[type="text"],
+  .form-group input[type="password"],
+  .form-group input[type="email"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 45px;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 55px;
+    margin-top: 30px;
+    font-size: 18px;
+  }
+
+  .link-group {
+    margin-top: 20px;
+    padding-bottom: 30px;
+  }
+}
+
 /* ===== 모바일 반응형 (768px 이하) ===== */
 @media screen and (max-width: 768px) {
   body {
