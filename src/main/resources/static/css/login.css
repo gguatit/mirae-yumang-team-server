@@ -170,7 +170,7 @@ button[type="submit"]:hover {
 
 	.wrap {
 		min-height: 100vh;
-		padding-top: 60px;
+		padding-top: 72px;
 		box-sizing: border-box;
 	}
 
@@ -199,7 +199,7 @@ button[type="submit"]:hover {
 	}
 
 	.starlog {
-		padding: 30px 0 24px;
+		padding: 56px 0 24px;
 		font-size: 26px;
 	}
 
@@ -238,10 +238,10 @@ button[type="submit"]:hover {
 
 	header a {
 		position: fixed;
-		top: 12px;
-		left: 12px;
-		font-size: 14px;
-		padding: 8px 14px;
+		top: 10px;
+		left: 10px;
+		font-size: 13px;
+		padding: 7px 12px;
 		z-index: 100;
 		background: rgba(16, 18, 38, 0.6);
 		border-radius: 8px;
@@ -252,6 +252,7 @@ button[type="submit"]:hover {
 		width: 100% !important;
 		height: auto !important;
 		min-height: 100vh;
+		padding-top: 56px;
 	}
 
 	.centerbox {
@@ -274,7 +275,7 @@ button[type="submit"]:hover {
 	}
 
 	.starlog {
-		padding: 40px 0 30px;
+		padding: 60px 0 30px;
 		font-size: 28px;
 	}
 
