@@ -2,13 +2,87 @@
 
 > 오늘의 운세 관련 코드와 각종 정보들은 [Today-s-horoscope](https://github.com/gguatit/Today-s-horoscope) 레포지토리에서 확인할 수 있습니다.
 
-```
-./mvnw clean package -DskipTests && sudo systemctl restart starlog (서버 재시작)
-```
-
 > 학교 커뮤니티 기반 웹 애플리케이션
 
 미래유망팀의 Spring Boot 기반 통합 커뮤니티 플랫폼입니다. 게시판, 한글 검색, AI 챗봇, 학교 정보 페이지 등 다양한 기능을 제공합니다.
+
+## 빌드 & 서버 재시작
+
+> **⚠️ systemd (`sudo systemctl restart starlog`)는 사용하지 마세요.**
+>
+> systemd 서비스는 환경변수/stdout flush/TIME_WAIT 문제로 새 인스턴스가 hang 하거나
+> `Restart=always` + `RestartSec=5` 루프가 정상 인스턴스를 SIGKILL로 죽입니다.
+> **반드시 아래 수동 재시작 절차만 사용하세요.**
+
+### 1. 빌드
+
+```bash
+./mvnw clean package -DskipTests
+```
+
+### 2. 기존 인스턴스 정지
+
+```bash
+# 8090 포트를 잡고 있는 java 프로세스만 정확히 추출 (cloudflared 등 무관)
+PID=$(sudo lsof -ti:8090 2>/dev/null | while read p; do
+  [ "$(cat /proc/$p/comm 2>/dev/null)" = "java" ] && echo "$p"
+done | head -1)
+if [ -n "$PID" ]; then sudo kill "$PID"; fi
+sleep 5
+ss -tlnp 2>&1 | grep 8090
+# 8090이 비어 있어야 다음 단계 진행
+```
+
+> **절대 `kill -9` 사용 금지.** Spring Boot이 graceful shutdown 중 코너 케이스 데이터가 손실될 수 있습니다.
+> `kill` (SIGTERM) 만 사용. 30초 안에 안 죽으면 `kill -9`로 escalation.
+
+### 3. 새 인스턴스 수동 기동
+
+```bash
+nohup sudo -u kalpha env \
+  DB_USERNAME=starlog_user \
+  DB_PASSWORD=starlog_2026_recover \
+  TURNSTILE_SECRET_KEY=0x4AAAAAADCFFKe73OfGNIrj4H0qywF7geo \
+  /usr/bin/java -jar /home/kalpha/mirae-yumang-team-server/target/demo-0.0.1-SNAPSHOT.jar \
+  --spring.profiles.active=prod \
+  > /tmp/starlog.log 2>&1 &
+disown
+```
+
+### 4. 검증
+
+```bash
+sleep 20
+ss -tlnp 2>&1 | grep 8090          # java가 8090 listen 중이어야 함
+curl -s -o /dev/null -w "HTTP %{http_code}\n" --max-time 5 http://localhost:8090/home  # 200
+curl -s http://localhost:8090/home | grep "home.css?v="  # 최신 캐시 버전 확인
+tail -5 /tmp/starlog.log            # "Started DemoApplication" + "홈 접속" 로그
+```
+
+### 5. systemd 상태 (참고용)
+
+```bash
+sudo systemctl status starlog --no-pager   # 현재 disabled
+sudo systemctl is-enabled starlog          # disabled
+```
+
+재부팅 후 자동 시작이 꼭 필요하면 systemd를 살려야 하지만, `StandardOutput=append:/var/log/starlog/app.log`,
+`TimeoutStopSec=60`, `RestartSec=10` 등 추가 설정이 필요합니다.
+
+### 한 줄 요약 (자주 하는 실수 방지)
+
+```bash
+# ✅ 이렇게 하세요
+./mvnw clean package -DskipTests && \
+  PID=$(sudo lsof -ti:8090 2>/dev/null | while read p; do [ "$(cat /proc/$p/comm 2>/dev/null)" = "java" ] && echo "$p"; done | head -1) && \
+  [ -n "$PID" ] && sudo kill "$PID" && sleep 5 && \
+  nohup sudo -u kalpha env DB_USERNAME=starlog_user DB_PASSWORD=starlog_2026_recover TURNSTILE_SECRET_KEY=0x4AAAAAADCFFKe73OfGNIrj4H0qywF7geo \
+  /usr/bin/java -jar target/demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > /tmp/starlog.log 2>&1 & disown
+
+# ❌ 절대 하지 마세요
+sudo systemctl restart starlog     # systemd hang, 8090 안 잡힘
+sudo kill -9 <PID>                  # 정상 인스턴스 강제 종료, 데이터 손실 위험
+```
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.7-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
