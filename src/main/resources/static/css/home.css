@@ -567,6 +567,12 @@ header a:hover {
         padding: 6px 8px;
     }
 
+    /* nav(z:150) 위에 logo/menu가 떠야 클릭 가능 */
+    .header-logo,
+    .header-menu {
+        z-index: 200;
+    }
+
     .header-bg {
         display: none;
     }
