@@ -107,7 +107,7 @@ scene.add(stars);
 
 // --- Shooting stars: glowing head sprite + dotted trail (THREE.Points) ---
 var METEOR_COUNT = 4;
-var TRAIL_LEN = 32;
+var TRAIL_LEN = 18;
 var meteorCanv = document.createElement('canvas');
 meteorCanv.width = 64;
 meteorCanv.height = 64;
@@ -146,20 +146,19 @@ for (var mi = 0; mi < METEOR_COUNT; mi++) {
     trailGeo.setAttribute('aSize', new THREE.BufferAttribute(tSize, 1));
 
     // Per-vertex color/size driven by ShaderMaterial (rounded glow point)
+    // aSize: 픽셀 단위 (1.5 ~ 3.0). gl_PointSize는 device pixel에 자동 매핑됨.
     var trailMat = new THREE.ShaderMaterial({
-        uniforms: {
-            uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        },
         vertexShader: [
             'attribute vec3 aColor;',
             'attribute float aSize;',
-            'uniform float uPixelRatio;',
             'varying vec3 vColor;',
             'void main() {',
             '    vColor = aColor;',
             '    vec4 mv = modelViewMatrix * vec4(position, 1.0);',
             '    gl_Position = projectionMatrix * mv;',
-            '    gl_PointSize = aSize * uPixelRatio * (300.0 / -mv.z);',
+            '    // 약한 거리 감쇠 — z=100일 때 0.85배, z=300일 때 0.5배',
+            '    float distAtt = clamp(200.0 / max(-mv.z, 50.0), 0.4, 1.0);',
+            '    gl_PointSize = aSize * distAtt;',
             '}',
         ].join('\n'),
         fragmentShader: [
@@ -168,7 +167,7 @@ for (var mi = 0; mi < METEOR_COUNT; mi++) {
             '    float d = distance(gl_PointCoord, vec2(0.5));',
             '    if (d > 0.5) discard;',
             '    float a = 1.0 - smoothstep(0.0, 0.5, d);',
-            '    a = pow(a, 1.8);',
+            '    a = pow(a, 1.6);',
             '    gl_FragColor = vec4(vColor, a);',
             '}',
         ].join('\n'),
@@ -249,15 +248,19 @@ function updateMeteors(delta) {
         m.y += m.vy * delta;
         m.z += m.vz * delta;
 
-        // Head sprite
+        // Head sprite (가산 블렌딩 텍스처라 sprite 스케일 1.0~1.5가 적절)
         m.sprite.position.set(m.x, m.y, m.z);
-        var size = 10 + 22 * fadeIn * fadeOut;
-        m.sprite.scale.set(size, size, 1);
-        m.sprite.material.opacity = opacity;
+        var headSize = 1.0 + 1.8 * fadeIn * fadeOut;
+        m.sprite.scale.set(headSize, headSize, 1);
+        m.sprite.material.opacity = opacity * 0.9;
 
-        // Trail dots: 머리에서 꼬리로 갈수록 작고 어둡게
-        m.trail.unshift({ x: m.x, y: m.y, z: m.z });
-        if (m.trail.length > TRAIL_LEN) m.trail.pop();
+        // Trail dots: 2프레임마다 추가해서 시각적 간격 확보
+        m.dotAcc = (m.dotAcc || 0) + delta;
+        if (m.dotAcc >= 0.025) {
+            m.trail.unshift({ x: m.x, y: m.y, z: m.z });
+            if (m.trail.length > TRAIL_LEN) m.trail.pop();
+            m.dotAcc = 0;
+        }
 
         for (var j = 0; j < TRAIL_LEN; j++) {
             if (j < m.trail.length) {
@@ -269,7 +272,8 @@ function updateMeteors(delta) {
                 m.tCol[j * 3] = fade;
                 m.tCol[j * 3 + 1] = fade;
                 m.tCol[j * 3 + 2] = fade;
-                m.tSize[j] = 0.6 * (1 - j / TRAIL_LEN) + 0.15;  // 머리~0.75, 꼬리~0.15
+                // 픽셀 단위: 머리 ~2.6, 꼬리 ~0.5
+                m.tSize[j] = 2.4 * (1 - j / TRAIL_LEN) + 0.5;
             } else {
                 // 비활성 도트는 머리 위치에 뭉치고 size 0 → 안 보임
                 m.tPos[j * 3] = m.x;
@@ -316,10 +320,6 @@ function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    for (var i = 0; i < meteors.length; i++) {
-        meteors[i].trailPoints.material.uniforms.uPixelRatio.value =
-            Math.min(window.devicePixelRatio, 2);
-    }
 }
 window.addEventListener('resize', onResize);
 
