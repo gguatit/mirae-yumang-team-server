@@ -135,6 +135,11 @@ button:hover {
   font-size: 14px;
 }
 
+.link-group a {
+  color: #202353;
+  text-decoration: none;
+}
+
 .signup-link {
   margin-left: 6px;
   color: #C7D7F9;

@@ -41,10 +41,12 @@ ss -tlnp 2>&1 | grep 8090
 ```bash
 nohup sudo -u kalpha env \
   DB_USERNAME=starlog_user \
-  DB_PASSWORD=starlog_2026_recover \
-  TURNSTILE_SECRET_KEY=0x4AAAAAADCFFKe73OfGNIrj4H0qywF7geo \
-  GITHUB_CLIENT_ID=Ov23lipitxUaHqCjJL2E \
-  GITHUB_CLIENT_SECRET=466cac10ae6a6b92080e70947824dddbbf764c5a \
+  DB_PASSWORD=your_db_password \
+  TURNSTILE_SECRET_KEY=your_turnstile_secret \
+  GITHUB_CLIENT_ID=your_github_oauth_client_id \
+  GITHUB_CLIENT_SECRET=your_github_oauth_client_secret \
+  GOOGLE_CLIENT_ID=your_google_oauth_client_id \
+  GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret \
   /usr/bin/java -jar /home/kalpha/mirae-yumang-team-server/target/demo-0.0.1-SNAPSHOT.jar \
   --spring.profiles.active=prod \
   > /tmp/starlog.log 2>&1 &
@@ -78,7 +80,7 @@ sudo systemctl is-enabled starlog          # disabled
 ./mvnw clean compile package -DskipTests && \
   PID=$(sudo lsof -ti:8090 2>/dev/null | while read p; do [ "$(cat /proc/$p/comm 2>/dev/null)" = "java" ] && echo "$p"; done | head -1) && \
   [ -n "$PID" ] && sudo kill "$PID" && sleep 5 && \
-  nohup sudo -u kalpha env DB_USERNAME=starlog_user DB_PASSWORD=starlog_2026_recover TURNSTILE_SECRET_KEY=0x4AAAAAADCFFKe73OfGNIrj4H0qywF7geo GITHUB_CLIENT_ID=Ov23lipitxUaHqCjJL2E GITHUB_CLIENT_SECRET=466cac10ae6a6b92080e70947824dddbbf764c5a \
+  nohup sudo -u kalpha env DB_USERNAME=starlog_user DB_PASSWORD=starlog_2026_recover TURNSTILE_SECRET_KEY=your_turnstile_secret GITHUB_CLIENT_ID=your_github_oauth_client_id GITHUB_CLIENT_SECRET=your_github_oauth_client_secret GOOGLE_CLIENT_ID=your_google_oauth_client_id GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret \
   /usr/bin/java -jar target/demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > /tmp/starlog.log 2>&1 & disown
 
 # ❌ 절대 하지 마세요
@@ -125,8 +127,8 @@ FLUSH PRIVILEGES;
 
 ### 사용자 인증 및 보안
 - 회원가입, 로그인, 로그아웃, 세션 관리
-- **GitHub OAuth2 소셜 로그인** (Spring Security OAuth2 Client)
-- **계정 연동**: 기존 계정에 GitHub 계정 연결 (마이페이지)
+- **GitHub/Google OAuth2 소셜 로그인** (Spring Security OAuth2 Client)
+- **계정 연동**: 기존 계정에 GitHub/Google 계정 연결 (마이페이지)
 - BCrypt 비밀번호 암호화 (입력 100자 제한으로 DoS 방지)
 - 브루트포스 방어: IP+계정 조합 5회 실패 시 15분 잠금 (DB 영속 저장)
 - Cloudflare Turnstile: 로그인/회원가입 시 봇 방지
@@ -234,6 +236,8 @@ export DB_PASSWORD=starlog_2026_recover
 export NEIS_API_KEY=your_neis_api_key
 export GITHUB_CLIENT_ID=your_github_oauth_client_id
 export GITHUB_CLIENT_SECRET=your_github_oauth_client_secret
+export GOOGLE_CLIENT_ID=your_google_oauth_client_id
+export GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 ```
 
@@ -244,6 +248,8 @@ DB_USERNAME=starlog_user DB_PASSWORD=starlog_2026_recover \
 NEIS_API_KEY=your_neis_api_key \
 GITHUB_CLIENT_ID=your_github_oauth_client_id \
 GITHUB_CLIENT_SECRET=your_github_oauth_client_secret \
+GOOGLE_CLIENT_ID=your_google_oauth_client_id \
+GOOGLE_CLIENT_SECRET=your_google_oauth_client_secret \
 java -jar target/demo-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 ```
 
@@ -337,6 +343,7 @@ Client -> Controller -> Service -> Repository -> Database
 | GET | /auth/delete-account | 회원 탈퇴 페이지 |
 | POST | /auth/delete-account | 회원 탈퇴 처리 |
 | GET | /oauth2/authorization/github | GitHub OAuth2 로그인 |
+| GET | /oauth2/authorization/google | Google OAuth2 로그인 |
 
 ### Posts
 | Method | Endpoint | Description |
@@ -409,7 +416,7 @@ User (1) <-> (N) Lh
 
 ### Completed Features
 - 사용자 인증 (회원가입, 로그인, 로그아웃)
-- **GitHub OAuth2 소셜 로그인 및 계정 연동**
+- **GitHub/Google OAuth2 소셜 로그인 및 계정 연동**
 - 회원 탈퇴 (비밀번호 재확인, 연관 데이터 전체 삭제)
 - 게시판 CRUD
 - 게시글 이미지 수정

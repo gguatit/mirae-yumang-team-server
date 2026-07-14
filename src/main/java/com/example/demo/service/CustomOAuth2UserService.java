@@ -26,9 +26,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         String provider = userRequest.getClientRegistration().getRegistrationId();
+        String nameAttr = "google".equals(provider) ? "sub" : "id";
+        log.info("OAuth2 login: provider={}, attributes={}", provider, oAuth2User.getAttributes().keySet());
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(provider)),
                 oAuth2User.getAttributes(),
-                "id");
+                nameAttr);
     }
 }

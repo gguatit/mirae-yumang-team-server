@@ -45,21 +45,22 @@ a {
 	max-width: 1440px;
 	min-height: 100vh;
 	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 16px;
+	box-sizing: border-box;
 }
 
 .centerbox {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	width: min(1104px, calc(100vw - 32px));
-	height: 650px;
+	height: auto;
+	min-height: 650px;
 	display: flex;
 }
 
 .leftbox {
 	width: 552px;
-	height: 100%;
 }
 
 .leftbox>img {
@@ -68,22 +69,22 @@ a {
 	object-fit: cover;
 }
 
-/* 비밀번호, 정보 입력칸*/
 .rightbox {
 	width: 552px;
-	height: 100%;
+	min-height: 650px;
 	background: #9DB2F5;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
+/* 비밀번호, 정보 입력칸*/
 .starlog {
 	font-size: 24px;
 	color: #FAE8D3;
 	display: block;
 	text-align: center;
-	padding: 98px 0;
+	padding: 50px 0 20px;
 }
 
 .starlog:hover {
@@ -92,7 +93,7 @@ a {
 
 /* 입력칸 */
 .form-group {
-	margin-bottom: 30px;
+	margin-bottom: 20px;
 }
 
 .form-group input {
@@ -122,13 +123,13 @@ a {
 button[type="submit"] {
 	font-size: 20px;
 	width: 400px;
-	height: 60px;
+	height: 56px;
 	background: #5C68B2;
 	border: none;
 	outline: none;
 	display: block;
 	margin: 0 auto;
-	margin-top: 30px;
+	margin-top: 20px;
 	box-shadow:
 		0 0 8px rgba(92, 104, 178, 0.5),
 		0 0 20px rgba(92, 104, 178, 0.3);
@@ -141,7 +142,7 @@ button[type="submit"]:hover {
 
 .oauth-divider {
 	width: 400px;
-	margin: 20px auto 0;
+	margin: 14px auto 0;
 	text-align: center;
 	position: relative;
 }
@@ -171,12 +172,12 @@ button[type="submit"]:hover {
 	justify-content: center;
 	gap: 10px;
 	width: 400px;
-	height: 48px;
+	height: 46px;
 	background: #24292e;
 	color: #fff;
 	font-size: 16px;
 	border-radius: 20px;
-	margin-top: 14px;
+	margin-top: 10px;
 	text-decoration: none;
 	transition: background 0.2s;
 }
@@ -185,13 +186,38 @@ button[type="submit"]:hover {
 	background: #2f363d;
 }
 
-.link-group {
-	margin-top: 20px;
-	text-align: center;
-	font-size: 14px;
+.google-login-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 400px;
+	height: 46px;
+	background: #fff;
+	color: #444;
+	font-size: 16px;
+	border-radius: 20px;
+	margin-top: 8px;
+	text-decoration: none;
+	transition: background 0.2s;
+	border: 1px solid #ddd;
 }
 
-.signup-link {
+.google-login-btn:hover {
+	background: #f5f5f5;
+}
+
+.link-group {
+	margin-top: 16px;
+	text-align: center;
+	font-size: 14px;
+	padding-bottom: 40px;
+}
+
+.link-group a {
+	color: #202353;
+	text-decoration: none;
+}
 	margin-left: 6px;
 	color: #C7D7F9;
 	text-decoration: underline;
@@ -284,6 +310,11 @@ button[type="submit"]:hover {
 		width: 100% !important;
 		max-width: 100% !important;
 	}
+
+	.google-login-btn {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
 }
 
 /* ===== 모바일 반응형 (768px 이하) ===== */
@@ -371,6 +402,11 @@ button[type="submit"]:hover {
 	}
 
 	.github-login-btn {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
+	.google-login-btn {
 		width: 100% !important;
 		max-width: 100% !important;
 	}

@@ -20,7 +20,9 @@ import com.example.demo.service.CustomOAuth2UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -70,7 +72,7 @@ public class SecurityConfig {
                                 "default-src 'self'; " +
                                 "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh unpkg.com challenges.cloudflare.com; " +
                                 "style-src 'self' 'unsafe-inline' cdn.jsdelivr.net; " +
-                                "img-src 'self' data: blob: app.spline.design prod.spline.design https://starlog.c01.kr https://avatars.githubusercontent.com; " +
+                                "img-src 'self' data: blob: app.spline.design prod.spline.design https://starlog.c01.kr https://avatars.githubusercontent.com https://lh3.googleusercontent.com; " +
                                 "font-src 'self' cdn.jsdelivr.net https://cdn.jsdelivr.net; " +
                                 "connect-src 'self' https://starlog.c01.kr http://starlog.c01.kr cloudflareinsights.com esm.sh prod.spline.design app.spline.design challenges.cloudflare.com; " +
                                 "frame-src 'self' challenges.cloudflare.com; " +
@@ -89,11 +91,21 @@ public class SecurityConfig {
                             if (authentication instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken token) {
                                 registrationId = token.getAuthorizedClientRegistrationId();
                             }
-                            String providerId = String.valueOf(attributes.get("id"));
-                            String login = (String) attributes.get("login");
-                            String email = (String) attributes.get("email");
-                            if (email == null || email.isBlank()) {
-                                email = login + "@github.com";
+
+                            String providerId;
+                            String login;
+                            String email;
+                            if ("google".equals(registrationId)) {
+                                providerId = String.valueOf(attributes.get("sub"));
+                                login = (String) attributes.get("name");
+                                email = (String) attributes.get("email");
+                            } else {
+                                providerId = String.valueOf(attributes.get("id"));
+                                login = (String) attributes.get("login");
+                                email = (String) attributes.get("email");
+                                if (email == null || email.isBlank()) {
+                                    email = login + "@github.com";
+                                }
                             }
 
                             HttpSession oldSession = request.getSession(false);
@@ -115,7 +127,7 @@ public class SecurityConfig {
                             }
 
                             if (user == null) {
-                                String baseUsername = login != null ? login : registrationId + "_" + providerId;
+                                String baseUsername = login != null ? login.replaceAll("\\s+", "_") : registrationId + "_" + providerId;
                                 String username = baseUsername;
                                 int suffix = 1;
                                 while (userRepository.existsByUsername(username)) {
@@ -133,6 +145,7 @@ public class SecurityConfig {
                             response.sendRedirect("/home");
                         })
                         .failureHandler((request, response, exception) -> {
+                            log.error("OAuth2 login failed", exception);
                             response.sendRedirect("/auth/login?error=oauth");
                         }))
                 .formLogin(form -> form.disable())
