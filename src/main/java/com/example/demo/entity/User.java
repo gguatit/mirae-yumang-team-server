@@ -31,10 +31,25 @@ public class User {
     @Column(name = "profile_image_path")
     private String profileImagePath;
 
+    @Column(length = 20)
+    private String provider;
+
+    @Column(name = "provider_id", length = 100)
+    private String providerId;
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public User(String username, String email, String provider, String providerId) {
+        this.username = username;
+        this.password = java.util.UUID.randomUUID().toString();
+        this.email = email;
+        this.provider = provider;
+        this.providerId = providerId;
         this.createdAt = LocalDateTime.now();
     }
 }

@@ -128,7 +128,7 @@ button[type="submit"] {
 	outline: none;
 	display: block;
 	margin: 0 auto;
-	margin-top: 100px;
+	margin-top: 30px;
 	box-shadow:
 		0 0 8px rgba(92, 104, 178, 0.5),
 		0 0 20px rgba(92, 104, 178, 0.3);
@@ -137,6 +137,52 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
 	background: #202353;
+}
+
+.oauth-divider {
+	width: 400px;
+	margin: 20px auto 0;
+	text-align: center;
+	position: relative;
+}
+
+.oauth-divider span {
+	font-size: 14px;
+	color: #5C68B2;
+	background: #9DB2F5;
+	padding: 0 16px;
+	position: relative;
+	z-index: 1;
+}
+
+.oauth-divider::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: #5C68B2;
+}
+
+.github-login-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 400px;
+	height: 48px;
+	background: #24292e;
+	color: #fff;
+	font-size: 16px;
+	border-radius: 20px;
+	margin-top: 14px;
+	text-decoration: none;
+	transition: background 0.2s;
+}
+
+.github-login-btn:hover {
+	background: #2f363d;
 }
 
 .link-group {
@@ -219,13 +265,24 @@ button[type="submit"]:hover {
 		width: 100% !important;
 		max-width: 100% !important;
 		height: 55px;
-		margin-top: 30px;
+		margin-top: 20px;
 		font-size: 18px;
+		box-sizing: border-box;
 	}
 
 	.link-group {
 		margin-top: 20px;
 		padding-bottom: 30px;
+	}
+
+	.oauth-divider {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
+	.github-login-btn {
+		width: 100% !important;
+		max-width: 100% !important;
 	}
 }
 
@@ -298,12 +355,23 @@ button[type="submit"]:hover {
 		width: 100% !important;
 		max-width: 100% !important;
 		height: 55px;
-		margin-top: 30px;
+		margin-top: 20px;
 		font-size: 18px;
+		box-sizing: border-box;
 	}
 
 	.link-group {
 		margin-top: 20px;
 		padding-bottom: 30px;
+	}
+
+	.oauth-divider {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+
+	.github-login-btn {
+		width: 100% !important;
+		max-width: 100% !important;
 	}
 }

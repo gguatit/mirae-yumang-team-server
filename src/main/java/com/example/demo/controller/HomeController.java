@@ -86,6 +86,7 @@ public class HomeController {
         model.addAttribute("profileImagePath", user.getProfileImagePath());
         model.addAttribute("myPosts", myPosts);
         model.addAttribute("postCount", postCount);
+        model.addAttribute("provider", user.getProvider());
 
         log.info("마이페이지 접속: {}", username);
         return "mypage";

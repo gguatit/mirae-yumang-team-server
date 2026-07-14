@@ -1,9 +1,11 @@
 package com.example.demo.config;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,18 +13,21 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.CustomOAuth2UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService, UserRepository userRepository, Environment env) throws Exception {
         http
-                // 세션 기반 수동 인증 유지하면서 Spring Security를 2차 방어선으로 사용
-                // 공개 경로만 permitAll, 나머지는 컨트롤러의 수동 체크와 무관하게 인증 요구
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
@@ -31,34 +36,29 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/upload/**"),
                                 new AntPathRequestMatcher("/favicon.ico"),
                                 new AntPathRequestMatcher("/error"),
-                                // 인증
                                 new AntPathRequestMatcher("/auth/login"),
                                 new AntPathRequestMatcher("/auth/register"),
-                                // 학교 시간표/급식
                                 new AntPathRequestMatcher("/school"),
-                                // 게시글 목록/상세 (조회)
                                 new AntPathRequestMatcher("/posts"),
                                 new AntPathRequestMatcher("/posts/**"),
                                 new AntPathRequestMatcher("/comments/**"),
                                 new AntPathRequestMatcher("/mypage"),
                                 new AntPathRequestMatcher("/mypage/**"),
                                 new AntPathRequestMatcher("/auth/**"),
-                                new AntPathRequestMatcher("/h2-console/**")
+                                new AntPathRequestMatcher("/h2-console/**"),
+                                new AntPathRequestMatcher("/oauth2/**")
                         ).permitAll()
                         .anyRequest().permitAll())
-                // 인증되지 않은 사용자가 보호 라우트 접근 시 /auth/login으로 리다이렉트
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) -> {
                             sendRedirectToLogin(request, response);
                         }))
-                // CSRF 보호 활성화 (H2 콘솔, 로그인/회원가입 POST는 예외)
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(
                                 "/h2-console/**",
                                 "/auth/login",
                                 "/auth/register"
                         ))
-                // 보안 헤더 설정
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.sameOrigin())
                         .contentTypeOptions(contentType -> {})
@@ -70,7 +70,7 @@ public class SecurityConfig {
                                 "default-src 'self'; " +
                                 "script-src 'self' 'unsafe-inline' 'unsafe-eval' cdnjs.cloudflare.com static.cloudflareinsights.com esm.sh unpkg.com challenges.cloudflare.com; " +
                                 "style-src 'self' 'unsafe-inline' cdn.jsdelivr.net; " +
-                                "img-src 'self' data: blob: app.spline.design prod.spline.design https://starlog.c01.kr; " +
+                                "img-src 'self' data: blob: app.spline.design prod.spline.design https://starlog.c01.kr https://avatars.githubusercontent.com; " +
                                 "font-src 'self' cdn.jsdelivr.net https://cdn.jsdelivr.net; " +
                                 "connect-src 'self' https://starlog.c01.kr http://starlog.c01.kr cloudflareinsights.com esm.sh prod.spline.design app.spline.design challenges.cloudflare.com; " +
                                 "frame-src 'self' challenges.cloudflare.com; " +
@@ -78,6 +78,63 @@ public class SecurityConfig {
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN))
                 )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/auth/login")
+                        .userInfoEndpoint(ui -> ui
+                                .userService(customOAuth2UserService))
+                        .successHandler((request, response, authentication) -> {
+                            var oAuth2User = (org.springframework.security.oauth2.core.user.OAuth2User) authentication.getPrincipal();
+                            Map<String, Object> attributes = oAuth2User.getAttributes();
+                            String registrationId = "";
+                            if (authentication instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken token) {
+                                registrationId = token.getAuthorizedClientRegistrationId();
+                            }
+                            String providerId = String.valueOf(attributes.get("id"));
+                            String login = (String) attributes.get("login");
+                            String email = (String) attributes.get("email");
+                            if (email == null || email.isBlank()) {
+                                email = login + "@github.com";
+                            }
+
+                            HttpSession oldSession = request.getSession(false);
+                            Long oldUserId = null;
+                            if (oldSession != null) {
+                                oldUserId = (Long) oldSession.getAttribute("userId");
+                                oldSession.invalidate();
+                            }
+
+                            com.example.demo.entity.User user = userRepository.findByProviderAndProviderId(registrationId, providerId).orElse(null);
+
+                            if (user == null && oldUserId != null) {
+                                user = userRepository.findById(oldUserId).orElse(null);
+                                if (user != null) {
+                                    user.setProvider(registrationId);
+                                    user.setProviderId(providerId);
+                                    userRepository.save(user);
+                                }
+                            }
+
+                            if (user == null) {
+                                String baseUsername = login != null ? login : registrationId + "_" + providerId;
+                                String username = baseUsername;
+                                int suffix = 1;
+                                while (userRepository.existsByUsername(username)) {
+                                    username = baseUsername + suffix;
+                                    suffix++;
+                                }
+                                user = new com.example.demo.entity.User(username, email, registrationId, providerId);
+                                userRepository.save(user);
+                            }
+
+                            HttpSession session = request.getSession(true);
+                            session.setAttribute("userId", user.getId());
+                            session.setAttribute("loginUser", user.getUsername());
+                            session.setAttribute("loginEmail", user.getEmail());
+                            response.sendRedirect("/home");
+                        })
+                        .failureHandler((request, response, exception) -> {
+                            response.sendRedirect("/auth/login?error=oauth");
+                        }))
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 

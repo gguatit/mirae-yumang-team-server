@@ -27,6 +27,8 @@
 │ email          (NOT NULL) │    │
 │ bio              (TEXT)   │    │
 │ profile_image_path        │    │
+│ provider      (VARCHAR 20)│    │
+│ provider_id  (VARCHAR 100)│    │
 │ created_at     (NOT NULL) │    │
 └──────────────────────────┘    │
          │                      │
@@ -114,12 +116,15 @@
 | `email` | `VARCHAR(100)` | NOT NULL | 이메일 |
 | `bio` | `TEXT` | nullable | 자기소개 |
 | `profile_image_path` | `VARCHAR(255)` | nullable | 프로필 이미지 경로 |
+| `provider` | `VARCHAR(20)` | nullable | OAuth2 제공자 (e.g. github) |
+| `provider_id` | `VARCHAR(100)` | nullable | OAuth2 제공자 내 사용자 ID |
 | `created_at` | `TIMESTAMP` | NOT NULL, updatable=false | 가입일 |
 
 **Repository:** `UserRepository`
 - `existsByUsername(String)` — 중복 체크
 - `findByUsername(String)` → `Optional<User>` — 로그인/조회
 - `existsByEmail(String)` — 이메일 중복 체크
+- `findByProviderAndProviderId(String, String)` → `Optional<User>` — OAuth2 사용자 조회
 
 **관계:**
 - `1 : N` → `Post` (`user_id`)
@@ -343,6 +348,8 @@ erDiagram
         varchar email
         text bio
         varchar profile_image_path
+        varchar provider
+        varchar provider_id
         timestamp created_at
     }
 

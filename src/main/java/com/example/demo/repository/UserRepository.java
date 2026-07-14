@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // email 중복 체크 (회원가입 시 사용)
     boolean existsByEmail(String email);
+
+    Optional<User> findByProviderAndProviderId(String provider, String providerId);
 }

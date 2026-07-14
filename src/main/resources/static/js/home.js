@@ -154,36 +154,6 @@ function initAnimations() {
             });
         });
 
-        gsap.from(".today-box1", {
-            yPercent: -5,
-            scrollTrigger: {
-                trigger: ".today", start: "top bottom", end: "bottom top", scrub: 1.5,
-            },
-            ease: "none",
-        });
-        gsap.from(".today-box2", {
-            yPercent: -10,
-            scrollTrigger: {
-                trigger: ".today", start: "top bottom", end: "bottom top", scrub: 1.5,
-            },
-            ease: "none",
-        });
-
-        gsap.from(".community-box1", {
-            yPercent: -5,
-            scrollTrigger: {
-                trigger: ".community", start: "top bottom", end: "bottom top", scrub: 1.5,
-            },
-            ease: "none",
-        });
-        gsap.from(".community-box2", {
-            yPercent: -10,
-            scrollTrigger: {
-                trigger: ".community", start: "top bottom", end: "bottom top", scrub: 1.5,
-            },
-            ease: "none",
-        });
-
         // --- Fortune lists (distribute-based, scoped) ---
         gsap.from(".today .fortune-list > li", {
             rotation: -2, scale: 0.97, opacity: 0,
